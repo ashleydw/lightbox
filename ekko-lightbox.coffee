@@ -18,7 +18,6 @@ EkkoLightbox = ( element, options ) ->
 			if @gallery
 				$(document).off 'keydown.ekkoLightbox'
 			@modal.remove()
-		onMaximise : ( height ) ->
 		id : false
 	}, options || {})
 
@@ -31,7 +30,14 @@ EkkoLightbox = ( element, options ) ->
 	$(document.body).append '<div id="' + @modal_id + '" class="modal fade"><div class="modal-dialog"><div class="modal-content">' + header + '<div class="modal-body"></div>' + footer + '</div></div></div>'
 
 	@modal = $ '#' + @modal_id
-	@modal_body = @modal.find('.modal-body')
+	@modal_body = @modal.find('.modal-body').first()
+
+	@padding = {
+		left: parseFloat(@modal_body.css('padding-left'), 10)
+		right: parseFloat(@modal_body.css('padding-right'), 10)
+		bottom: parseFloat(@modal_body.css('padding-bottom'), 10)
+		top: parseFloat(@modal_body.css('padding-top'), 10)
+	}
 
 	if !@options.remote
 		@error 'No remote target given'
@@ -114,26 +120,39 @@ EkkoLightbox.prototype = {
 		img = new Image()
 		if !onLoadShowImage? || onLoadShowImage == true
 			img.onload = =>
-				@resize img.width, img.height
+				@checkImageDimensions(img)
 				@modal_body.html img
+				img = @modal_body.find('img')
+				@resize img.width(), img.height()
 			img.onerror = =>
 				@error 'Failed to load image: ' + src
 
 		img.src = src
 
-		if !onLoadShowImage? || onLoadShowImage == true
-			if img.complete != true
-				do @showLoading
-
 	close : ->
 		@modal.modal('hide');
 
+	center: ->
+		@modal.find('.modal-dialog').css({
+			'left': -> -($(this).width()/2)
+		})
+
 	resize : ( width, height ) ->
-		left_padding = parseFloat(@modal_body.css('padding-left'), 10)
-		right_padding = parseFloat(@modal_body.css('padding-right'), 10)
+		width = width + @padding.left + @padding.right
+		#height = height + @padding.top + @padding.bottom
 		@modal.find('.modal-content').css {
-			'width' : width + left_padding + right_padding
+			'width' : width
 		}
+		@modal.find('.modal-dialog').css {
+			'width' : width + 20 #+ 20 because of the drop shadow
+		}
+		do @center
+
+	checkImageDimensions: (img) ->
+
+		w = $(window)
+		if img.width > w.width()
+			img.width = w.width() - (@padding.left + @padding.right + 20) #+ 20 because of the drop shadow
 
 }
 

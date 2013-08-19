@@ -26,7 +26,6 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
         }
         return this.modal.remove();
       },
-      onMaximise: function(height) {},
       id: false
     }, options || {});
     this.$element = $(element);
@@ -36,7 +35,13 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
     footer = this.options.footer ? '<div class="modal-footer">' + this.options.footer + '</div>' : '';
     $(document.body).append('<div id="' + this.modal_id + '" class="modal fade"><div class="modal-dialog"><div class="modal-content">' + header + '<div class="modal-body"></div>' + footer + '</div></div></div>');
     this.modal = $('#' + this.modal_id);
-    this.modal_body = this.modal.find('.modal-body');
+    this.modal_body = this.modal.find('.modal-body').first();
+    this.padding = {
+      left: parseFloat(this.modal_body.css('padding-left'), 10),
+      right: parseFloat(this.modal_body.css('padding-right'), 10),
+      bottom: parseFloat(this.modal_body.css('padding-bottom'), 10),
+      top: parseFloat(this.modal_body.css('padding-top'), 10)
+    };
     if (!this.options.remote) {
       this.error('No remote target given');
     } else {
@@ -122,30 +127,43 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       img = new Image();
       if ((onLoadShowImage == null) || onLoadShowImage === true) {
         img.onload = function() {
-          _this.resize(img.width, img.height);
-          return _this.modal_body.html(img);
+          _this.checkImageDimensions(img);
+          _this.modal_body.html(img);
+          img = _this.modal_body.find('img');
+          return _this.resize(img.width(), img.height());
         };
         img.onerror = function() {
           return _this.error('Failed to load image: ' + src);
         };
       }
-      img.src = src;
-      if ((onLoadShowImage == null) || onLoadShowImage === true) {
-        if (img.complete !== true) {
-          return this.showLoading();
-        }
-      }
+      return img.src = src;
     },
     close: function() {
       return this.modal.modal('hide');
     },
-    resize: function(width, height) {
-      var left_padding, right_padding;
-      left_padding = parseFloat(this.modal_body.css('padding-left'), 10);
-      right_padding = parseFloat(this.modal_body.css('padding-right'), 10);
-      return this.modal.find('.modal-content').css({
-        'width': width + left_padding + right_padding
+    center: function() {
+      return this.modal.find('.modal-dialog').css({
+        'left': function() {
+          return -($(this).width() / 2);
+        }
       });
+    },
+    resize: function(width, height) {
+      width = width + this.padding.left + this.padding.right;
+      this.modal.find('.modal-content').css({
+        'width': width
+      });
+      this.modal.find('.modal-dialog').css({
+        'width': width + 20
+      });
+      return this.center();
+    },
+    checkImageDimensions: function(img) {
+      var w;
+      w = $(window);
+      if (img.width > w.width()) {
+        return img.width = w.width() - (this.padding.left + this.padding.right + 20);
+      }
     }
   };
 
