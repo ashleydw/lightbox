@@ -27,7 +27,7 @@ EkkoLightbox = ( element, options ) ->
 	@modal_id = if @options.modal_id then @options.modal_id else 'ekkoLightbox-' + Math.floor((Math.random() * 1000) + 1)
 	header = if @options.title then '<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">' + @options.title + '</h4></div>' else ''
 	footer = if @options.footer then '<div class="modal-footer">' + @options.footer + '</div>' else ''
-	$(document.body).append '<div id="' + @modal_id + '" class="modal fade"><div class="modal-dialog"><div class="modal-content">' + header + '<div class="modal-body"></div>' + footer + '</div></div></div>'
+	$(document.body).append '<div id="' + @modal_id + '" class="modal fade" tabindex="-1"><div class="modal-dialog"><div class="modal-content">' + header + '<div class="modal-body"></div>' + footer + '</div></div></div>'
 
 	@modal = $ '#' + @modal_id
 	@modal_body = @modal.find('.modal-body').first()
@@ -122,8 +122,9 @@ EkkoLightbox.prototype = {
 			img.onload = =>
 				@checkImageDimensions(img)
 				@modal_body.html img
-				img = @modal_body.find('img')
-				@resize img.width(), img.height()
+				i = @modal_body.find('img').first()
+				width = if i && i.width() > 0 then i.width() else img.width
+				@resize width, i.height()
 			img.onerror = =>
 				@error 'Failed to load image: ' + src
 
@@ -151,7 +152,7 @@ EkkoLightbox.prototype = {
 	checkImageDimensions: (img) ->
 
 		w = $(window)
-		if img.width > w.width()
+		if (img.width + (@padding.left + @padding.right + 20)) > w.width()
 			img.width = w.width() - (@padding.left + @padding.right + 20) #+ 20 because of the drop shadow
 
 }
