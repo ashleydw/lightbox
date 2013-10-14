@@ -28,6 +28,7 @@
             <pre>&lt;a href=&quot;someurl&quot; id=&quot;mylink&quot;&gt;Open lightbox&lt;/a&gt;<br />$(&#39;#mylink&#39;).lightbox(options);</pre>
 
             <h2>Options</h2>
+            <p>Options are passed down to the modal object so you can also use any of the original modal options.</p>
             <table class="table table-bordered">
                 <thead>
                 <tr>
@@ -55,9 +56,10 @@
             <p>Images taken from Instagrams <a href="http://blog.instagram.com/post/58570728864/twoi92" title="Because I was too lazy to find my own">"The Week on Instagram | 92"</a></p>
 
             <h2 class="page-header" id="single-image">Example #1: Single Image</h2>
+            <p>Note: uses modal plugin title option via <code>data-title</code>, and the custom footer tag using <code>data-footer</code></p>
             <div class="row">
                 <div class="col-sm-offset-4 col-sm-3">
-                    <a href="http://distilleryimage6.ak.instagram.com/ba70b8e8030011e3a31b22000a1fbb63_7.jpg" data-toggle="lightbox">
+                    <a href="http://distilleryimage6.ak.instagram.com/ba70b8e8030011e3a31b22000a1fbb63_7.jpg" data-toggle="lightbox" data-title="A random title" data-footer="A custom footer text">
                         <img src="http://distilleryimage6.ak.instagram.com/ba70b8e8030011e3a31b22000a1fbb63_7.jpg" class="img-responsive">
                     </a>
                 </div>
