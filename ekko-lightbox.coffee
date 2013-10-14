@@ -4,6 +4,8 @@ https://github.com/ashleydw/lightbox
 
 License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
 ###
+"use strict";
+
 EkkoLightbox = ( element, options ) ->
 
 	@options = $.extend({
@@ -162,7 +164,8 @@ $.fn.ekkoLightbox = ( options ) ->
 	@each ->
 
 		$this = $(this)
-		new EkkoLightbox(@, { remote : $this.attr('data-source') || $this.attr('href') })
+		options = $.extend({ remote : $this.attr('data-source') || $this.attr('href') }, $this.data())
+		new EkkoLightbox(@, options)
 		@
 
 $(document).delegate '*[data-toggle="lightbox"]', 'click', ( event ) ->

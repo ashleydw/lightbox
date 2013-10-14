@@ -8,6 +8,7 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
 
 
 (function() {
+  "use strict";
   var EkkoLightbox;
 
   EkkoLightbox = function(element, options) {
@@ -169,13 +170,14 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
     }
   };
 
-  $.fn.ekkoLightbox = function(options) {
+  $.fn.ekkoLightbox = function(options, _relatedTarget) {
     return this.each(function() {
       var $this;
       $this = $(this);
-      new EkkoLightbox(this, {
+      options = $.extend({
         remote: $this.attr('data-source') || $this.attr('href')
-      });
+      }, $this.data());
+      new EkkoLightbox(this, options);
       return this;
     });
   };
