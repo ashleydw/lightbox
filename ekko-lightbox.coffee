@@ -135,11 +135,6 @@ EkkoLightbox.prototype = {
 	close : ->
 		@modal.modal('hide');
 
-	center: ->
-		@modal.find('.modal-dialog').css({
-			'left': -> -($(this).width()/2)
-		})
-
 	resize : ( width, height ) ->
 		width = width + @padding.left + @padding.right
 		#height = height + @padding.top + @padding.bottom
@@ -149,7 +144,6 @@ EkkoLightbox.prototype = {
 		@modal.find('.modal-dialog').css {
 			'width' : width + 20 #+ 20 because of the drop shadow
 		}
-		do @center
 
 	checkImageDimensions: (img) ->
 
