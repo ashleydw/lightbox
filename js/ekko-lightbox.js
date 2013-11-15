@@ -14,6 +14,7 @@
     EkkoLightbox = function(element, options) {
         var content, footer, header, youtube;
         this.options = $.extend({
+            gallery_parent_selector: '*:not(.row)',
             title: null,
             footer: null,
             remote: null,
@@ -55,7 +56,7 @@
             }
             this.gallery = this.$element.data('gallery');
             if (this.gallery) {
-                this.gallery_items = this.$element.parents('*:not(.row)').first().find('*[data-toggle="lightbox"][data-gallery="' + this.gallery + '"]');
+                this.gallery_items = this.$element.parents(this.options.gallery_parent_selector).first().find('*[data-toggle="lightbox"][data-gallery="' + this.gallery + '"]');
                 this.gallery_index = this.gallery_items.index(this.$element);
                 $(document).on('keydown.ekkoLightbox', this.navigate.bind(this));
             }
@@ -167,7 +168,8 @@
             var $this;
             $this = $(this);
             options = $.extend({
-                remote: $this.attr('data-source') || $this.attr('href')
+                remote: $this.attr('data-source') || $this.attr('href'),
+                gallery_parent_selector: $this.attr('data-parent')
             }, $this.data());
             new EkkoLightbox(this, options);
             return this;
@@ -179,7 +181,8 @@
         event.preventDefault();
         $this = $(this);
         return $this.ekkoLightbox({
-            remote: $this.attr('data-source') || $this.attr('href')
+            remote: $this.attr('data-source') || $this.attr('href'),
+            gallery_parent_selector: $this.attr('data-parent')
         }).one('hide', function() {
                 return $this.is(':visible') && $this.focus();
             });

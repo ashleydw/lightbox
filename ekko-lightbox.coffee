@@ -9,6 +9,7 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
 EkkoLightbox = ( element, options ) ->
 
 	@options = $.extend({
+		gallery_parent_selector: '*:not(.row)'
 		title : null
 		footer : null
 		remote : null
@@ -56,7 +57,7 @@ EkkoLightbox = ( element, options ) ->
 
 		@gallery = @$element.data('gallery')
 		if @gallery
-			@gallery_items = @$element.parents('*:not(.row)').first().find('*[data-toggle="lightbox"][data-gallery="' + @gallery + '"]')
+			@gallery_items = @$element.parents(this.options.gallery_parent_selector).first().find('*[data-toggle="lightbox"][data-gallery="' + @gallery + '"]')
 			@gallery_index = @gallery_items.index(@$element)
 			$(document).on 'keydown.ekkoLightbox', @navigate.bind(@)
 
@@ -158,7 +159,10 @@ $.fn.ekkoLightbox = ( options ) ->
 	@each ->
 
 		$this = $(this)
-		options = $.extend({ remote : $this.attr('data-source') || $this.attr('href') }, $this.data())
+		options = $.extend({
+			remote : $this.attr('data-source') || $this.attr('href')
+			gallery_parent_selector : $this.attr('data-parent')
+		}, $this.data())
 		new EkkoLightbox(@, options)
 		@
 
@@ -167,6 +171,9 @@ $(document).delegate '*[data-toggle="lightbox"]', 'click', ( event ) ->
 
 	$this = $(this)
 	$this
-		.ekkoLightbox({ remote : $this.attr('data-source') || $this.attr('href') })
+		.ekkoLightbox({
+			remote : $this.attr('data-source') || $this.attr('href')
+			gallery_parent_selector : $this.attr('data-parent')
+		})
 		.one 'hide', ->
 			$this.is(':visible') && $this.focus()

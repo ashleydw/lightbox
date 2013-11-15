@@ -9,10 +9,19 @@
         div.row > div > div.row { margin-bottom:15px; }
         body { padding-bottom:50px; }
         h2.page-header { margin-top:50px; }
+        figure { position: relative; }
+        figure figcaption {
+            font-size:22px;
+            color:#fff;
+            text-decoration:none;
+            bottom:10px;
+            right:20px;
+            position: absolute;
+            background-color:#000;
+        }
     </style>
 </head>
 <body>
-
     <div class="container">
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
@@ -28,7 +37,7 @@
                 <pre>&lt;a href=&quot;someurl&quot; id=&quot;mylink&quot;&gt;Open lightbox&lt;/a&gt;<br />$(&#39;#mylink&#39;).lightbox(options);</pre>
 
                 <h2>Options</h2>
-                <p>Options are passed down to the modal object so you can also use any of the original modal options.</p>
+                <p>Options are passed down to the modal object so you can also use any of the <a href="http://getbootstrap.com/javascript/#modals-usage">original modal options</a>.</p>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -36,6 +45,7 @@
                             <th>type</th>
                             <th>default</th>
                             <th>description</th>
+                            <th>data-*</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -43,122 +53,144 @@
                             <td>source</td>
                             <td>string</td>
                             <td></td>
-                            <td>If you can't/don't want to set the href property of an element, use <code>data-source="something"</code></td>
+                            <td>If you can't/don't want to set the href property of an element</td>
+                            <td><code>data-source="http://www...."</code></td>
                         </tr>
                         <tr>
                             <td>gallery</td>
                             <td>string</td>
                             <td></td>
                             <td>For grouping elements</td>
+                            <td><code>data-gallery="galleryname"</code></td>
+                        </tr>
+                        <tr>
+                            <td>gallery_parent_selector</td>
+                            <td>string</td>
+                            <td>*:not(.row)</td>
+                            <td>If the gallery parent isn't a div, use this.</td>
+                            <td><code>data-parent=".someCssSelector"</code></td>
                         </tr>
                     </tbody>
                 </table>
-                <p>Images taken from Instagrams <a href="http://blog.instagram.com/post/58570728864/twoi92" title="Because I was too lazy to find my own">"The Week on Instagram | 92"</a></p>
+                <p>Images taken from Instagrams <a href="http://blog.instagram.com/post/58570728864/twoi92">"The Week on Instagram | 92"</a></p>
+                
+                <h1 class="page-header">Examples</h1>
+                <ul>
+                    <li><a href="#single-image">Example #1: Single Image</a></li>
+                    <li><a href="#image-gallery">Example #2: Gallery of Images</a></li>
+                    <li><a href="#single-youtube">Example #3: Single YouTube Video</a></li>
+                    <li><a href="#mixed-gallery">Example #5: Mixed gallery</a></li>
+                    <li><a href="#programatically-call">Example #6: Programatically call</a></li>
+                    <li><a href="#data-source">Example #7: Via <code>data-source</code></a></li>
+                    <li><a href="#different-sizes">Example #8: Gallery of different sized images</a></li>
+                    <li><a href="#too-large">Example #9: Images too wide for display</a></li>
+                    <li><a href="#wrappers">Example #11: Column wrappers</a></li>
+                </ul>
 
-                <h2 class="page-header" id="single-image">Example #1: Single Image</h2>
+                <h3 class="page-header" id="single-image">Example #1: Single Image</h3>
                 <p>Note: uses modal plugin title option via <code>data-title</code>, and the custom footer tag using <code>data-footer</code></p>
                 <div class="row">
                     <div class="col-sm-offset-4 col-sm-3">
                         <a href="http://distilleryimage6.ak.instagram.com/ba70b8e8030011e3a31b22000a1fbb63_7.jpg" data-toggle="lightbox" data-title="A random title" data-footer="A custom footer text">
-                            <img src="http://distilleryimage6.ak.instagram.com/ba70b8e8030011e3a31b22000a1fbb63_7.jpg" class="img-responsive">
+                            <img src="//distilleryimage6.ak.instagram.com/ba70b8e8030011e3a31b22000a1fbb63_7.jpg" class="img-responsive">
                         </a>
                     </div>
                 </div>
 
-                <h2 class="page-header" id="image-gallery">Example #2: Gallery of Images</h2>
-                <p>Gallery images must be wrapped in a tag (probably <code>&lt;div&gt;</code>) - which doesn't have the class <code>.row</code>. This is so you can create columns/rows.</p>
-                <p>Note how the final image is not in the gallery intentionally.</p>
+                <h3 class="page-header" id="image-gallery">Example #2: Gallery of Images</h3>
+                <p>By default, gallery images must be wrapped in a tag (probably <code>&lt;div&gt;</code>) - which doesn't have the class <code>.row</code>. This is so you can create columns/rows.</p>
+                <p>A custom selector for the parent can be used, see <a href="#wrappers">example #11</a>. Note how the final image is not in the gallery intentionally.</p>
                 <div class="row">
                     <div class="col-md-offset-2 col-md-8">
                         <div class="row">
                             <a href="http://distilleryimage6.ak.instagram.com/ba70b8e8030011e3a31b22000a1fbb63_7.jpg" data-toggle="lightbox" data-gallery="multiimages" class="col-sm-4">
-                                <img src="http://distilleryimage6.ak.instagram.com/ba70b8e8030011e3a31b22000a1fbb63_7.jpg" class="img-responsive">
+                                <img src="//distilleryimage6.ak.instagram.com/ba70b8e8030011e3a31b22000a1fbb63_7.jpg" class="img-responsive">
                             </a>
                             <a href="http://distilleryimage3.ak.instagram.com/f0c3343c046511e393b222000aa8011b_7.jpg" data-toggle="lightbox" data-gallery="multiimages" class="col-sm-4">
-                                <img src="http://distilleryimage3.ak.instagram.com/f0c3343c046511e393b222000aa8011b_7.jpg" class="img-responsive">
+                                <img src="//distilleryimage3.ak.instagram.com/f0c3343c046511e393b222000aa8011b_7.jpg" class="img-responsive">
                             </a>
                             <a href="http://distilleryimage5.ak.instagram.com/59e9419c05d111e3896922000a1fbe1a_7.jpg" data-toggle="lightbox" data-gallery="multiimages" class="col-sm-4">
-                                <img src="http://distilleryimage5.ak.instagram.com/59e9419c05d111e3896922000a1fbe1a_7.jpg" class="img-responsive">
+                                <img src="//distilleryimage5.ak.instagram.com/59e9419c05d111e3896922000a1fbe1a_7.jpg" class="img-responsive">
                             </a>
                         </div>
                         <div class="row">
                             <a href="http://distilleryimage2.ak.instagram.com/e3493b0a045411e3a4fb22000a1f97ec_7.jpg" data-toggle="lightbox" data-gallery="multiimages" class="col-sm-4">
-                                <img src="http://distilleryimage2.ak.instagram.com/e3493b0a045411e3a4fb22000a1f97ec_7.jpg" class="img-responsive">
+                                <img src="//distilleryimage2.ak.instagram.com/e3493b0a045411e3a4fb22000a1f97ec_7.jpg" class="img-responsive">
                             </a>
                             <a href="http://distilleryimage10.ak.instagram.com/85c5d0e4039411e3bd9b22000aa82186_7.jpg" data-toggle="lightbox" data-gallery="multiimages" class="col-sm-4">
-                                <img src="http://distilleryimage10.ak.instagram.com/85c5d0e4039411e3bd9b22000aa82186_7.jpg" class="img-responsive">
+                                <img src="//distilleryimage10.ak.instagram.com/85c5d0e4039411e3bd9b22000aa82186_7.jpg" class="img-responsive">
                             </a>
                             <a href="http://distilleryimage3.ak.instagram.com/aa7088e6048c11e3a32722000aa800c4_7.jpg" data-toggle="lightbox" class="col-sm-4">
-                                <img src="http://distilleryimage3.ak.instagram.com/aa7088e6048c11e3a32722000aa800c4_7.jpg" class="img-responsive">
+                                <img src="//distilleryimage3.ak.instagram.com/aa7088e6048c11e3a32722000aa800c4_7.jpg" class="img-responsive">
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <h2 class="page-header" id="single-youtube">Example #3: Single YouTube Video</h2>
+                <h3 class="page-header" id="single-youtube">Example #3: Single YouTube Video</h3>
                 <a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox">
                     Ghostpoet - Cash and Carry Me Home (Official Video)
                 </a>
 
-                <h2 class="page-header" id="youtube-gallery">Example #4: Gallery of YouTube Videos</h2>
+                <h3 class="page-header" id="youtube-gallery">Example #4: Gallery of YouTube Videos</h3>
                 <div class="row">
                     <div class="col-md-offset-1 col-md-10">
                         <div class="row">
                             <a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox" data-gallery="youtubevideos" class="col-sm-4">
-                               <img src="http://i1.ytimg.com/vi/yP11r5n5RNg/mqdefault.jpg" class="img-responsive">
+                               <img src="//i1.ytimg.com/vi/yP11r5n5RNg/mqdefault.jpg" class="img-responsive">
                             </a>
                             <a href="http://youtu.be/iQ4D273C7Ac" data-toggle="lightbox" data-gallery="youtubevideos" class="col-sm-4">
-                               <img src="http://i1.ytimg.com/vi/iQ4D273C7Ac/mqdefault.jpg" class="img-responsive">
+                               <img src="//i1.ytimg.com/vi/iQ4D273C7Ac/mqdefault.jpg" class="img-responsive">
                             </a>
                             <a href="//www.youtube.com/embed/b0jqPvpn3sY" data-toggle="lightbox" data-gallery="youtubevideos" class="col-sm-4">
-                               <img src="http://i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" class="img-responsive">
+                               <img src="//i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" class="img-responsive">
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <h2 class="page-header" id="mixed-gallery">Example #5: Mixed gallery</h2>
+                <h3 class="page-header" id="mixed-gallery">Example #5: Mixed gallery</h3>
                 <div class="row">
                     <div class="col-md-offset-1 col-md-10">
                         <div class="row">
                             <a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox" data-gallery="mixedgallery" class="col-sm-4">
-                               <img src="http://i1.ytimg.com/vi/yP11r5n5RNg/mqdefault.jpg" class="img-responsive">
+                               <img src="//i1.ytimg.com/vi/yP11r5n5RNg/mqdefault.jpg" class="img-responsive">
                             </a>
                             <a href="http://distilleryimage10.ak.instagram.com/85c5d0e4039411e3bd9b22000aa82186_7.jpg" data-toggle="lightbox" data-gallery="mixedgallery" class="col-sm-4">
-                                <img src="http://distilleryimage10.ak.instagram.com/85c5d0e4039411e3bd9b22000aa82186_7.jpg" class="img-responsive">
+                                <img src="//distilleryimage10.ak.instagram.com/85c5d0e4039411e3bd9b22000aa82186_7.jpg" class="img-responsive">
                             </a>
                             <a href="//www.youtube.com/embed/b0jqPvpn3sY" data-toggle="lightbox" data-gallery="mixedgallery" class="col-sm-4">
-                               <img src="http://i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" class="img-responsive">
+                               <img src="//i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" class="img-responsive">
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <h2 class="page-header" id="programatically-call">Example #6: Programatically call</h2>
+                <h3 class="page-header" id="programatically-call">Example #6: Programatically call</h2>
                 <div class="row">
                     <div class="col-md-offset-1 col-md-10">
                         <div class="row">
                             <a href="http://distilleryimage3.ak.instagram.com/f0c3343c046511e393b222000aa8011b_7.jpg" id="open-image" class="col-sm-4">
-                                <img src="http://distilleryimage3.ak.instagram.com/f0c3343c046511e393b222000aa8011b_7.jpg" class="img-responsive">
+                                <img src="//distilleryimage3.ak.instagram.com/f0c3343c046511e393b222000aa8011b_7.jpg" class="img-responsive">
                             </a>
                             <a href="http://youtu.be/iQ4D273C7Ac" id="open-youtube" class="col-sm-4">
-                                <img src="http://i1.ytimg.com/vi/iQ4D273C7Ac/mqdefault.jpg" class="img-responsive">
+                                <img src="//i1.ytimg.com/vi/iQ4D273C7Ac/mqdefault.jpg" class="img-responsive">
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <h2 class="page-header" id="programatically-call">Example #7: Via <code>data-source</code></h2>
+                <h3 class="page-header" id="data-source">Example #7: Via <code>data-source</code></h3>
                 <div class="row">
                     <div class="col-md-offset-1 col-md-10">
                         <div class="row">
-                            <img src="http://distilleryimage2.ak.instagram.com/e3493b0a045411e3a4fb22000a1f97ec_7.jpg" data-toggle="lightbox" data-source="http://distilleryimage2.ak.instagram.com/e3493b0a045411e3a4fb22000a1f97ec_7.jpg" class="img-responsive col-sm-4">
-                            <img src="http://i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" data-toggle="lightbox" data-source="//www.youtube.com/embed/b0jqPvpn3sY" class="img-responsive col-sm-4">
+                            <img src="//distilleryimage2.ak.instagram.com/e3493b0a045411e3a4fb22000a1f97ec_7.jpg" data-toggle="lightbox" data-source="http://distilleryimage2.ak.instagram.com/e3493b0a045411e3a4fb22000a1f97ec_7.jpg" class="img-responsive col-sm-4">
+                            <img src="//i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" data-toggle="lightbox" data-source="//www.youtube.com/embed/b0jqPvpn3sY" class="img-responsive col-sm-4">
                         </div>
                     </div>
                 </div>
 
-                <h2 class="page-header" id="different-sizes">Example #8: Gallery of different sized images</h2>
+                <h3 class="page-header" id="different-sizes">Example #8: Gallery of different sized images</h3>
                 <div class="row">
                     <div class="col-md-offset-1 col-md-10">
                         <div class="row">
@@ -178,8 +210,45 @@
                     </div>
                 </div>
 
-                <h2 class="page-header" id="too-large">Example #9: Images too wide for display</h2>
+                <h3 class="page-header" id="too-large">Example #9: Images too wide for display</h3>
                 <p>All examples on this page are this example. Too high images don't count, scrolling works fine with the original modal.</p>
+
+                <h3 class="page-header" id="semantic">Example #10: Semantic code</h3>
+                <p>So you want to use <code>&lt;figure&gt;</code></p>
+                <div class="row">
+                    <a href="http://25.media.tumblr.com/de356cd6570d7c26e73979467f296f67/tumblr_mrn3dc10Wa1r1thfzo6_1280.jpg" class="col-sm-3" data-toggle="lightbox">
+                        <figure>
+                            <img src="//25.media.tumblr.com/de356cd6570d7c26e73979467f296f67/tumblr_mrn3dc10Wa1r1thfzo6_400.jpg" class="img-responsive" alt="">
+                            <figcaption>@gregfoster</figcaption>
+                        </figure>
+                    </a>
+                    <a href="http://31.media.tumblr.com/c8bdcc303df762a14df18e518128c4dd/tumblr_mrn3dc10Wa1r1thfzo7_1280.jpg" class="col-sm-3" data-toggle="lightbox">
+                        <figure>
+                            <img src="//31.media.tumblr.com/c8bdcc303df762a14df18e518128c4dd/tumblr_mrn3dc10Wa1r1thfzo7_400.jpg" class="img-responsive" alt="">
+                            <figcaption>@littlecoal</figcaption>
+                        </figure>
+                    </a>
+                </div>
+
+                <h3 class="page-header" id="wrappers">Example #11: Column wrappers</h3>
+                <p>This shows that the images do not need to be columns as per the other examples. Use <code>data-parent</code> on the gallery item, or set it via the options.</p>
+                <div class="row wrapper-parent">
+                    <div class="col-sm-3">
+                        <a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox" data-gallery="columnwrappers" data-parent=".wrapper-parent">
+                            <img src="//i1.ytimg.com/vi/yP11r5n5RNg/mqdefault.jpg" class="img-responsive">
+                        </a>
+                    </div>
+                    <div class="col-sm-3">
+                        <a href="http://distilleryimage10.ak.instagram.com/85c5d0e4039411e3bd9b22000aa82186_7.jpg" data-toggle="lightbox" data-gallery="columnwrappers" data-parent=".wrapper-parent">
+                            <img src="//distilleryimage10.ak.instagram.com/85c5d0e4039411e3bd9b22000aa82186_7.jpg" class="img-responsive">
+                        </a>
+                    </div>
+                    <div class="col-sm-3">
+                        <a href="//www.youtube.com/embed/b0jqPvpn3sY" data-toggle="lightbox" data-gallery="columnwrappers" data-parent=".wrapper-parent">
+                            <img src="//i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" class="img-responsive">
+                        </a>
+                    </div>
+                </div>
 
             </div>
         </div>
