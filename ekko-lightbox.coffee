@@ -112,7 +112,7 @@ EkkoLightbox.prototype = {
 		@modal_body.html '<div class="modal-loading">Loading..</div>'
 
 	showYoutubeVideo : (id) ->
-		@resize(560, 315)
+		@resize(560)
 		@modal_body.html '<iframe width="560" height="315" src="//www.youtube.com/embed/' + id + '?autoplay=1" frameborder="0" allowfullscreen></iframe>'
 
 	error : ( message ) ->
@@ -123,11 +123,10 @@ EkkoLightbox.prototype = {
 		img = new Image()
 		if !onLoadShowImage? || onLoadShowImage == true
 			img.onload = =>
+				width = img.width
 				@checkImageDimensions(img)
 				@modal_body.html img
-				i = @modal_body.find('img').first()
-				width = if i && i.width() > 0 then i.width() else img.width
-				@resize width, i.height()
+				@resize width
 			img.onerror = =>
 				@error 'Failed to load image: ' + src
 
@@ -136,9 +135,8 @@ EkkoLightbox.prototype = {
 	close : ->
 		@modal.modal('hide');
 
-	resize : ( width, height ) ->
+	resize : ( width ) ->
 		width = width + @padding.left + @padding.right
-		#height = height + @padding.top + @padding.bottom
 		@modal.find('.modal-content').css {
 			'width' : width
 		}
