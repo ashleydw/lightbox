@@ -283,35 +283,41 @@
 
             <h3 class="page-header" id="global-galleries">Example #12: Global galleries</h3>
             <p>If you're gallery images have different parents you may wish to have all images with the same gallery tag to open regardless of their parent. To do this, set <code>data-parent</code> to the highest element you know of - on this page it is the <code>div.container</code>.</p>
+			<p>You can also leave the <code>data-parent</code> attribute empty, and it will default to <code></code>document.body</code>. This example uses a combination of the two.</p>
             <div class="row">
-                <div class="col-sm-3">
-					<a href="http://25.media.tumblr.com/de356cd6570d7c26e73979467f296f67/tumblr_mrn3dc10Wa1r1thfzo6_1280.jpg" data-gallery="global-gallery" data-parent=".container" data-toggle="lightbox">
+                <div class="col-sm-4">
+					<a href="http://25.media.tumblr.com/de356cd6570d7c26e73979467f296f67/tumblr_mrn3dc10Wa1r1thfzo6_1280.jpg" data-gallery="global-gallery" data-parent="" data-toggle="lightbox">
 						<figure>
 							<img src="//25.media.tumblr.com/de356cd6570d7c26e73979467f296f67/tumblr_mrn3dc10Wa1r1thfzo6_400.jpg" class="img-responsive" alt="">
 							<figcaption>@gregfoster</figcaption>
 						</figure>
 					</a>
                 </div>
-                <div class="col-sm-3">
-                    <a href="http://distilleryimage10.ak.instagram.com/85c5d0e4039411e3bd9b22000aa82186_7.jpg" data-toggle="lightbox" data-gallery="global-gallery" data-parent=".container">
+                <div class="col-sm-4">
+                    <a href="http://distilleryimage10.ak.instagram.com/85c5d0e4039411e3bd9b22000aa82186_7.jpg" data-toggle="lightbox" data-gallery="global-gallery" data-parent="">
                         <img src="//distilleryimage10.ak.instagram.com/85c5d0e4039411e3bd9b22000aa82186_7.jpg" class="img-responsive">
                     </a>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-4">
+					<a href="https://lh4.googleusercontent.com/-lB-KDQlhdAE/T0oJGy0-UOI/AAAAAAAAQyw/K-1hc5M7EQM/s800/IMG_1193%2520-%2520original.jpg" data-toggle="lightbox"  data-gallery="global-gallery" data-parent=".container">
+						<img src="//lh4.googleusercontent.com/-lB-KDQlhdAE/T0oJGy0-UOI/AAAAAAAAQyw/K-1hc5M7EQM/s800/IMG_1193%2520-%2520original.jpg" class="img-responsive">
+					</a>
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-4">
+					<a href="https://lh5.googleusercontent.com/-jl_I19YyRVM/T0oJ3PCKZuI/AAAAAAAARRs/-gfmn1LxMJ8/s1280/tilt%2520shift%2520baseball.jpg" data-toggle="lightbox"  data-gallery="global-gallery" data-parent=".container">
+						<img src="//lh5.googleusercontent.com/-jl_I19YyRVM/T0oJ3PCKZuI/AAAAAAAARRs/-gfmn1LxMJ8/s1280/tilt%2520shift%2520baseball.jpg" class="img-responsive">
+					</a>
                 </div>
-                <div class="col-sm-3">
-                    <a href="//www.youtube.com/embed/b0jqPvpn3sY" data-toggle="lightbox" data-gallery="global-gallery" data-parent=".container">
+                <div class="col-sm-4">
+                    <a href="//www.youtube.com/embed/b0jqPvpn3sY" data-toggle="lightbox" data-gallery="global-gallery" data-parent="">
                         <img src="//i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" class="img-responsive">
                     </a>
                 </div>
             </div>
-    
         </div>
     </div>
 </div>

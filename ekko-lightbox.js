@@ -56,7 +56,11 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       }
       this.gallery = this.$element.data('gallery');
       if (this.gallery) {
-        this.gallery_items = this.$element.parents(this.options.gallery_parent_selector).first().find('*[data-toggle="lightbox"][data-gallery="' + this.gallery + '"]');
+        if (this.options.gallery_parent_selector === 'document.body' || this.options.gallery_parent_selector === '') {
+          this.gallery_items = $(document.body).find('*[data-toggle="lightbox"][data-gallery="' + this.gallery + '"]');
+        } else {
+          this.gallery_items = this.$element.parents(this.options.gallery_parent_selector).first().find('*[data-toggle="lightbox"][data-gallery="' + this.gallery + '"]');
+        }
         this.gallery_index = this.gallery_items.index(this.$element);
         $(document).on('keydown.ekkoLightbox', this.navigate.bind(this));
       }
