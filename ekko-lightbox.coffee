@@ -28,8 +28,8 @@ EkkoLightbox = ( element, options ) ->
 	content = ''
 
 	@modal_id = if @options.modal_id then @options.modal_id else 'ekkoLightbox-' + Math.floor((Math.random() * 1000) + 1)
-	header = if @options.title then '<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">' + @options.title + '</h4></div>' else ''
-	footer = if @options.footer then '<div class="modal-footer">' + @options.footer + '</div>' else ''
+	header = '<div class="modal-header"'+(if @options.title then '' else ' style="display:none"')+'><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">' + @options.title + '</h4></div>'
+	footer = '<div class="modal-footer"'+(if @options.footer then '' else ' style="display:none"')+'>' + @options.footer + '</div>'
 	$(document.body).append '<div id="' + @modal_id + '" class="ekko-lightbox modal fade" tabindex="-1"><div class="modal-dialog"><div class="modal-content">' + header + '<div class="modal-body"></div>' + footer + '</div></div></div>'
 
 	@modal = $ '#' + @modal_id
@@ -92,6 +92,7 @@ EkkoLightbox.prototype = {
 				@gallery_index++
 				@$element = $(@gallery_items.get(@gallery_index))
 				src = @$element.attr('data-source') || @$element.attr('href')
+				@updateTitleAndFooter()
 				if @isImage(src)
 					@preloadImage(src, true)
 				else if youtube = @getYoutubeId(src)
@@ -106,14 +107,25 @@ EkkoLightbox.prototype = {
 			else if event.keyCode == 37 && @gallery_index > 0
 				@gallery_index--
 				@$element = $(@gallery_items.get(@gallery_index))
+				@updateTitleAndFooter()
 				src = @$element.attr('data-source') || @$element.attr('href')
 				if @isImage(src)
 					@preloadImage(src, true)
 				else if youtube = @getYoutubeId(src)
 					@showYoutubeVideo(youtube)
 
+	updateTitleAndFooter: ->
+		header = @modal.find('.modal-dialog .modal-content .modal-header')
+		footer = @modal.find('.modal-dialog .modal-content .modal-footer')
+		title = @$element.data('title') || ""
+		caption = @$element.data('footer') || ""
+		if title then header.css('display', '').find('.modal-title').html(title) else header.css('display', 'none')
+		if caption then footer.css('display', '').html(caption) else footer.css('display', 'none')
+		@
+
 	showLoading : ->
 		@modal_body.html '<div class="modal-loading">Loading..</div>'
+		@
 
 	showYoutubeVideo : (id) ->
 		@resize(560)
@@ -121,6 +133,7 @@ EkkoLightbox.prototype = {
 
 	error : ( message ) ->
 		@modal_body.html message
+		@
 
 	preloadImage : ( src, onLoadShowImage) ->
 
@@ -135,6 +148,7 @@ EkkoLightbox.prototype = {
 				@error 'Failed to load image: ' + src
 
 		img.src = src
+		img
 
 	close : ->
 		@modal.modal('hide');
@@ -147,12 +161,14 @@ EkkoLightbox.prototype = {
 		@modal.find('.modal-dialog').css {
 			'width' : width + 20 #+ 20 because of the drop shadow
 		}
+		@
 
 	checkImageDimensions: (img) ->
 
 		w = $(window)
 		if (img.width + (@padding.left + @padding.right + 20)) > w.width()
 			img.width = w.width() - (@padding.left + @padding.right + 20) #+ 20 because of the drop shadow
+		@
 
 }
 

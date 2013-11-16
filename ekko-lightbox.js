@@ -33,8 +33,8 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
     this.$element = $(element);
     content = '';
     this.modal_id = this.options.modal_id ? this.options.modal_id : 'ekkoLightbox-' + Math.floor((Math.random() * 1000) + 1);
-    header = this.options.title ? '<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">' + this.options.title + '</h4></div>' : '';
-    footer = this.options.footer ? '<div class="modal-footer">' + this.options.footer + '</div>' : '';
+    header = '<div class="modal-header"' + (this.options.title ? '' : ' style="display:none"') + '><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">' + this.options.title + '</h4></div>';
+    footer = '<div class="modal-footer"' + (this.options.footer ? '' : ' style="display:none"') + '>' + this.options.footer + '</div>';
     $(document.body).append('<div id="' + this.modal_id + '" class="ekko-lightbox modal fade" tabindex="-1"><div class="modal-dialog"><div class="modal-content">' + header + '<div class="modal-body"></div>' + footer + '</div></div></div>');
     this.modal = $('#' + this.modal_id);
     this.modal_body = this.modal.find('.modal-body').first();
@@ -93,6 +93,7 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
           this.gallery_index++;
           this.$element = $(this.gallery_items.get(this.gallery_index));
           src = this.$element.attr('data-source') || this.$element.attr('href');
+          this.updateTitleAndFooter();
           if (this.isImage(src)) {
             this.preloadImage(src, true);
           } else if (youtube = this.getYoutubeId(src)) {
@@ -108,6 +109,7 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
         } else if (event.keyCode === 37 && this.gallery_index > 0) {
           this.gallery_index--;
           this.$element = $(this.gallery_items.get(this.gallery_index));
+          this.updateTitleAndFooter();
           src = this.$element.attr('data-source') || this.$element.attr('href');
           if (this.isImage(src)) {
             return this.preloadImage(src, true);
@@ -117,15 +119,35 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
         }
       }
     },
+    updateTitleAndFooter: function() {
+      var caption, footer, header, title;
+      header = this.modal.find('.modal-dialog .modal-content .modal-header');
+      footer = this.modal.find('.modal-dialog .modal-content .modal-footer');
+      title = this.$element.data('title') || "";
+      caption = this.$element.data('footer') || "";
+      if (title) {
+        header.css('display', '').find('.modal-title').html(title);
+      } else {
+        header.css('display', 'none');
+      }
+      if (caption) {
+        footer.css('display', '').html(caption);
+      } else {
+        footer.css('display', 'none');
+      }
+      return this;
+    },
     showLoading: function() {
-      return this.modal_body.html('<div class="modal-loading">Loading..</div>');
+      this.modal_body.html('<div class="modal-loading">Loading..</div>');
+      return this;
     },
     showYoutubeVideo: function(id) {
       this.resize(560);
       return this.modal_body.html('<iframe width="560" height="315" src="//www.youtube.com/embed/' + id + '?autoplay=1" frameborder="0" allowfullscreen></iframe>');
     },
     error: function(message) {
-      return this.modal_body.html(message);
+      this.modal_body.html(message);
+      return this;
     },
     preloadImage: function(src, onLoadShowImage) {
       var img,
@@ -143,7 +165,8 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
           return _this.error('Failed to load image: ' + src);
         };
       }
-      return img.src = src;
+      img.src = src;
+      return img;
     },
     close: function() {
       return this.modal.modal('hide');
@@ -153,16 +176,18 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       this.modal.find('.modal-content').css({
         'width': width
       });
-      return this.modal.find('.modal-dialog').css({
+      this.modal.find('.modal-dialog').css({
         'width': width + 20
       });
+      return this;
     },
     checkImageDimensions: function(img) {
       var w;
       w = $(window);
       if ((img.width + (this.padding.left + this.padding.right + 20)) > w.width()) {
-        return img.width = w.width() - (this.padding.left + this.padding.right + 20);
+        img.width = w.width() - (this.padding.left + this.padding.right + 20);
       }
+      return this;
     }
   };
 
