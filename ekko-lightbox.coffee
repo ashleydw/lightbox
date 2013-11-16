@@ -30,7 +30,7 @@ EkkoLightbox = ( element, options ) ->
 	@modal_id = if @options.modal_id then @options.modal_id else 'ekkoLightbox-' + Math.floor((Math.random() * 1000) + 1)
 	header = if @options.title then '<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">' + @options.title + '</h4></div>' else ''
 	footer = if @options.footer then '<div class="modal-footer">' + @options.footer + '</div>' else ''
-	$(document.body).append '<div id="' + @modal_id + '" class="modal fade" tabindex="-1"><div class="modal-dialog"><div class="modal-content">' + header + '<div class="modal-body"></div>' + footer + '</div></div></div>'
+	$(document.body).append '<div id="' + @modal_id + '" class="ekko-lightbox modal fade" tabindex="-1"><div class="modal-dialog"><div class="modal-content">' + header + '<div class="modal-body"></div>' + footer + '</div></div></div>'
 
 	@modal = $ '#' + @modal_id
 	@modal_body = @modal.find('.modal-body').first()
