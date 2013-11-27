@@ -155,9 +155,9 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       img = new Image();
       if ((onLoadShowImage == null) || onLoadShowImage === true) {
         img.onload = function() {
-          _this.checkImageDimensions(img);
+          var width = _this.checkImageDimensions(img);
           _this.modal_body.html(img);
-          return _this.resize(img.width);
+          return _this.resize(width);
         };
         img.onerror = function() {
           return _this.error('Failed to load image: ' + src);
@@ -185,7 +185,7 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       if ((img.width + (this.padding.left + this.padding.right + 20)) > w.width()) {
         img.width = w.width() - (this.padding.left + this.padding.right + 20);
       }
-      return this;
+      return img.width;
     }
   };
 
