@@ -155,11 +155,9 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       img = new Image();
       if ((onLoadShowImage == null) || onLoadShowImage === true) {
         img.onload = function() {
-          var width;
-          width = img.width;
           _this.checkImageDimensions(img);
           _this.modal_body.html(img);
-          return _this.resize(width);
+          return _this.resize(img.width);
         };
         img.onerror = function() {
           return _this.error('Failed to load image: ' + src);
