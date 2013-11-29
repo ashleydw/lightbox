@@ -12,13 +12,16 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
   var EkkoLightbox;
 
   EkkoLightbox = function(element, options) {
-    var content, footer, header, youtube;
+    var arrows, content, footer, header, youtube,
+      _this = this;
     this.options = $.extend({
       gallery_parent_selector: '*:not(.row)',
       title: null,
       footer: null,
       remote: null,
-      keyboard: true,
+      left_arrow_class: '.glyphicon .glyphicon-chevron-left',
+      right_arrow_class: '.glyphicon .glyphicon-chevron-right',
+      directional_arrows: true,
       onShow: function() {},
       onShown: function() {},
       onHide: function() {},
@@ -35,9 +38,11 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
     this.modal_id = this.options.modal_id ? this.options.modal_id : 'ekkoLightbox-' + Math.floor((Math.random() * 1000) + 1);
     header = '<div class="modal-header"' + (this.options.title ? '' : ' style="display:none"') + '><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">' + this.options.title + '</h4></div>';
     footer = '<div class="modal-footer"' + (this.options.footer ? '' : ' style="display:none"') + '>' + this.options.footer + '</div>';
-    $(document.body).append('<div id="' + this.modal_id + '" class="ekko-lightbox modal fade" tabindex="-1"><div class="modal-dialog"><div class="modal-content">' + header + '<div class="modal-body"></div>' + footer + '</div></div></div>');
+    $(document.body).append('<div id="' + this.modal_id + '" class="ekko-lightbox modal fade" tabindex="-1"><div class="modal-dialog"><div class="modal-content">' + header + '<div class="modal-body"><div class="ekko-lightbox-container"></div></div>' + footer + '</div></div></div>');
     this.modal = $('#' + this.modal_id);
     this.modal_body = this.modal.find('.modal-body').first();
+    this.lightbox_body = this.modal_body.find('.ekko-lightbox-container').first();
+    this.modal_arrows = null;
     this.padding = {
       left: parseFloat(this.modal_body.css('padding-left'), 10),
       right: parseFloat(this.modal_body.css('padding-right'), 10),
@@ -51,8 +56,6 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
         this.preloadImage(this.options.remote, true);
       } else if (youtube = this.getYoutubeId(this.options.remote)) {
         this.showYoutubeVideo(youtube);
-      } else if (this.isSwf(this.options.remote)) {
-        console.log('todo');
       }
       this.gallery = this.$element.data('gallery');
       if (this.gallery) {
@@ -63,6 +66,19 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
         }
         this.gallery_index = this.gallery_items.index(this.$element);
         $(document).on('keydown.ekkoLightbox', this.navigate.bind(this));
+        if (this.options.directional_arrows) {
+          arrows = '<div class="ekko-lightbox-nav-overlay"><a href="#" class="' + this.strip_stops(this.options.left_arrow_class) + '"></a><a href="#" class="' + this.strip_stops(this.options.right_arrow_class) + '"></a></div>';
+          this.modal_body.prepend(arrows);
+          this.modal_arrows = this.modal_body.find('.ekko-lightbox-nav-overlay').first();
+          this.modal_arrows.find('a' + this.strip_spaces(this.options.left_arrow_class)).on('click', function(event) {
+            event.preventDefault();
+            return _this.navigate_left();
+          });
+          this.modal_arrows.find('a' + this.strip_spaces(this.options.right_arrow_class)).on('click', function(event) {
+            event.preventDefault();
+            return _this.navigate_right();
+          });
+        }
       }
     }
     this.modal.on('show.bs.modal', this.options.onShow.bind(this)).on('shown.bs.modal', this.options.onShown.bind(this)).on('hide.bs.modal', this.options.onHide.bind(this)).on('hidden.bs.modal', this.options.onHidden.bind(this)).modal('show', options);
@@ -70,6 +86,12 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
   };
 
   EkkoLightbox.prototype = {
+    strip_stops: function(str) {
+      return str.replace(/\./g, '');
+    },
+    strip_spaces: function(str) {
+      return str.replace(/\s/g, '');
+    },
     isImage: function(str) {
       return str.match(/(^data:image\/.*,)|(\.(jp(e|g|eg)|gif|png|bmp|webp|svg)((\?|#).*)?$)/i);
     },
@@ -86,36 +108,51 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       }
     },
     navigate: function(event) {
-      var next, src, youtube;
       event = event || window.event;
       if (event.keyCode === 39 || event.keyCode === 37) {
-        if (event.keyCode === 39 && this.gallery_index + 1 < this.gallery_items.length) {
-          this.gallery_index++;
-          this.$element = $(this.gallery_items.get(this.gallery_index));
-          src = this.$element.attr('data-source') || this.$element.attr('href');
-          this.updateTitleAndFooter();
-          if (this.isImage(src)) {
-            this.preloadImage(src, true);
-          } else if (youtube = this.getYoutubeId(src)) {
-            this.showYoutubeVideo(youtube);
-          }
-          if (this.gallery_index + 1 < this.gallery_items.length) {
-            next = $(this.gallery_items.get(this.gallery_index + 1), false);
-            src = next.attr('data-source') || next.attr('href');
-            if (this.isImage(src)) {
-              return this.preloadImage(src, false);
-            }
-          }
-        } else if (event.keyCode === 37 && this.gallery_index > 0) {
-          this.gallery_index--;
-          this.$element = $(this.gallery_items.get(this.gallery_index));
-          this.updateTitleAndFooter();
-          src = this.$element.attr('data-source') || this.$element.attr('href');
-          if (this.isImage(src)) {
-            return this.preloadImage(src, true);
-          } else if (youtube = this.getYoutubeId(src)) {
-            return this.showYoutubeVideo(youtube);
-          }
+        if (event.keyCode === 39) {
+          return this.navigate_right();
+        } else if (event.keyCode === 37) {
+          return this.navigate_left();
+        }
+      }
+    },
+    navigate_left: function() {
+      var src, youtube;
+      if (this.gallery_index === 0) {
+        this.gallery_index = this.gallery_items.length - 1;
+      } else {
+        this.gallery_index--;
+      }
+      this.$element = $(this.gallery_items.get(this.gallery_index));
+      this.updateTitleAndFooter();
+      src = this.$element.attr('data-source') || this.$element.attr('href');
+      if (this.isImage(src)) {
+        return this.preloadImage(src, true);
+      } else if (youtube = this.getYoutubeId(src)) {
+        return this.showYoutubeVideo(youtube);
+      }
+    },
+    navigate_right: function() {
+      var next, src, youtube;
+      if (this.gallery_index === this.gallery_items.length - 1) {
+        this.gallery_index = 0;
+      } else {
+        this.gallery_index++;
+      }
+      this.$element = $(this.gallery_items.get(this.gallery_index));
+      src = this.$element.attr('data-source') || this.$element.attr('href');
+      this.updateTitleAndFooter();
+      if (this.isImage(src)) {
+        this.preloadImage(src, true);
+      } else if (youtube = this.getYoutubeId(src)) {
+        this.showYoutubeVideo(youtube);
+      }
+      if (this.gallery_index + 1 < this.gallery_items.length) {
+        next = $(this.gallery_items.get(this.gallery_index + 1), false);
+        src = next.attr('data-source') || next.attr('href');
+        if (this.isImage(src)) {
+          return this.preloadImage(src, false);
         }
       }
     },
@@ -138,15 +175,15 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       return this;
     },
     showLoading: function() {
-      this.modal_body.html('<div class="modal-loading">Loading..</div>');
+      this.lightbox_body.html('<div class="modal-loading">Loading..</div>');
       return this;
     },
     showYoutubeVideo: function(id) {
-      this.resize(560);
-      return this.modal_body.html('<iframe width="560" height="315" src="//www.youtube.com/embed/' + id + '?autoplay=1" frameborder="0" allowfullscreen></iframe>');
+      this.resize(560, 315);
+      return this.lightbox_body.html('<iframe width="560" height="315" src="//www.youtube.com/embed/' + id + '?autoplay=1" frameborder="0" allowfullscreen></iframe>');
     },
     error: function(message) {
-      this.modal_body.html(message);
+      this.lightbox_body.html(message);
       return this;
     },
     preloadImage: function(src, onLoadShowImage) {
@@ -156,9 +193,10 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       if ((onLoadShowImage == null) || onLoadShowImage === true) {
         img.onload = function() {
           var width;
-          width = _this.checkImageDimensions(img);
-          _this.modal_body.html(img);
-          return _this.resize(width);
+          width = img.width;
+          _this.checkImageDimensions(img);
+          _this.lightbox_body.html(img);
+          return _this.resize(width, img.height);
         };
         img.onerror = function() {
           return _this.error('Failed to load image: ' + src);
@@ -170,14 +208,21 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
     close: function() {
       return this.modal.modal('hide');
     },
-    resize: function(width) {
-      width = width + this.padding.left + this.padding.right;
+    resize: function(width, height) {
+      var width_inc_padding;
+      width_inc_padding = width + this.padding.left + this.padding.right;
       this.modal.find('.modal-content').css({
-        'width': width
+        'width': width_inc_padding
       });
       this.modal.find('.modal-dialog').css({
-        'width': width + 20
+        'width': width_inc_padding + 20
       });
+      if (this.modal_arrows) {
+        this.modal_arrows.css({
+          'width': width,
+          'height': height
+        });
+      }
       return this;
     },
     checkImageDimensions: function(img) {
