@@ -155,7 +155,8 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       img = new Image();
       if ((onLoadShowImage == null) || onLoadShowImage === true) {
         img.onload = function() {
-          var width = _this.checkImageDimensions(img);
+          var width;
+          width = _this.checkImageDimensions(img);
           _this.modal_body.html(img);
           return _this.resize(width);
         };
