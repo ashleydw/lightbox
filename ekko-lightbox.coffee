@@ -140,8 +140,7 @@ EkkoLightbox.prototype = {
 		img = new Image()
 		if !onLoadShowImage? || onLoadShowImage == true
 			img.onload = =>
-				width = img.width
-				@checkImageDimensions(img)
+				width = @checkImageDimensions(img)
 				@modal_body.html img
 				@resize width
 			img.onerror = =>
@@ -168,7 +167,7 @@ EkkoLightbox.prototype = {
 		w = $(window)
 		if (img.width + (@padding.left + @padding.right + 20)) > w.width()
 			img.width = w.width() - (@padding.left + @padding.right + 20) #+ 20 because of the drop shadow
-		@
+		img.width
 
 }
 
