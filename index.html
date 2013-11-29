@@ -6,7 +6,46 @@
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
 
-		/* use this to get your footer text left aligned - bootstraps modal default aligns them right */
+		/* custom styling of the directional arrows */
+		.ekko-lightbox-nav-overlay {
+			z-index:100;
+			position: absolute;
+			overflow: hidden;
+		}
+		.ekko-lightbox-nav-overlay a {
+			opacity: 0;
+			-webkit-transition: opacity 0.5s;
+			-moz-transition: opacity 0.5s;
+			-o-transition: opacity 0.5s;
+			transition: opacity 0.5s;
+			color:#fff;
+			font-size:30px;
+			height: 100%;
+			width:49%;
+			display:block;
+			padding-top:45%;
+			text-shadow: 2px 2px 4px #000;
+			filter: dropshadow(color=#000, offx=2, offy=2);
+		}
+		.ekko-lightbox-nav-overlay a:empty {
+			width:49%; /* removes glyphicons :empty { width:1em } */
+		}
+		.ekko-lightbox a:hover {
+			opacity: 1;
+			text-decoration: none;
+		}
+		.ekko-lightbox .glyphicon-chevron-left {
+			float: left;
+			text-align: left;
+			padding-left:15px;
+		}
+		.ekko-lightbox .glyphicon-chevron-right {
+			text-align: right;
+			float: right;
+			padding-right:15px;
+		}
+
+			/* use this to get your footer text left aligned - bootstraps modal default aligns them right */
 		.ekko-lightbox .modal-footer {
 			text-align: left;
 		}
