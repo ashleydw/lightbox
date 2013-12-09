@@ -20,9 +20,6 @@ EkkoLightbox = ( element, options ) ->
 		onShown : ->
 		onHide : ->
 		onHidden : ->
-			if @gallery
-				$(document).off 'keydown.ekkoLightbox'
-			@modal.remove()
 		id : false
 	}, options || {})
 
@@ -32,11 +29,12 @@ EkkoLightbox = ( element, options ) ->
 	@modal_id = if @options.modal_id then @options.modal_id else 'ekkoLightbox-' + Math.floor((Math.random() * 1000) + 1)
 	header = '<div class="modal-header"'+(if @options.title then '' else ' style="display:none"')+'><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">' + @options.title + '</h4></div>'
 	footer = '<div class="modal-footer"'+(if @options.footer then '' else ' style="display:none"')+'>' + @options.footer + '</div>'
-	$(document.body).append '<div id="' + @modal_id + '" class="ekko-lightbox modal fade" tabindex="-1"><div class="modal-dialog"><div class="modal-content">' + header + '<div class="modal-body"><div class="ekko-lightbox-container"></div></div>' + footer + '</div></div></div>'
+	$(document.body).append '<div id="' + @modal_id + '" class="ekko-lightbox modal fade" tabindex="-1"><div class="modal-dialog"><div class="modal-content">' + header + '<div class="modal-body"><div class="ekko-lightbox-container"><div></div></div></div>' + footer + '</div></div></div>'
 
 	@modal = $ '#' + @modal_id
 	@modal_body = @modal.find('.modal-body').first()
-	@lightbox_body = @modal_body.find('.ekko-lightbox-container').first()
+	@lightbox_container = @modal_body.find('.ekko-lightbox-container').first()
+	@lightbox_body = @lightbox_container.find('> div:first-child').first()
 	@modal_arrows = null
 
 	@padding = {
@@ -50,12 +48,6 @@ EkkoLightbox = ( element, options ) ->
 		@error 'No remote target given'
 	else
 
-		if @isImage(@options.remote)
-			@preloadImage(@options.remote, true)
-
-		else if youtube = @getYoutubeId(@options.remote)
-			@showYoutubeVideo(youtube)
-
 		@gallery = @$element.data('gallery')
 		if @gallery
 			# parents('document.body') fails for some reason, so do this manually
@@ -68,22 +60,33 @@ EkkoLightbox = ( element, options ) ->
 
 			# add the directional arrows to the modal
 			if @options.directional_arrows
-				arrows = '<div class="ekko-lightbox-nav-overlay"><a href="#" class="'+@strip_stops(@options.left_arrow_class)+'"></a><a href="#" class="'+@strip_stops(@options.right_arrow_class)+'"></a></div>';
-				@modal_body.prepend(arrows)
-				@modal_arrows = @modal_body.find('.ekko-lightbox-nav-overlay').first()
-				@modal_arrows.find('a'+@strip_spaces(@options.left_arrow_class)).on 'click', (event) =>
+				@lightbox_container.prepend('<div class="ekko-lightbox-nav-overlay"><a href="#" class="'+@strip_stops(@options.left_arrow_class)+'"></a><a href="#" class="'+@strip_stops(@options.right_arrow_class)+'"></a></div>')
+				@modal_arrows = @lightbox_container.find('div.ekko-lightbox-nav-overlay').first()
+				@lightbox_container.find('a'+@strip_spaces(@options.left_arrow_class)).on 'click', (event) =>
 					event.preventDefault()
 					do @navigate_left
-				@modal_arrows.find('a'+@strip_spaces(@options.right_arrow_class)).on 'click', (event) =>
+				@lightbox_container.find('a'+@strip_spaces(@options.right_arrow_class)).on 'click', (event) =>
 					event.preventDefault()
 					do @navigate_right
+
+		if @isImage(@options.remote)
+			@preloadImage(@options.remote, true)
+		else if youtube = @getYoutubeId(@options.remote)
+			@showYoutubeVideo(youtube)
 
 
 	@modal
 		.on('show.bs.modal', @options.onShow.bind(@))
-		.on('shown.bs.modal', @options.onShown.bind(@))
+		.on 'shown.bs.modal', =>
+			if @modal_arrows
+				@resize @lightbox_body.width()
+			@options.onShown.call(@)
 		.on('hide.bs.modal', @options.onHide.bind(@))
-		.on('hidden.bs.modal', @options.onHidden.bind(@))
+		.on 'hidden.bs.modal', =>
+			if @gallery
+				$(document).off 'keydown.ekkoLightbox'
+			@modal.remove()
+			@options.onHidden.call(@)
 		.modal 'show', options
 
 	@modal
@@ -160,8 +163,10 @@ EkkoLightbox.prototype = {
 		@
 
 	showYoutubeVideo : (id) ->
-		@resize(560, 315)
+		@resize 560
 		@lightbox_body.html '<iframe width="560" height="315" src="//www.youtube.com/embed/' + id + '?autoplay=1" frameborder="0" allowfullscreen></iframe>'
+		if @modal_arrows #hide the arrows when showing video
+			@modal_arrows.css 'display', 'none'
 
 	error : ( message ) ->
 		@lightbox_body.html message
@@ -172,41 +177,39 @@ EkkoLightbox.prototype = {
 		img = new Image()
 		if !onLoadShowImage? || onLoadShowImage == true
 			img.onload = =>
-				width = img.width
-				@checkImageDimensions(img)
-				@lightbox_body.html img
-				@resize width, img.height
+				width = @checkImageDimensions(img.width)
+				image = $('<img />')
+				image.attr('src', img.src)
+				image.css('max-width', '100%')
+				@lightbox_body.html image
+				if @modal_arrows #show the arrows
+					@modal_arrows.css 'display', 'block'
+				@resize width
 			img.onerror = =>
 				@error 'Failed to load image: ' + src
 
 		img.src = src
 		img
 
-	close : ->
-		@modal.modal('hide');
-
-	resize : ( width, height ) ->
+	resize : ( width ) ->
 		width_inc_padding = width + @padding.left + @padding.right
-		@modal.find('.modal-content').css {
-			'width' : width_inc_padding
-		}
-		@modal.find('.modal-dialog').css {
-			'width' : width_inc_padding + 20 #+ 20 because of the drop shadow
-		}
-		if @modal_arrows
-			@modal_arrows.css {
-				'width' : width
-				'height': height
-			}
+		@modal.find('.modal-content').css('width', width_inc_padding)
+		@modal.find('.modal-dialog').css('width', width_inc_padding + 20 ) #+ 20 because of the drop shadow
+		# fu padding, fu
+		@lightbox_container.find('a').css 'padding-top', ->
+			$(@).parent().height() / 2
 		@
 
-	checkImageDimensions: (img) ->
-
+	checkImageDimensions: (max_width) ->
+		#resize the container based on the max width given
 		w = $(window)
-		if (img.width + (@padding.left + @padding.right + 20)) > w.width()
-			img.width = w.width() - (@padding.left + @padding.right + 20) #+ 20 because of the drop shadow
-		img.width
+		width = max_width
+		if (max_width + (@padding.left + @padding.right + 20)) > w.width()
+			width = w.width() - (@padding.left + @padding.right + 20) #+ 20 because of the drop shadow
+		width
 
+	close : ->
+		@modal.modal('hide');
 }
 
 
@@ -217,7 +220,7 @@ $.fn.ekkoLightbox = ( options ) ->
 		options = $.extend({
 			remote : $this.attr('data-source') || $this.attr('href')
 			gallery_parent_selector : $this.attr('data-parent')
-		}, $this.data())
+		}, options, $this.data())
 		new EkkoLightbox(@, options)
 		@
 
@@ -229,6 +232,9 @@ $(document).delegate '*[data-toggle="lightbox"]', 'click', ( event ) ->
 		.ekkoLightbox({
 			remote : $this.attr('data-source') || $this.attr('href')
 			gallery_parent_selector : $this.attr('data-parent')
+			onShown: ->
+				if window.console
+					console.log('Checking our the events huh?')
 		})
 		.one 'hide', ->
 			$this.is(':visible') && $this.focus()
