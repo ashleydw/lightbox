@@ -16,6 +16,7 @@ EkkoLightbox = ( element, options ) ->
 		left_arrow_class: '.glyphicon .glyphicon-chevron-left' #include class . here - they are stripped out later
 		right_arrow_class: '.glyphicon .glyphicon-chevron-right' #include class . here - they are stripped out later
 		directional_arrows: true #display the left / right arrows or not
+		type: null #force the lightbox into image / youtube mode. if null, or not image|youtube|vimeo; detect it
 		onShow : ->
 		onShown : ->
 		onHide : ->
@@ -69,10 +70,18 @@ EkkoLightbox = ( element, options ) ->
 					event.preventDefault()
 					do @navigate_right
 
-		if @isImage(@options.remote)
-			@preloadImage(@options.remote, true)
-		else if youtube = @getYoutubeId(@options.remote)
-			@showYoutubeVideo(youtube)
+		if @options.type
+			if @options.type == 'image'
+				@preloadImage(@options.remote, true)
+			else if @options.type == 'youtube' && video_id = @getYoutubeId(@options.remote)
+				@showYoutubeVideo(video_id)
+			else if @options.type == 'vimeo'
+				@showVimeoVideo(@options.remote)
+			else
+				@error "Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo\""
+
+		else
+			@detectRemoteType(@options.remote)
 
 
 	@modal
@@ -108,6 +117,9 @@ EkkoLightbox.prototype = {
 		match = str.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
 		if match && match[2].length == 11 then match[2] else false
 
+	getVimeoId: (str) ->
+		if str.indexOf('vimeo') > 0 then str else false
+
 	navigate : ( event ) ->
 
 		event = event || window.event;
@@ -123,31 +135,35 @@ EkkoLightbox.prototype = {
 
 		@$element = $(@gallery_items.get(@gallery_index))
 		@updateTitleAndFooter()
-		src = @$element.attr('data-source') || @$element.attr('href')
+		src = @$element.attr('data-remote') || @$element.attr('href')
 
-		if @isImage(src)
-			@preloadImage(src, true)
-		else if youtube = @getYoutubeId(src)
-			@showYoutubeVideo(youtube)
+		@detectRemoteType(src)
 
 	navigate_right: ->
 
 		if @gallery_index == @gallery_items.length-1 then @gallery_index = 0 else @gallery_index++ #circular
 
 		@$element = $(@gallery_items.get(@gallery_index))
-		src = @$element.attr('data-source') || @$element.attr('href')
+		src = @$element.attr('data-remote') || @$element.attr('href')
 		@updateTitleAndFooter()
 
-		if @isImage(src)
-			@preloadImage(src, true)
-		else if youtube = @getYoutubeId(src)
-			@showYoutubeVideo(youtube)
+		@detectRemoteType(src)
 
 		if @gallery_index + 1 < @gallery_items.length
 			next = $(@gallery_items.get(@gallery_index + 1), false)
-			src = next.attr('data-source') || next.attr('href')
+			src = next.attr('data-remote') || next.attr('href')
 			if @isImage(src)
 				@preloadImage(src, false)
+
+	detectRemoteType: (src) ->
+		if @isImage(src)
+			@preloadImage(src, true)
+		else if video_id = @getYoutubeId(src)
+			@showYoutubeVideo(video_id)
+		else if video_id = @getVimeoId(src)
+			@showVimeoVideo(video_id)
+		else
+			@error "Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo\""
 
 	updateTitleAndFooter: ->
 		header = @modal.find('.modal-dialog .modal-content .modal-header')
@@ -164,7 +180,13 @@ EkkoLightbox.prototype = {
 
 	showYoutubeVideo : (id) ->
 		@resize 560
-		@lightbox_body.html '<iframe width="560" height="315" src="//www.youtube.com/embed/' + id + '?autoplay=1" frameborder="0" allowfullscreen></iframe>'
+		@lightbox_body.html '<iframe width="560" height="315" src="//www.youtube.com/embed/' + id + '?badge=0&autoplay=1" frameborder="0" allowfullscreen></iframe>'
+		if @modal_arrows #hide the arrows when showing video
+			@modal_arrows.css 'display', 'none'
+
+	showVimeoVideo : (id) ->
+		@resize 500
+		@lightbox_body.html '<iframe width="500" height="281" src="' + id + '?autoplay=1" frameborder="0" allowfullscreen></iframe>'
 		if @modal_arrows #hide the arrows when showing video
 			@modal_arrows.css 'display', 'none'
 
@@ -218,8 +240,9 @@ $.fn.ekkoLightbox = ( options ) ->
 
 		$this = $(this)
 		options = $.extend({
-			remote : $this.attr('data-source') || $this.attr('href')
+			remote : $this.attr('data-remote') || $this.attr('href')
 			gallery_parent_selector : $this.attr('data-parent')
+			type : $this.attr('data-type')
 		}, options, $this.data())
 		new EkkoLightbox(@, options)
 		@
@@ -230,7 +253,7 @@ $(document).delegate '*[data-toggle="lightbox"]', 'click', ( event ) ->
 	$this = $(this)
 	$this
 		.ekkoLightbox({
-			remote : $this.attr('data-source') || $this.attr('href')
+			remote : $this.attr('data-remote') || $this.attr('href')
 			gallery_parent_selector : $this.attr('data-parent')
 			onShown: ->
 				if window.console

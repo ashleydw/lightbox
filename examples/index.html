@@ -131,7 +131,7 @@
 						<td>string</td>
 						<td></td>
 						<td>If you can't/don't want to set the href property of an element</td>
-						<td><code>data-source="http://www...."</code></td>
+						<td><code>data-remote="http://www...."</code></td>
 					</tr>
 					<tr>
 						<td>gallery</td>
@@ -147,6 +147,13 @@
 						<td>If the gallery parent isn't a div, use this.</td>
 						<td><code>data-parent="any valid selector"</code></td>
 					</tr>
+					<tr>
+						<td>type</td>
+						<td>string</td>
+						<td></td>
+						<td>Force the lightbox into image/YouTube mode.</td>
+						<td><code>data-type="(image|youtube|vimeo)"</code></td>
+					</tr>
 					</tbody>
 				</table>
             </div>
@@ -156,14 +163,16 @@
             <ul>
                 <li><a href="#single-image">Example #1: Single Image</a></li>
                 <li><a href="#image-gallery">Example #2: Gallery of Images</a></li>
-                <li><a href="#single-youtube">Example #3: Single YouTube Video</a></li>
+                <li><a href="#single-youtube">Example #3: Single YouTube / Vimeo Video</a></li>
+                <li><a href="#youtube-gallery">Example #4: Gallery of YouTube / Vimeo Videos</a></li>
                 <li><a href="#mixed-gallery">Example #5: Mixed gallery</a></li>
                 <li><a href="#programatically-call">Example #6: Programatically call</a></li>
-                <li><a href="#data-source">Example #7: Via <code>data-source</code></a></li>
+                <li><a href="#data-remote">Example #7: Via <code>data-remote</code></a></li>
                 <li><a href="#different-sizes">Example #8: Gallery of different sized images</a></li>
                 <li><a href="#too-large">Example #9: Images too wide for display</a></li>
                 <li><a href="#wrappers">Example #11: Column wrappers</a></li>
                 <li><a href="#global-galleries">Example #12: Global galleries</a></li>
+                <li><a href="#check-is-image">Example #13: No-extension images / presume everything is an image</a></li>
             </ul>
             
             <h3 class="page-header" id="single-image">Example #1: Single Image</h3>
@@ -206,11 +215,17 @@
                 </div>
             </div>
             
-            <h3 class="page-header" id="single-youtube">Example #3: Single YouTube Video</h3>
-            <a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox">
-                Ghostpoet - Cash and Carry Me Home (Official Video)
-            </a>
-            
+            <h3 class="page-header" id="single-youtube">Example #3: Single YouTube / Vimeo Video</h3>
+			<h4>YouTube</h4>
+			<p>You can use various YouTube URL formats, the regex used is: <code>/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/</code></p>
+			<p><a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox">Ghostpoet - Cash and Carry Me Home</a></p>
+			<p><a href="http://youtu.be/b0jqPvpn3sY" data-toggle="lightbox">Tame Impala - Elephant (using youtu.be link)</a></p>
+			<br />
+			<h4>Vimeo</h4>
+			<p>You cannot embed Vimeo videos using the standard url (ie http://vimeo.com/80629469); you must link to the embed source (ie player.vimeo.com/video/80629469). This will mean your link url - if the JavaScript fails, will open the full screen player (try opening the first link below in a new tab); the solution to this is to set the lightbox source directly - the second link below does this.</p>
+			<p><a href="http://player.vimeo.com/video/80629469" data-toggle="lightbox">City Lights - from Colin Rich (using embed link)</a></p>
+			<p><a href="http://vimeo.com/80629469" data-remote="http://player.vimeo.com/video/80629469" data-toggle="lightbox">City Lights - from Colin Rich</a> (with reccommended <code>data-remote</code> setting)</p>
+
             <h3 class="page-header" id="youtube-gallery">Example #4: Gallery of YouTube Videos</h3>
             <div class="row">
                 <div class="col-md-offset-1 col-md-10">
@@ -238,9 +253,9 @@
                         <a href="http://distilleryimage10.ak.instagram.com/85c5d0e4039411e3bd9b22000aa82186_7.jpg" data-toggle="lightbox" data-gallery="mixedgallery" class="col-sm-4">
                             <img src="//distilleryimage10.ak.instagram.com/85c5d0e4039411e3bd9b22000aa82186_7.jpg" class="img-responsive">
                         </a>
-                        <a href="//www.youtube.com/embed/b0jqPvpn3sY" data-toggle="lightbox" data-gallery="mixedgallery" class="col-sm-4">
-                            <img src="//i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" class="img-responsive">
-                        </a>
+						<a href="http://vimeo.com/80629469" data-remote="http://player.vimeo.com/video/80629469" data-toggle="lightbox" data-gallery="mixedgallery" class="col-sm-4">
+							<img src="//b.vimeocdn.com/ts/458/070/458070637_200.jpg" class="img-responsive">
+						</a>
                     </div>
                 </div>
             </div>
@@ -260,12 +275,12 @@
                 </div>
             </div>
         
-            <h3 class="page-header" id="data-source">Example #7: Via <code>data-source</code></h3>
+            <h3 class="page-header" id="data-remote">Example #7: Via <code>data-remote</code></h3>
             <div class="row">
                 <div class="col-md-offset-1 col-md-10">
                     <div class="row">
-                        <img src="//distilleryimage2.ak.instagram.com/e3493b0a045411e3a4fb22000a1f97ec_7.jpg" data-toggle="lightbox" data-source="http://distilleryimage2.ak.instagram.com/e3493b0a045411e3a4fb22000a1f97ec_7.jpg" class="img-responsive col-sm-4">
-                        <img src="//i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" data-toggle="lightbox" data-source="//www.youtube.com/embed/b0jqPvpn3sY" class="img-responsive col-sm-4">
+                        <img src="//distilleryimage2.ak.instagram.com/e3493b0a045411e3a4fb22000a1f97ec_7.jpg" data-toggle="lightbox" data-remote="http://distilleryimage2.ak.instagram.com/e3493b0a045411e3a4fb22000a1f97ec_7.jpg" class="img-responsive col-sm-4">
+                        <img src="//i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" data-toggle="lightbox" data-remote="//www.youtube.com/embed/b0jqPvpn3sY" class="img-responsive col-sm-4">
                     </div>
                 </div>
             </div>
@@ -367,6 +382,12 @@
                     </a>
                 </div>
             </div>
+
+            <h3 class="page-header" id="check-is-image">Example #13: No-extension images / presume everything is an image</h3>
+            <p>If the images you are linking to have no extension, the lightbox cannot detect that is an image; therefore you need to tell the lightbox what <code>data-type</code> it is.</p>
+            <p><a href="http://nla.gov.au/nla.pic-an22199070-gd600n" data-title="Force image display" data-footer="The remote of this modal has no extension: http://nla.gov.au/nla.pic-an22199070-gd600n" data-toggle="lightbox" data-type="image">Click here for an image, but with no extension.</a></p>
+            <p><a href="http://nla.gov.au/nla.pic-an22199070-gd600n" data-toggle="lightbox">This link is missing the type attribute, and will not work.</a></p>
+            <p><a href="http://www.youtube.com/watch?v=b0jqPvpn3sY" data-toggle="lightbox" data-type="image">This link is linking to a YouTube video, but forcing an image.</a></p>
         </div>
     </div>
 </div>

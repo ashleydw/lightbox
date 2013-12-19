@@ -12,7 +12,7 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
   var EkkoLightbox;
 
   EkkoLightbox = function(element, options) {
-    var content, footer, header, youtube,
+    var content, footer, header, video_id,
       _this = this;
     this.options = $.extend({
       gallery_parent_selector: '*:not(.row)',
@@ -22,6 +22,7 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       left_arrow_class: '.glyphicon .glyphicon-chevron-left',
       right_arrow_class: '.glyphicon .glyphicon-chevron-right',
       directional_arrows: true,
+      type: null,
       onShow: function() {},
       onShown: function() {},
       onHide: function() {},
@@ -70,10 +71,18 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
           });
         }
       }
-      if (this.isImage(this.options.remote)) {
-        this.preloadImage(this.options.remote, true);
-      } else if (youtube = this.getYoutubeId(this.options.remote)) {
-        this.showYoutubeVideo(youtube);
+      if (this.options.type) {
+        if (this.options.type === 'image') {
+          this.preloadImage(this.options.remote, true);
+        } else if (this.options.type === 'youtube' && (video_id = this.getYoutubeId(this.options.remote))) {
+          this.showYoutubeVideo(video_id);
+        } else if (this.options.type === 'vimeo') {
+          this.showVimeoVideo(this.options.remote);
+        } else {
+          this.error("Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo\"");
+        }
+      } else {
+        this.detectRemoteType(this.options.remote);
       }
     }
     this.modal.on('show.bs.modal', this.options.onShow.bind(this)).on('shown.bs.modal', function() {
@@ -113,6 +122,13 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
         return false;
       }
     },
+    getVimeoId: function(str) {
+      if (str.indexOf('vimeo') > 0) {
+        return str;
+      } else {
+        return false;
+      }
+    },
     navigate: function(event) {
       event = event || window.event;
       if (event.keyCode === 39 || event.keyCode === 37) {
@@ -124,7 +140,7 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       }
     },
     navigate_left: function() {
-      var src, youtube;
+      var src;
       if (this.gallery_index === 0) {
         this.gallery_index = this.gallery_items.length - 1;
       } else {
@@ -132,34 +148,38 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       }
       this.$element = $(this.gallery_items.get(this.gallery_index));
       this.updateTitleAndFooter();
-      src = this.$element.attr('data-source') || this.$element.attr('href');
-      if (this.isImage(src)) {
-        return this.preloadImage(src, true);
-      } else if (youtube = this.getYoutubeId(src)) {
-        return this.showYoutubeVideo(youtube);
-      }
+      src = this.$element.attr('data-remote') || this.$element.attr('href');
+      return this.detectRemoteType(src);
     },
     navigate_right: function() {
-      var next, src, youtube;
+      var next, src;
       if (this.gallery_index === this.gallery_items.length - 1) {
         this.gallery_index = 0;
       } else {
         this.gallery_index++;
       }
       this.$element = $(this.gallery_items.get(this.gallery_index));
-      src = this.$element.attr('data-source') || this.$element.attr('href');
+      src = this.$element.attr('data-remote') || this.$element.attr('href');
       this.updateTitleAndFooter();
-      if (this.isImage(src)) {
-        this.preloadImage(src, true);
-      } else if (youtube = this.getYoutubeId(src)) {
-        this.showYoutubeVideo(youtube);
-      }
+      this.detectRemoteType(src);
       if (this.gallery_index + 1 < this.gallery_items.length) {
         next = $(this.gallery_items.get(this.gallery_index + 1), false);
-        src = next.attr('data-source') || next.attr('href');
+        src = next.attr('data-remote') || next.attr('href');
         if (this.isImage(src)) {
           return this.preloadImage(src, false);
         }
+      }
+    },
+    detectRemoteType: function(src) {
+      var video_id;
+      if (this.isImage(src)) {
+        return this.preloadImage(src, true);
+      } else if (video_id = this.getYoutubeId(src)) {
+        return this.showYoutubeVideo(video_id);
+      } else if (video_id = this.getVimeoId(src)) {
+        return this.showVimeoVideo(video_id);
+      } else {
+        return this.error("Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo\"");
       }
     },
     updateTitleAndFooter: function() {
@@ -186,7 +206,14 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
     },
     showYoutubeVideo: function(id) {
       this.resize(560);
-      this.lightbox_body.html('<iframe width="560" height="315" src="//www.youtube.com/embed/' + id + '?autoplay=1" frameborder="0" allowfullscreen></iframe>');
+      this.lightbox_body.html('<iframe width="560" height="315" src="//www.youtube.com/embed/' + id + '?badge=0&autoplay=1" frameborder="0" allowfullscreen></iframe>');
+      if (this.modal_arrows) {
+        return this.modal_arrows.css('display', 'none');
+      }
+    },
+    showVimeoVideo: function(id) {
+      this.resize(500);
+      this.lightbox_body.html('<iframe width="500" height="281" src="' + id + '?autoplay=1" frameborder="0" allowfullscreen></iframe>');
       if (this.modal_arrows) {
         return this.modal_arrows.css('display', 'none');
       }
@@ -248,8 +275,9 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       var $this;
       $this = $(this);
       options = $.extend({
-        remote: $this.attr('data-source') || $this.attr('href'),
-        gallery_parent_selector: $this.attr('data-parent')
+        remote: $this.attr('data-remote') || $this.attr('href'),
+        gallery_parent_selector: $this.attr('data-parent'),
+        type: $this.attr('data-type')
       }, options, $this.data());
       new EkkoLightbox(this, options);
       return this;
@@ -261,7 +289,7 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
     event.preventDefault();
     $this = $(this);
     return $this.ekkoLightbox({
-      remote: $this.attr('data-source') || $this.attr('href'),
+      remote: $this.attr('data-remote') || $this.attr('href'),
       gallery_parent_selector: $this.attr('data-parent'),
       onShown: function() {
         if (window.console) {
