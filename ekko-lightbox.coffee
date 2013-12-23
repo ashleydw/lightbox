@@ -137,7 +137,7 @@ EkkoLightbox.prototype = {
 		@updateTitleAndFooter()
 		src = @$element.attr('data-remote') || @$element.attr('href')
 
-		@detectRemoteType(src, @element.attr('data-type'))
+		@detectRemoteType(src, @$element.attr('data-type'))
 
 	navigate_right: ->
 
@@ -147,7 +147,7 @@ EkkoLightbox.prototype = {
 		src = @$element.attr('data-remote') || @$element.attr('href')
 		@updateTitleAndFooter()
 
-		@detectRemoteType(src, @element.attr('data-type'))
+		@detectRemoteType(src, @$element.attr('data-type'))
 
 		if @gallery_index + 1 < @gallery_items.length
 			next = $(@gallery_items.get(@gallery_index + 1), false)
