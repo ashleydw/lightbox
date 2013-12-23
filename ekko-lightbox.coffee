@@ -130,7 +130,9 @@ EkkoLightbox.prototype = {
 				do @navigate_left
 
 	navigate_left: ->
-
+		
+		if @gallery_items.length == 1 then return
+		
 		if @gallery_index == 0 then @gallery_index = @gallery_items.length-1 else @gallery_index-- #circular
 
 		@$element = $(@gallery_items.get(@gallery_index))
@@ -140,7 +142,9 @@ EkkoLightbox.prototype = {
 		@detectRemoteType(src, @$element.attr('data-type'))
 
 	navigate_right: ->
-
+		
+		if @gallery_items.length == 1 then return
+		
 		if @gallery_index == @gallery_items.length-1 then @gallery_index = 0 else @gallery_index++ #circular
 
 		@$element = $(@gallery_items.get(@gallery_index))
@@ -152,7 +156,7 @@ EkkoLightbox.prototype = {
 		if @gallery_index + 1 < @gallery_items.length
 			next = $(@gallery_items.get(@gallery_index + 1), false)
 			src = next.attr('data-remote') || next.attr('href')
-			if @isImage(src)
+			if next.attr('data-type') == 'image' || @isImage(src)
 				@preloadImage(src, false)
 
 	detectRemoteType: (src, type) ->
