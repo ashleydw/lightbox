@@ -183,8 +183,10 @@ EkkoLightbox.prototype = {
 		@
 
 	showYoutubeVideo : (id) ->
-		@resize 560
-		@lightbox_body.html '<iframe width="560" height="315" src="//www.youtube.com/embed/' + id + '?badge=0&autoplay=1" frameborder="0" allowfullscreen></iframe>'
+		width = @$element.data('width') || 560
+		height = @$element.data('height') || 315
+		@resize width
+		@lightbox_body.html '<iframe width="'+width+'" height="'+height+'" src="//www.youtube.com/embed/' + id + '?badge=0&autoplay=1" frameborder="0" allowfullscreen></iframe>'
 		if @modal_arrows #hide the arrows when showing video
 			@modal_arrows.css 'display', 'none'
 
@@ -250,18 +252,3 @@ $.fn.ekkoLightbox = ( options ) ->
 		}, options, $this.data())
 		new EkkoLightbox(@, options)
 		@
-
-$(document).delegate '*[data-toggle="lightbox"]', 'click', ( event ) ->
-	event.preventDefault()
-
-	$this = $(this)
-	$this
-		.ekkoLightbox({
-			remote : $this.attr('data-remote') || $this.attr('href')
-			gallery_parent_selector : $this.attr('data-parent')
-			onShown: ->
-				if window.console
-					console.log('Checking our the events huh?')
-		})
-		.one 'hide', ->
-			$this.is(':visible') && $this.focus()

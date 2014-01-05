@@ -113,6 +113,15 @@
 			</div>
 
 			<div class="top-header">
+				<h2>Implementation</h2>
+				<p>As of release v3.0.3a, the main script no longer includes the delegate function:</p>
+<code style="white-space: pre-wrap">$(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
+	event.preventDefault();
+	return $(this).ekkoLightbox();
+});");</code>
+			</div>
+
+			<div class="top-header">
 				<h2>Options</h2>
 				<p>Options are passed down to the modal object so you can also use any of the <a href="http://getbootstrap.com/javascript/#modals-usage">original modal options</a>.</p>
 				<table class="table table-bordered">
@@ -154,8 +163,23 @@
 						<td>Force the lightbox into image/YouTube mode.</td>
 						<td><code>data-type="(image|youtube|vimeo)"</code></td>
 					</tr>
+					<tr>
+						<td>width *</td>
+						<td>integer</td>
+						<td></td>
+						<td>Force the width</td>
+						<td><code>data-width="[0-9]+]"</code></td>
+					</tr>
+					<tr>
+						<td>height *</td>
+						<td>integer</td>
+						<td></td>
+						<td>Force the height</td>
+						<td><code>data-height="[0-9]+]"</code></td>
+					</tr>
 					</tbody>
 				</table>
+				<p>*: Videos only</p>
             </div>
 
             <h1 class="page-header">Examples</h1>
@@ -163,7 +187,7 @@
             <ul>
                 <li><a href="#single-image">Example #1: Single Image</a></li>
                 <li><a href="#image-gallery">Example #2: Gallery of Images</a></li>
-                <li><a href="#single-youtube">Example #3: Single YouTube / Vimeo Video</a></li>
+                <li><a href="#single-youtube">Example #3: Single YouTube & Vimeo Video. Forced width</a></li>
                 <li><a href="#youtube-gallery">Example #4: Gallery of YouTube / Vimeo Videos</a></li>
                 <li><a href="#mixed-gallery">Example #5: Mixed gallery</a></li>
                 <li><a href="#programatically-call">Example #6: Programatically call</a></li>
@@ -225,6 +249,12 @@
 			<p>You cannot embed Vimeo videos using the standard url (ie http://vimeo.com/80629469); you must link to the embed source (ie player.vimeo.com/video/80629469). This will mean your link url - if the JavaScript fails, will open the full screen player (try opening the first link below in a new tab); the solution to this is to set the lightbox source directly - the second link below does this.</p>
 			<p><a href="http://player.vimeo.com/video/80629469" data-toggle="lightbox">City Lights - from Colin Rich (using embed link)</a></p>
 			<p><a href="http://vimeo.com/80629469" data-remote="http://player.vimeo.com/video/80629469" data-toggle="lightbox">City Lights - from Colin Rich</a> (with reccommended <code>data-remote</code> setting)</p>
+			<br />
+			<h4>Forcing width</h4>
+			<p>Set the width of the video</p>
+			<p><a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox">Ghostpoet - Cash and Carry Me Home (standard)</a></p>
+			<p><a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox" data-width="640" data-height="360">Ghostpoet - Cash and Carry Me Home (640 x 360)</a></p>
+			<p><a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox" data-width="1280" data-height="780">Ghostpoet - Cash and Carry Me Home (1280 x 780)</a></p>
 
             <h3 class="page-header" id="youtube-gallery">Example #4: Gallery of YouTube Videos</h3>
             <div class="row">
@@ -397,6 +427,20 @@
 <script src="../ekko-lightbox.js"></script>
 <script type="text/javascript">
     $(document).ready(function ($) {
+
+		// delegate calls to data-toggle="lightbox"
+		$(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
+			event.preventDefault();
+			return $(this).ekkoLightbox({
+				onShown: function() {
+					if (window.console) {
+						return console.log('Checking our the events huh?');
+					}
+				}
+			});
+		});
+
+		//Programatically call
 		$('#open-image').click(function (e) {
 			e.preventDefault();
 			$(this).ekkoLightbox();
@@ -405,6 +449,8 @@
 			e.preventDefault();
 			$(this).ekkoLightbox();
 		});
+
+
 	});
 </script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>

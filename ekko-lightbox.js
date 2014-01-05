@@ -58,7 +58,7 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
         }
         this.gallery_index = this.gallery_items.index(this.$element);
         $(document).on('keydown.ekkoLightbox', this.navigate.bind(this));
-        if (this.options.directional_arrows) {
+        if (this.options.directional_arrows && this.gallery_items.length > 1) {
           this.lightbox_container.prepend('<div class="ekko-lightbox-nav-overlay"><a href="#" class="' + this.strip_stops(this.options.left_arrow_class) + '"></a><a href="#" class="' + this.strip_stops(this.options.right_arrow_class) + '"></a></div>');
           this.modal_arrows = this.lightbox_container.find('div.ekko-lightbox-nav-overlay').first();
           this.lightbox_container.find('a' + this.strip_spaces(this.options.left_arrow_class)).on('click', function(event) {
@@ -141,6 +141,9 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
     },
     navigate_left: function() {
       var src;
+      if (this.gallery_items.length === 1) {
+        return;
+      }
       if (this.gallery_index === 0) {
         this.gallery_index = this.gallery_items.length - 1;
       } else {
@@ -149,10 +152,13 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       this.$element = $(this.gallery_items.get(this.gallery_index));
       this.updateTitleAndFooter();
       src = this.$element.attr('data-remote') || this.$element.attr('href');
-      return this.detectRemoteType(src);
+      return this.detectRemoteType(src, this.$element.attr('data-type'));
     },
     navigate_right: function() {
       var next, src;
+      if (this.gallery_items.length === 1) {
+        return;
+      }
       if (this.gallery_index === this.gallery_items.length - 1) {
         this.gallery_index = 0;
       } else {
@@ -161,22 +167,22 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       this.$element = $(this.gallery_items.get(this.gallery_index));
       src = this.$element.attr('data-remote') || this.$element.attr('href');
       this.updateTitleAndFooter();
-      this.detectRemoteType(src);
+      this.detectRemoteType(src, this.$element.attr('data-type'));
       if (this.gallery_index + 1 < this.gallery_items.length) {
         next = $(this.gallery_items.get(this.gallery_index + 1), false);
         src = next.attr('data-remote') || next.attr('href');
-        if (this.isImage(src)) {
+        if (next.attr('data-type') === 'image' || this.isImage(src)) {
           return this.preloadImage(src, false);
         }
       }
     },
-    detectRemoteType: function(src) {
+    detectRemoteType: function(src, type) {
       var video_id;
-      if (this.isImage(src)) {
+      if (type === 'image' || this.isImage(src)) {
         return this.preloadImage(src, true);
-      } else if (video_id = this.getYoutubeId(src)) {
+      } else if (type === 'youtube' || (video_id = this.getYoutubeId(src))) {
         return this.showYoutubeVideo(video_id);
-      } else if (video_id = this.getVimeoId(src)) {
+      } else if (type === 'vimeo' || (video_id = this.getVimeoId(src))) {
         return this.showVimeoVideo(video_id);
       } else {
         return this.error("Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo\"");
@@ -205,8 +211,11 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       return this;
     },
     showYoutubeVideo: function(id) {
-      this.resize(560);
-      this.lightbox_body.html('<iframe width="560" height="315" src="//www.youtube.com/embed/' + id + '?badge=0&autoplay=1" frameborder="0" allowfullscreen></iframe>');
+      var height, width;
+      width = this.$element.data('width') || 560;
+      height = this.$element.data('height') || 315;
+      this.resize(width);
+      this.lightbox_body.html('<iframe width="' + width + '" height="' + height + '" src="//www.youtube.com/embed/' + id + '?badge=0&autoplay=1" frameborder="0" allowfullscreen></iframe>');
       if (this.modal_arrows) {
         return this.modal_arrows.css('display', 'none');
       }
@@ -283,22 +292,5 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       return this;
     });
   };
-
-  $(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
-    var $this;
-    event.preventDefault();
-    $this = $(this);
-    return $this.ekkoLightbox({
-      remote: $this.attr('data-remote') || $this.attr('href'),
-      gallery_parent_selector: $this.attr('data-parent'),
-      onShown: function() {
-        if (window.console) {
-          return console.log('Checking our the events huh?');
-        }
-      }
-    }).one('hide', function() {
-      return $this.is(':visible') && $this.focus();
-    });
-  });
 
 }).call(this);
