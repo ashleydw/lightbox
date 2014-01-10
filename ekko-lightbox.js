@@ -215,7 +215,7 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       width = this.$element.data('width') || 560;
       height = this.$element.data('height') || 315;
       this.resize(width);
-      this.lightbox_body.html('<iframe width="' + width + '" height="' + height + '" src="//www.youtube.com/embed/' + id + '?badge=0&autoplay=1" frameborder="0" allowfullscreen></iframe>');
+      this.lightbox_body.html('<iframe width="' + width + '" height="' + height + '" src="//www.youtube.com/embed/' + id + '?badge=0&autoplay=1&html5=1" frameborder="0" allowfullscreen></iframe>');
       if (this.modal_arrows) {
         return this.modal_arrows.css('display', 'none');
       }

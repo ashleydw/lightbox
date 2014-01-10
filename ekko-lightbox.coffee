@@ -186,7 +186,7 @@ EkkoLightbox.prototype = {
 		width = @$element.data('width') || 560
 		height = @$element.data('height') || 315
 		@resize width
-		@lightbox_body.html '<iframe width="'+width+'" height="'+height+'" src="//www.youtube.com/embed/' + id + '?badge=0&autoplay=1" frameborder="0" allowfullscreen></iframe>'
+		@lightbox_body.html '<iframe width="'+width+'" height="'+height+'" src="//www.youtube.com/embed/' + id + '?badge=0&autoplay=1&html5=1" frameborder="0" allowfullscreen></iframe>'
 		if @modal_arrows #hide the arrows when showing video
 			@modal_arrows.css 'display', 'none'
 
