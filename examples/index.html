@@ -9,7 +9,7 @@
         <link href="../dist/ekko-lightbox.css" rel="stylesheet">
 
         <style type="text/css">
-            /* i like padding */
+            /* i like padding - you can ignore this css. see the actual css / less files in the repository for styling the gallery navigation */
             div.row > div > div.row {
                 margin-bottom: 15px;
             }
@@ -53,20 +53,21 @@
 
                     <div class="top-header">
                         <h2>Usage</h2>
-                        <p>Obviously, you need the modal component that comes with Bootstrap, and jQuery.</p>
                         <h3>Via data attributes</h3>
                         <pre>&lt;a href=&quot;someurl&quot; data-toggle=&quot;lightbox&quot;&gt;Launch modal&lt;/a&gt;</pre>
                         <h3>Via Javascript</h3>
-                        <pre>&lt;a href=&quot;someurl&quot; id=&quot;mylink&quot;&gt;Open lightbox&lt;/a&gt;<br/>$(&#39;#mylink&#39;).lightbox(options);</pre>
+                        <pre>&lt;a href=&quot;someurl&quot; id=&quot;mylink&quot;&gt;Open lightbox&lt;/a&gt;<br/>$(&#39;#mylink&#39;).ekkoLightbox(options);</pre>
                     </div>
 
                     <div class="top-header">
                         <h2>Implementation</h2>
-                        <p>As of release v3.0.3a, the main script no longer includes the delegate function:</p>
+                        <p>Obviously, you need the modal component that comes with Bootstrap, and jQuery. As of release v3.0.3a, the main script no longer includes the delegate function:</p>
 <code style="white-space: pre-wrap">$(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
     event.preventDefault();
-    return $(this).ekkoLightbox();
-});");</code>
+    $(this).ekkoLightbox();
+});</code>
+						<br /><br />
+						<p>If you plan on having galleries, be sure to include the LESS / CSS files.</p>
                     </div>
 
                     <div class="top-header">
