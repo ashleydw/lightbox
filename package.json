@@ -1,0 +1,13 @@
+{
+    "name": "ekko-lightbox",
+    "version": "3.0.3a",
+    "devDependencies": {
+        "grunt": "~0.4.1",
+        "grunt-banner": "~0.2.0",
+        "grunt-contrib-coffee": "~0.8.0",
+        "grunt-contrib-uglify": "~0.2.2",
+        "grunt-contrib-watch": "~0.5.1",
+        "grunt-recess": "~0.3.3"
+    },
+    "private": true
+}
