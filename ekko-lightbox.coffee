@@ -30,7 +30,7 @@ EkkoLightbox = ( element, options ) ->
 	@modal_id = if @options.modal_id then @options.modal_id else 'ekkoLightbox-' + Math.floor((Math.random() * 1000) + 1)
 	header = '<div class="modal-header"'+(if @options.title then '' else ' style="display:none"')+'><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">' + @options.title + '</h4></div>'
 	footer = '<div class="modal-footer"'+(if @options.footer then '' else ' style="display:none"')+'>' + @options.footer + '</div>'
-    $(document.body).append '<div id="' + @modal_id + '" class="ekko-lightbox modal fade" tabindex="-1"><div class="modal-dialog"><div class="modal-content">' + header + '<div class="modal-body"><div class="ekko-lightbox-container"><div></div></div></div>' + footer + '</div></div></div>'
+	$(document.body).append '<div id="' + @modal_id + '" class="ekko-lightbox modal fade" tabindex="-1"><div class="modal-dialog"><div class="modal-content">' + header + '<div class="modal-body"><div class="ekko-lightbox-container"><div></div></div></div>' + footer + '</div></div></div>'
 
 	@modal = $ '#' + @modal_id
 	@modal_dialog = @modal.find('.modal-dialog').first()
@@ -43,19 +43,18 @@ EkkoLightbox = ( element, options ) ->
 	@modal_arrows = null
 
 	@border = {
-		top: parseFloat(@modal_dialog.css('border-top-width'), 0) + parseFloat(@modal_content.css('border-top-width'), 1) + parseFloat(@modal_body.css('border-top-width'), 0)
-		right: parseFloat(@modal_dialog.css('border-right-width'), 0) + parseFloat(@modal_content.css('border-right-width'), 1) + parseFloat(@modal_body.css('border-right-width'), 0)		
-		bottom: parseFloat(@modal_dialog.css('border-bottom-width'), 0) + parseFloat(@modal_content.css('border-bottom-width'), 1) + parseFloat(@modal_body.css('border-bottom-width'), 0)
-		left: parseFloat(@modal_dialog.css('border-left-width'), 0) + parseFloat(@modal_content.css('border-left-width'), 1) + parseFloat(@modal_body.css('border-left-width'), 0)		
+		top: parseFloat(@modal_dialog.css('border-top-width')) + parseFloat(@modal_content.css('border-top-width')) + parseFloat(@modal_body.css('border-top-width'))
+		right: parseFloat(@modal_dialog.css('border-right-width')) + parseFloat(@modal_content.css('border-right-width')) + parseFloat(@modal_body.css('border-right-width'))
+		bottom: parseFloat(@modal_dialog.css('border-bottom-width')) + parseFloat(@modal_content.css('border-bottom-width')) + parseFloat(@modal_body.css('border-bottom-width'))
+		left: parseFloat(@modal_dialog.css('border-left-width')) + parseFloat(@modal_content.css('border-left-width')) + parseFloat(@modal_body.css('border-left-width'))
 	}
 
 	@padding = {
-		top: parseFloat(@modal_dialog.css('padding-top'), 30) + parseFloat(@modal_content.css('padding-top'), 0) + parseFloat(@modal_body.css('padding-top'), 20)
-		right: parseFloat(@modal_dialog.css('padding-right'), 10) + parseFloat(@modal_content.css('padding-right'), 0) + parseFloat(@modal_body.css('padding-right'), 20)
-		bottom: parseFloat(@modal_dialog.css('padding-bottom'), 30) + parseFloat(@modal_content.css('padding-bottom'), 0) + parseFloat(@modal_body.css('padding-bottom'), 20)
-		left: parseFloat(@modal_dialog.css('padding-left'), 10) + parseFloat(@modal_content.css('padding-left'), 0) + parseFloat(@modal_body.css('padding-left'), 20)
+		top: parseFloat(@modal_dialog.css('padding-top')) + parseFloat(@modal_content.css('padding-top')) + parseFloat(@modal_body.css('padding-top'))
+		right: parseFloat(@modal_dialog.css('padding-right')) + parseFloat(@modal_content.css('padding-right')) + parseFloat(@modal_body.css('padding-right'))
+		bottom: parseFloat(@modal_dialog.css('padding-bottom')) + parseFloat(@modal_content.css('padding-bottom')) + parseFloat(@modal_body.css('padding-bottom'))
+		left: parseFloat(@modal_dialog.css('padding-left')) + parseFloat(@modal_content.css('padding-left')) + parseFloat(@modal_body.css('padding-left'))
 	}
-
 	if !@options.remote
 		@error 'No remote target given'
 	else
@@ -184,8 +183,8 @@ EkkoLightbox.prototype = {
 			@error "Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo\""
 
 	updateTitleAndFooter: ->
-		header = @modal.find('.modal-dialog .modal-content .modal-header')
-		footer = @modal.find('.modal-dialog .modal-content .modal-footer')
+		header = @modal_content.find('.modal-header')
+		footer = @modal_content.find('.modal-footer')
 		title = @$element.data('title') || ""
 		caption = @$element.data('footer') || ""
 		if title then header.css('display', '').find('.modal-title').html(title) else header.css('display', 'none')
@@ -227,7 +226,7 @@ EkkoLightbox.prototype = {
 			img.onload = =>
 				image = $('<img />')
 				image.attr('src', img.src)
-				
+				image.addClass('img-responsive')
 				@lightbox_body.html image
 				if @modal_arrows #show the arrows
 					@modal_arrows.css 'display', 'block'
@@ -240,8 +239,7 @@ EkkoLightbox.prototype = {
 
 	resize : ( width ) ->
 		width_total = width + @border.left + @padding.left + @padding.right + @border.right
-		
-		@modal.find('.modal-dialog').css('width', 'auto').css('max-width', width_total);
+		@modal_dialog.css('width', 'auto').css('max-width', width_total);
 
 		if @options.type == 'youtube' or @options.type =='vimeo'
 			@modal.find('.modal-dialog').css('min-width', width_total)
@@ -252,9 +250,9 @@ EkkoLightbox.prototype = {
 
 	checkDimensions: (width) ->
 		width_total = width + @border.left + @padding.left + @padding.right + @border.right
-		w = $(window)
-		if (width_total) > w.width()
-			width = w.width() - (width_total) 
+		w = document.body.clientWidth
+		if (width_total) > w
+			width = w - (width_total)
 		width
 
 	close : ->
