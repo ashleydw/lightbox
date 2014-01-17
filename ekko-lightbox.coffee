@@ -33,18 +33,28 @@ EkkoLightbox = ( element, options ) ->
 	$(document.body).append '<div id="' + @modal_id + '" class="ekko-lightbox modal fade" tabindex="-1"><div class="modal-dialog"><div class="modal-content">' + header + '<div class="modal-body"><div class="ekko-lightbox-container"><div></div></div></div>' + footer + '</div></div></div>'
 
 	@modal = $ '#' + @modal_id
+	@modal_dialog = @modal.find('.modal-dialog').first()
+	@modal_content = @modal.find('.modal-content').first()
 	@modal_body = @modal.find('.modal-body').first()
+
 	@lightbox_container = @modal_body.find('.ekko-lightbox-container').first()
 	@lightbox_body = @lightbox_container.find('> div:first-child').first()
+
 	@modal_arrows = null
 
-	@padding = {
-		left: parseFloat(@modal_body.css('padding-left'), 10)
-		right: parseFloat(@modal_body.css('padding-right'), 10)
-		bottom: parseFloat(@modal_body.css('padding-bottom'), 10)
-		top: parseFloat(@modal_body.css('padding-top'), 10)
+	@border = {
+		top: parseFloat(@modal_dialog.css('border-top-width')) + parseFloat(@modal_content.css('border-top-width')) + parseFloat(@modal_body.css('border-top-width'))
+		right: parseFloat(@modal_dialog.css('border-right-width')) + parseFloat(@modal_content.css('border-right-width')) + parseFloat(@modal_body.css('border-right-width'))
+		bottom: parseFloat(@modal_dialog.css('border-bottom-width')) + parseFloat(@modal_content.css('border-bottom-width')) + parseFloat(@modal_body.css('border-bottom-width'))
+		left: parseFloat(@modal_dialog.css('border-left-width')) + parseFloat(@modal_content.css('border-left-width')) + parseFloat(@modal_body.css('border-left-width'))
 	}
 
+	@padding = {
+		top: parseFloat(@modal_dialog.css('padding-top')) + parseFloat(@modal_content.css('padding-top')) + parseFloat(@modal_body.css('padding-top'))
+		right: parseFloat(@modal_dialog.css('padding-right')) + parseFloat(@modal_content.css('padding-right')) + parseFloat(@modal_body.css('padding-right'))
+		bottom: parseFloat(@modal_dialog.css('padding-bottom')) + parseFloat(@modal_content.css('padding-bottom')) + parseFloat(@modal_body.css('padding-bottom'))
+		left: parseFloat(@modal_dialog.css('padding-left')) + parseFloat(@modal_content.css('padding-left')) + parseFloat(@modal_body.css('padding-left'))
+	}
 	if !@options.remote
 		@error 'No remote target given'
 	else
@@ -161,17 +171,20 @@ EkkoLightbox.prototype = {
 
 	detectRemoteType: (src, type) ->
 		if type == 'image' || @isImage(src)
+			@options.type = 'image'
 			@preloadImage(src, true)
 		else if type == 'youtube' || video_id = @getYoutubeId(src)
+			@options.type = 'youtube'
 			@showYoutubeVideo(video_id)
 		else if type == 'vimeo' || video_id = @getVimeoId(src)
+			@options.type = 'vimeo'
 			@showVimeoVideo(video_id)
 		else
 			@error "Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo\""
 
 	updateTitleAndFooter: ->
-		header = @modal.find('.modal-dialog .modal-content .modal-header')
-		footer = @modal.find('.modal-dialog .modal-content .modal-footer')
+		header = @modal_content.find('.modal-header')
+		footer = @modal_content.find('.modal-footer')
 		title = @$element.data('title') || ""
 		caption = @$element.data('footer') || ""
 		if title then header.css('display', '').find('.modal-title').html(title) else header.css('display', 'none')
@@ -183,16 +196,22 @@ EkkoLightbox.prototype = {
 		@
 
 	showYoutubeVideo : (id) ->
+		aspectRatio = 560/315
 		width = @$element.data('width') || 560
-		height = @$element.data('height') || 315
+		width = @checkDimensions width
+		height = width / aspectRatio
 		@resize width
 		@lightbox_body.html '<iframe width="'+width+'" height="'+height+'" src="//www.youtube.com/embed/' + id + '?badge=0&autoplay=1&html5=1" frameborder="0" allowfullscreen></iframe>'
 		if @modal_arrows #hide the arrows when showing video
 			@modal_arrows.css 'display', 'none'
 
 	showVimeoVideo : (id) ->
-		@resize 500
-		@lightbox_body.html '<iframe width="500" height="281" src="' + id + '?autoplay=1" frameborder="0" allowfullscreen></iframe>'
+		aspectRatio = 500/281
+		width = @$element.data('width') || 560
+		width = @checkDimensions width
+		height = width / aspectRatio
+		@resize width
+		@lightbox_body.html '<iframe width="'+width+'" height="'+height+'" src="' + id + '?autoplay=1" frameborder="0" allowfullscreen></iframe>'
 		if @modal_arrows #hide the arrows when showing video
 			@modal_arrows.css 'display', 'none'
 
@@ -205,14 +224,13 @@ EkkoLightbox.prototype = {
 		img = new Image()
 		if !onLoadShowImage? || onLoadShowImage == true
 			img.onload = =>
-				width = @checkImageDimensions(img.width)
 				image = $('<img />')
 				image.attr('src', img.src)
-				image.css('max-width', '100%')
+				image.addClass('img-responsive')
 				@lightbox_body.html image
 				if @modal_arrows #show the arrows
 					@modal_arrows.css 'display', 'block'
-				@resize width
+				@resize img.width
 			img.onerror = =>
 				@error 'Failed to load image: ' + src
 
@@ -220,20 +238,21 @@ EkkoLightbox.prototype = {
 		img
 
 	resize : ( width ) ->
-		width_inc_padding = width + @padding.left + @padding.right
-		@modal.find('.modal-content').css('width', width_inc_padding)
-		@modal.find('.modal-dialog').css('width', width_inc_padding + 20 ) #+ 20 because of the drop shadow
-		# fu padding, fu
+		width_total = width + @border.left + @padding.left + @padding.right + @border.right
+		@modal_dialog.css('width', 'auto').css('max-width', width_total);
+
+		if @options.type == 'youtube' or @options.type =='vimeo'
+			@modal.find('.modal-dialog').css('min-width', width_total)
+
 		@lightbox_container.find('a').css 'padding-top', ->
 			$(@).parent().height() / 2
 		@
 
-	checkImageDimensions: (max_width) ->
-		#resize the container based on the max width given
-		w = $(window)
-		width = max_width
-		if (max_width + (@padding.left + @padding.right + 20)) > w.width()
-			width = w.width() - (@padding.left + @padding.right + 20) #+ 20 because of the drop shadow
+	checkDimensions: (width) ->
+		width_total = width + @border.left + @padding.left + @padding.right + @border.right
+		w = document.body.clientWidth
+		if (width_total) > w
+			width = w - (width_total)
 		width
 
 	close : ->
