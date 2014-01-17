@@ -39,7 +39,6 @@
 				position: absolute;
 				background-color: #000;
 			}
-
 			code {
 				white-space: pre-wrap;       /* css-3 */
 				white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
@@ -122,23 +121,15 @@
 									<td><code>data-type="(image|youtube|vimeo)"</code></td>
 								</tr>
 								<tr>
-									<td>width *</td>
+									<td>width (videos only; height is calculated by ratio)</td>
 									<td>integer</td>
 									<td></td>
 									<td>Force the width</td>
 									<td><code>data-width="[0-9]+]"</code></td>
 								</tr>
-								<tr>
-									<td>height *</td>
-									<td>integer</td>
-									<td></td>
-									<td>Force the height</td>
-									<td><code>data-height="[0-9]+]"</code></td>
-								</tr>
 								</tbody>
 							</table>
                     	</div>
-                        <p>*: Videos only</p>
                     </div>
 
                     <h1 class="page-header">Examples</h1>
@@ -212,8 +203,8 @@
                     <h4>Forcing width</h4>
                     <p>Set the width of the video</p>
                     <p><a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox">Ghostpoet - Cash and Carry Me Home (standard)</a></p>
-                    <p><a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox" data-width="640" data-height="360">Ghostpoet - Cash and Carry Me Home (640 x 360)</a></p>
-                    <p><a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox" data-width="1280" data-height="780">Ghostpoet - Cash and Carry Me Home (1280 x 780)</a></p>
+                    <p><a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox" data-width="640">Ghostpoet - Cash and Carry Me Home (640 x 360)</a></p>
+                    <p><a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox" data-width="1280">Ghostpoet - Cash and Carry Me Home (1280 x 780)</a></p>
 
                     <h3 class="page-header" id="youtube-gallery">Example #4: Gallery of YouTube Videos</h3>
                     <div class="row">
