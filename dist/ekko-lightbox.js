@@ -11,7 +11,7 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
   var EkkoLightbox;
 
   EkkoLightbox = function(element, options) {
-    var content, footer, header, video_id,
+    var content, footer, header,
       _this = this;
     this.options = $.extend({
       gallery_parent_selector: '*:not(.row)',
@@ -53,49 +53,8 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       bottom: parseFloat(this.modal_dialog.css('padding-bottom')) + parseFloat(this.modal_content.css('padding-bottom')) + parseFloat(this.modal_body.css('padding-bottom')),
       left: parseFloat(this.modal_dialog.css('padding-left')) + parseFloat(this.modal_content.css('padding-left')) + parseFloat(this.modal_body.css('padding-left'))
     };
-    if (!this.options.remote) {
-      this.error('No remote target given');
-    } else {
-      this.gallery = this.$element.data('gallery');
-      if (this.gallery) {
-        if (this.options.gallery_parent_selector === 'document.body' || this.options.gallery_parent_selector === '') {
-          this.gallery_items = $(document.body).find('*[data-toggle="lightbox"][data-gallery="' + this.gallery + '"]');
-        } else {
-          this.gallery_items = this.$element.parents(this.options.gallery_parent_selector).first().find('*[data-toggle="lightbox"][data-gallery="' + this.gallery + '"]');
-        }
-        this.gallery_index = this.gallery_items.index(this.$element);
-        $(document).on('keydown.ekkoLightbox', this.navigate.bind(this));
-        if (this.options.directional_arrows && this.gallery_items.length > 1) {
-          this.lightbox_container.prepend('<div class="ekko-lightbox-nav-overlay"><a href="#" class="' + this.strip_stops(this.options.left_arrow_class) + '"></a><a href="#" class="' + this.strip_stops(this.options.right_arrow_class) + '"></a></div>');
-          this.modal_arrows = this.lightbox_container.find('div.ekko-lightbox-nav-overlay').first();
-          this.lightbox_container.find('a' + this.strip_spaces(this.options.left_arrow_class)).on('click', function(event) {
-            event.preventDefault();
-            return _this.navigate_left();
-          });
-          this.lightbox_container.find('a' + this.strip_spaces(this.options.right_arrow_class)).on('click', function(event) {
-            event.preventDefault();
-            return _this.navigate_right();
-          });
-        }
-      }
-      if (this.options.type) {
-        if (this.options.type === 'image') {
-          this.preloadImage(this.options.remote, true);
-        } else if (this.options.type === 'youtube' && (video_id = this.getYoutubeId(this.options.remote))) {
-          this.showYoutubeVideo(video_id);
-        } else if (this.options.type === 'vimeo') {
-          this.showVimeoVideo(this.options.remote);
-        } else {
-          this.error("Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo\"");
-        }
-      } else {
-        this.detectRemoteType(this.options.remote);
-      }
-    }
     this.modal.on('show.bs.modal', this.options.onShow.bind(this)).on('shown.bs.modal', function() {
-      if (_this.modal_arrows) {
-        _this.resize(_this.lightbox_body.width());
-      }
+      _this.modal_shown();
       return _this.options.onShown.call(_this);
     }).on('hide.bs.modal', this.options.onHide.bind(this)).on('hidden.bs.modal', function() {
       if (_this.gallery) {
@@ -108,6 +67,49 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
   };
 
   EkkoLightbox.prototype = {
+    modal_shown: function() {
+      var video_id,
+        _this = this;
+      if (!this.options.remote) {
+        return this.error('No remote target given');
+      } else {
+        this.gallery = this.$element.data('gallery');
+        if (this.gallery) {
+          if (this.options.gallery_parent_selector === 'document.body' || this.options.gallery_parent_selector === '') {
+            this.gallery_items = $(document.body).find('*[data-toggle="lightbox"][data-gallery="' + this.gallery + '"]');
+          } else {
+            this.gallery_items = this.$element.parents(this.options.gallery_parent_selector).first().find('*[data-toggle="lightbox"][data-gallery="' + this.gallery + '"]');
+          }
+          this.gallery_index = this.gallery_items.index(this.$element);
+          $(document).on('keydown.ekkoLightbox', this.navigate.bind(this));
+          if (this.options.directional_arrows && this.gallery_items.length > 1) {
+            this.lightbox_container.prepend('<div class="ekko-lightbox-nav-overlay"><a href="#" class="' + this.strip_stops(this.options.left_arrow_class) + '"></a><a href="#" class="' + this.strip_stops(this.options.right_arrow_class) + '"></a></div>');
+            this.modal_arrows = this.lightbox_container.find('div.ekko-lightbox-nav-overlay').first();
+            this.lightbox_container.find('a' + this.strip_spaces(this.options.left_arrow_class)).on('click', function(event) {
+              event.preventDefault();
+              return _this.navigate_left();
+            });
+            this.lightbox_container.find('a' + this.strip_spaces(this.options.right_arrow_class)).on('click', function(event) {
+              event.preventDefault();
+              return _this.navigate_right();
+            });
+          }
+        }
+        if (this.options.type) {
+          if (this.options.type === 'image') {
+            return this.preloadImage(this.options.remote, true);
+          } else if (this.options.type === 'youtube' && (video_id = this.getYoutubeId(this.options.remote))) {
+            return this.showYoutubeVideo(video_id);
+          } else if (this.options.type === 'vimeo') {
+            return this.showVimeoVideo(this.options.remote);
+          } else {
+            return this.error("Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo\"");
+          }
+        } else {
+          return this.detectRemoteType(this.options.remote);
+        }
+      }
+    },
     strip_stops: function(str) {
       return str.replace(/\./g, '');
     },
@@ -275,20 +277,17 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       var width_total;
       width_total = width + this.border.left + this.padding.left + this.padding.right + this.border.right;
       this.modal_dialog.css('width', 'auto').css('max-width', width_total);
-      if (this.options.type === 'youtube' || this.options.type === 'vimeo') {
-        this.modal.find('.modal-dialog').css('min-width', width_total);
-      }
       this.lightbox_container.find('a').css('padding-top', function() {
         return $(this).parent().height() / 2;
       });
       return this;
     },
     checkDimensions: function(width) {
-      var w, width_total;
+      var body_width, width_total;
       width_total = width + this.border.left + this.padding.left + this.padding.right + this.border.right;
-      w = document.body.clientWidth;
-      if (width_total > w) {
-        width = w - width_total;
+      body_width = document.body.clientWidth;
+      if (width_total > body_width) {
+        width = this.modal_body.width();
       }
       return width;
     },

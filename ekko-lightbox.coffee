@@ -55,62 +55,63 @@ EkkoLightbox = ( element, options ) ->
 		bottom: parseFloat(@modal_dialog.css('padding-bottom')) + parseFloat(@modal_content.css('padding-bottom')) + parseFloat(@modal_body.css('padding-bottom'))
 		left: parseFloat(@modal_dialog.css('padding-left')) + parseFloat(@modal_content.css('padding-left')) + parseFloat(@modal_body.css('padding-left'))
 	}
-	if !@options.remote
-		@error 'No remote target given'
-	else
-
-		@gallery = @$element.data('gallery')
-		if @gallery
-			# parents('document.body') fails for some reason, so do this manually
-			if this.options.gallery_parent_selector == 'document.body' || this.options.gallery_parent_selector == ''
-				@gallery_items = $(document.body).find('*[data-toggle="lightbox"][data-gallery="' + @gallery + '"]')
-			else
-				@gallery_items = @$element.parents(this.options.gallery_parent_selector).first().find('*[data-toggle="lightbox"][data-gallery="' + @gallery + '"]')
-			@gallery_index = @gallery_items.index(@$element)
-			$(document).on 'keydown.ekkoLightbox', @navigate.bind(@)
-
-			# add the directional arrows to the modal
-			if @options.directional_arrows && @gallery_items.length > 1
-				@lightbox_container.prepend('<div class="ekko-lightbox-nav-overlay"><a href="#" class="'+@strip_stops(@options.left_arrow_class)+'"></a><a href="#" class="'+@strip_stops(@options.right_arrow_class)+'"></a></div>')
-				@modal_arrows = @lightbox_container.find('div.ekko-lightbox-nav-overlay').first()
-				@lightbox_container.find('a'+@strip_spaces(@options.left_arrow_class)).on 'click', (event) =>
-					event.preventDefault()
-					do @navigate_left
-				@lightbox_container.find('a'+@strip_spaces(@options.right_arrow_class)).on 'click', (event) =>
-					event.preventDefault()
-					do @navigate_right
-
-		if @options.type
-			if @options.type == 'image'
-				@preloadImage(@options.remote, true)
-			else if @options.type == 'youtube' && video_id = @getYoutubeId(@options.remote)
-				@showYoutubeVideo(video_id)
-			else if @options.type == 'vimeo'
-				@showVimeoVideo(@options.remote)
-			else
-				@error "Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo\""
-
-		else
-			@detectRemoteType(@options.remote)
-
 
 	@modal
-		.on('show.bs.modal', @options.onShow.bind(@))
-		.on 'shown.bs.modal', =>
-			if @modal_arrows
-				@resize @lightbox_body.width()
-			@options.onShown.call(@)
-		.on('hide.bs.modal', @options.onHide.bind(@))
-		.on 'hidden.bs.modal', =>
-			if @gallery
-				$(document).off 'keydown.ekkoLightbox'
-			@modal.remove()
-			@options.onHidden.call(@)
-		.modal 'show', options
+	.on('show.bs.modal', @options.onShow.bind(@))
+	.on 'shown.bs.modal', =>
+		@modal_shown()
+		@options.onShown.call(@)
+	.on('hide.bs.modal', @options.onHide.bind(@))
+	.on 'hidden.bs.modal', =>
+		if @gallery
+			$(document).off 'keydown.ekkoLightbox'
+		@modal.remove()
+		@options.onHidden.call(@)
+	.modal 'show', options
 
 	@modal
 
 EkkoLightbox.prototype = {
+	modal_shown: ->
+		# when the modal first loads
+		if !@options.remote
+			@error 'No remote target given'
+		else
+
+			@gallery = @$element.data('gallery')
+			if @gallery
+				# parents('document.body') fails for some reason, so do this manually
+				if this.options.gallery_parent_selector == 'document.body' || this.options.gallery_parent_selector == ''
+					@gallery_items = $(document.body).find('*[data-toggle="lightbox"][data-gallery="' + @gallery + '"]')
+				else
+					@gallery_items = @$element.parents(this.options.gallery_parent_selector).first().find('*[data-toggle="lightbox"][data-gallery="' + @gallery + '"]')
+				@gallery_index = @gallery_items.index(@$element)
+				$(document).on 'keydown.ekkoLightbox', @navigate.bind(@)
+
+				# add the directional arrows to the modal
+				if @options.directional_arrows && @gallery_items.length > 1
+					@lightbox_container.prepend('<div class="ekko-lightbox-nav-overlay"><a href="#" class="'+@strip_stops(@options.left_arrow_class)+'"></a><a href="#" class="'+@strip_stops(@options.right_arrow_class)+'"></a></div>')
+					@modal_arrows = @lightbox_container.find('div.ekko-lightbox-nav-overlay').first()
+					@lightbox_container.find('a'+@strip_spaces(@options.left_arrow_class)).on 'click', (event) =>
+						event.preventDefault()
+						do @navigate_left
+					@lightbox_container.find('a'+@strip_spaces(@options.right_arrow_class)).on 'click', (event) =>
+						event.preventDefault()
+						do @navigate_right
+
+			if @options.type
+				if @options.type == 'image'
+					@preloadImage(@options.remote, true)
+				else if @options.type == 'youtube' && video_id = @getYoutubeId(@options.remote)
+					@showYoutubeVideo(video_id)
+				else if @options.type == 'vimeo'
+					@showVimeoVideo(@options.remote)
+				else
+					@error "Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo\""
+
+			else
+				@detectRemoteType(@options.remote)
+
 	strip_stops: (str) ->
 		str.replace(/\./g, '')
 
@@ -238,21 +239,23 @@ EkkoLightbox.prototype = {
 		img
 
 	resize : ( width ) ->
+		#resize the dialog based on the width given, and adjust the directional arrow padding
 		width_total = width + @border.left + @padding.left + @padding.right + @border.right
-		@modal_dialog.css('width', 'auto').css('max-width', width_total);
-
-		if @options.type == 'youtube' or @options.type =='vimeo'
-			@modal.find('.modal-dialog').css('min-width', width_total)
+		@modal_dialog.css('width', 'auto') .css('max-width', width_total);
 
 		@lightbox_container.find('a').css 'padding-top', ->
 			$(@).parent().height() / 2
 		@
 
 	checkDimensions: (width) ->
+		#check that the width given can be displayed, if not return the maximum size that can be
+
 		width_total = width + @border.left + @padding.left + @padding.right + @border.right
-		w = document.body.clientWidth
-		if (width_total) > w
-			width = w - (width_total)
+		body_width = document.body.clientWidth
+
+		if width_total > body_width
+			width = @modal_body.width()
+
 		width
 
 	close : ->
