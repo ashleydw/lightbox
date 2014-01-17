@@ -30,19 +30,29 @@ EkkoLightbox = ( element, options ) ->
 	@modal_id = if @options.modal_id then @options.modal_id else 'ekkoLightbox-' + Math.floor((Math.random() * 1000) + 1)
 	header = '<div class="modal-header"'+(if @options.title then '' else ' style="display:none"')+'><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">' + @options.title + '</h4></div>'
 	footer = '<div class="modal-footer"'+(if @options.footer then '' else ' style="display:none"')+'>' + @options.footer + '</div>'
-	$(document.body).append '<div id="' + @modal_id + '" class="ekko-lightbox modal fade" tabindex="-1"><div class="modal-dialog"><div class="modal-content">' + header + '<div class="modal-body"><div class="ekko-lightbox-container"><div></div></div></div>' + footer + '</div></div></div>'
+	$(document.body).append '<div id="' + @modal_id + '" class="ekko-lightbox modal fade" tabindex="-1"><div class="modal-dialog"><div class="modal-content">' + header + '<div class="modal-body"></div>' + footer + '</div></div></div>'
 
 	@modal = $ '#' + @modal_id
+	@modal_dialog = @modal.find('.modal-dialog').first()
+	@modal_content = @modal.find('.modal-content').first()
 	@modal_body = @modal.find('.modal-body').first()
+
 	@lightbox_container = @modal_body.find('.ekko-lightbox-container').first()
 	@lightbox_body = @lightbox_container.find('> div:first-child').first()
 	@modal_arrows = null
 
+	@border = {
+		top: parseFloat(@modal_dialog.css('border-top-width'), 0) + parseFloat(@modal_content.css('border-top-width'), 1) + parseFloat(@modal_body.css('border-top-width'), 0)
+		right: parseFloat(@modal_dialog.css('border-right-width'), 0) + parseFloat(@modal_content.css('border-right-width'), 1) + parseFloat(@modal_body.css('border-right-width'), 0)		
+		bottom: parseFloat(@modal_dialog.css('border-bottom-width'), 0) + parseFloat(@modal_content.css('border-bottom-width'), 1) + parseFloat(@modal_body.css('border-bottom-width'), 0)
+		left: parseFloat(@modal_dialog.css('border-left-width'), 0) + parseFloat(@modal_content.css('border-left-width'), 1) + parseFloat(@modal_body.css('border-left-width'), 0)		
+	}
+
 	@padding = {
-		left: parseFloat(@modal_body.css('padding-left'), 10)
-		right: parseFloat(@modal_body.css('padding-right'), 10)
-		bottom: parseFloat(@modal_body.css('padding-bottom'), 10)
-		top: parseFloat(@modal_body.css('padding-top'), 10)
+		top: parseFloat(@modal_dialog.css('padding-top'), 30) + parseFloat(@modal_content.css('padding-top'), 0) + parseFloat(@modal_body.css('padding-top'), 20)
+		right: parseFloat(@modal_dialog.css('padding-right'), 10) + parseFloat(@modal_content.css('padding-right'), 0) + parseFloat(@modal_body.css('padding-right'), 20)
+		bottom: parseFloat(@modal_dialog.css('padding-bottom'), 30) + parseFloat(@modal_content.css('padding-bottom'), 0) + parseFloat(@modal_body.css('padding-bottom'), 20)
+		left: parseFloat(@modal_dialog.css('padding-left'), 10) + parseFloat(@modal_content.css('padding-left'), 0) + parseFloat(@modal_body.css('padding-left'), 20)
 	}
 
 	if !@options.remote
@@ -161,10 +171,13 @@ EkkoLightbox.prototype = {
 
 	detectRemoteType: (src, type) ->
 		if type == 'image' || @isImage(src)
+			@options.type = 'image'
 			@preloadImage(src, true)
 		else if type == 'youtube' || video_id = @getYoutubeId(src)
+			@options.type = 'youtube'
 			@showYoutubeVideo(video_id)
 		else if type == 'vimeo' || video_id = @getVimeoId(src)
+			@options.type = 'vimeo'
 			@showVimeoVideo(video_id)
 		else
 			@error "Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo\""
@@ -183,16 +196,22 @@ EkkoLightbox.prototype = {
 		@
 
 	showYoutubeVideo : (id) ->
+		aspectRatio = 560/315
 		width = @$element.data('width') || 560
-		height = @$element.data('height') || 315
+		width = @checkDimensions width
+		height = width / aspectRatio
 		@resize width
 		@lightbox_body.html '<iframe width="'+width+'" height="'+height+'" src="//www.youtube.com/embed/' + id + '?badge=0&autoplay=1&html5=1" frameborder="0" allowfullscreen></iframe>'
 		if @modal_arrows #hide the arrows when showing video
 			@modal_arrows.css 'display', 'none'
 
 	showVimeoVideo : (id) ->
-		@resize 500
-		@lightbox_body.html '<iframe width="500" height="281" src="' + id + '?autoplay=1" frameborder="0" allowfullscreen></iframe>'
+		aspectRatio = 500/281
+		width = @$element.data('width') || 560
+		width = @checkDimensions width
+		height = width / aspectRatio
+		@resize width
+		@lightbox_body.html '<iframe width="'+width+'" height="'+height+'" src="' + id + '?autoplay=1" frameborder="0" allowfullscreen></iframe>'
 		if @modal_arrows #hide the arrows when showing video
 			@modal_arrows.css 'display', 'none'
 
@@ -205,14 +224,13 @@ EkkoLightbox.prototype = {
 		img = new Image()
 		if !onLoadShowImage? || onLoadShowImage == true
 			img.onload = =>
-				width = @checkImageDimensions(img.width)
 				image = $('<img />')
 				image.attr('src', img.src)
-				image.css('max-width', '100%')
+				
 				@lightbox_body.html image
 				if @modal_arrows #show the arrows
 					@modal_arrows.css 'display', 'block'
-				@resize width
+				@resize img.width
 			img.onerror = =>
 				@error 'Failed to load image: ' + src
 
@@ -220,20 +238,22 @@ EkkoLightbox.prototype = {
 		img
 
 	resize : ( width ) ->
-		width_inc_padding = width + @padding.left + @padding.right
-		@modal.find('.modal-content').css('width', width_inc_padding)
-		@modal.find('.modal-dialog').css('width', width_inc_padding + 20 ) #+ 20 because of the drop shadow
-		# fu padding, fu
+		width_total = width + @border.left + @padding.left + @padding.right + @border.right
+		
+		@modal.find('.modal-dialog').css('width', 'auto').css('max-width', width_total);
+
+		if @options.type == 'youtube' or @options.type =='vimeo'
+			@modal.find('.modal-dialog').css('min-width', width_total)
+
 		@lightbox_container.find('a').css 'padding-top', ->
 			$(@).parent().height() / 2
 		@
 
-	checkImageDimensions: (max_width) ->
-		#resize the container based on the max width given
+	checkDimensions: (width) ->
+		width_total = width + @border.left + @padding.left + @padding.right + @border.right
 		w = $(window)
-		width = max_width
-		if (max_width + (@padding.left + @padding.right + 20)) > w.width()
-			width = w.width() - (@padding.left + @padding.right + 20) #+ 20 because of the drop shadow
+		if (width_total) > w.width()
+			width = w.width() - (width_total) 
 		width
 
 	close : ->
