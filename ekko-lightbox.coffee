@@ -17,6 +17,7 @@ EkkoLightbox = ( element, options ) ->
 		right_arrow_class: '.glyphicon .glyphicon-chevron-right' #include class . here - they are stripped out later
 		directional_arrows: true #display the left / right arrows or not
 		type: null #force the lightbox into image / youtube mode. if null, or not image|youtube|vimeo; detect it
+		always_show_close: true #always show the close button, even if there is no title
 		onShow : ->
 		onShown : ->
 		onHide : ->
@@ -28,7 +29,7 @@ EkkoLightbox = ( element, options ) ->
 	content = ''
 
 	@modal_id = if @options.modal_id then @options.modal_id else 'ekkoLightbox-' + Math.floor((Math.random() * 1000) + 1)
-	header = '<div class="modal-header"'+(if @options.title then '' else ' style="display:none"')+'><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">' + @options.title + '</h4></div>'
+	header = '<div class="modal-header"'+(if @options.title or @options.always_show_close then '' else ' style="display:none"')+'><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">' + (@options.title || "&nbsp;") + '</h4></div>'
 	footer = '<div class="modal-footer"'+(if @options.footer then '' else ' style="display:none"')+'>' + @options.footer + '</div>'
 	$(document.body).append '<div id="' + @modal_id + '" class="ekko-lightbox modal fade" tabindex="-1"><div class="modal-dialog"><div class="modal-content">' + header + '<div class="modal-body"><div class="ekko-lightbox-container"><div></div></div></div>' + footer + '</div></div></div>'
 
@@ -186,9 +187,10 @@ EkkoLightbox.prototype = {
 	updateTitleAndFooter: ->
 		header = @modal_content.find('.modal-header')
 		footer = @modal_content.find('.modal-footer')
-		title = @$element.data('title') || ""
+		title = @$element.data('title') || "&nbsp;"
 		caption = @$element.data('footer') || ""
-		if title then header.css('display', '').find('.modal-title').html(title) else header.css('display', 'none')
+		header.css('display', '').find('.modal-title').html(title)
+		if title or @options.always_show_close then header.css('display', '') else header.css('display', 'none')
 		if caption then footer.css('display', '').html(caption) else footer.css('display', 'none')
 		@
 

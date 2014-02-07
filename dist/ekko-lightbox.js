@@ -22,6 +22,7 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       right_arrow_class: '.glyphicon .glyphicon-chevron-right',
       directional_arrows: true,
       type: null,
+      always_show_close: true,
       onShow: function() {},
       onShown: function() {},
       onHide: function() {},
@@ -31,7 +32,7 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
     this.$element = $(element);
     content = '';
     this.modal_id = this.options.modal_id ? this.options.modal_id : 'ekkoLightbox-' + Math.floor((Math.random() * 1000) + 1);
-    header = '<div class="modal-header"' + (this.options.title ? '' : ' style="display:none"') + '><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">' + this.options.title + '</h4></div>';
+    header = '<div class="modal-header"' + (this.options.title || this.options.always_show_close ? '' : ' style="display:none"') + '><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">' + (this.options.title || "&nbsp;") + '</h4></div>';
     footer = '<div class="modal-footer"' + (this.options.footer ? '' : ' style="display:none"') + '>' + this.options.footer + '</div>';
     $(document.body).append('<div id="' + this.modal_id + '" class="ekko-lightbox modal fade" tabindex="-1"><div class="modal-dialog"><div class="modal-content">' + header + '<div class="modal-body"><div class="ekko-lightbox-container"><div></div></div></div>' + footer + '</div></div></div>');
     this.modal = $('#' + this.modal_id);
@@ -204,10 +205,11 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       var caption, footer, header, title;
       header = this.modal_content.find('.modal-header');
       footer = this.modal_content.find('.modal-footer');
-      title = this.$element.data('title') || "";
+      title = this.$element.data('title') || "&nbsp;";
       caption = this.$element.data('footer') || "";
-      if (title) {
-        header.css('display', '').find('.modal-title').html(title);
+      header.css('display', '').find('.modal-title').html(title);
+      if (title || this.options.always_show_close) {
+        header.css('display', '');
       } else {
         header.css('display', 'none');
       }
