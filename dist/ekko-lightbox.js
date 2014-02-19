@@ -8,27 +8,18 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
 
 (function() {
   "use strict";
-  var EkkoLightbox;
+  var $, EkkoLightbox;
+
+  $ = jQuery;
 
   EkkoLightbox = function(element, options) {
     var content, footer, header,
       _this = this;
     this.options = $.extend({
-      gallery_parent_selector: '*:not(.row)',
       title: null,
       footer: null,
-      remote: null,
-      left_arrow_class: '.glyphicon .glyphicon-chevron-left',
-      right_arrow_class: '.glyphicon .glyphicon-chevron-right',
-      directional_arrows: true,
-      type: null,
-      always_show_close: true,
-      onShow: function() {},
-      onShown: function() {},
-      onHide: function() {},
-      onHidden: function() {},
-      id: false
-    }, options || {});
+      remote: null
+    }, $.fn.ekkoLightbox.defaults, options || {});
     this.$element = $(element);
     content = '';
     this.modal_id = this.options.modal_id ? this.options.modal_id : 'ekkoLightbox-' + Math.floor((Math.random() * 1000) + 1);
@@ -310,6 +301,19 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       new EkkoLightbox(this, options);
       return this;
     });
+  };
+
+  $.fn.ekkoLightbox.defaults = {
+    gallery_parent_selector: '*:not(.row)',
+    left_arrow_class: '.glyphicon .glyphicon-chevron-left',
+    right_arrow_class: '.glyphicon .glyphicon-chevron-right',
+    directional_arrows: true,
+    type: null,
+    always_show_close: true,
+    onShow: function() {},
+    onShown: function() {},
+    onHide: function() {},
+    onHidden: function() {}
   };
 
 }).call(this);

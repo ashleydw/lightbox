@@ -68,7 +68,7 @@
 
                     <div class="top-header">
                         <h2>Implementation</h2>
-                        <p>Obviously, you need the modal component that comes with Bootstrap, and jQuery. As of release v3.0.3a, the main script no longer includes the delegate function:</p>
+                        <p>Obviously, you need the modal component that comes with Bootstrap, and jQuery. The delegate function used on this page is:</p>
 <code style="white-space: pre-wrap">$(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
     event.preventDefault();
     $(this).ekkoLightbox();
@@ -80,6 +80,7 @@
                     <div class="top-header">
                         <h2>Options</h2>
                         <p>Options are passed down to the modal object so you can also use any of the <a href="http://getbootstrap.com/javascript/#modals-usage">original modal options</a>.</p>
+						<p>Pass the options to the calling function as an object, or set defaults using <code>$.fn.ekkoLightbox.defaults</code> (excluding modal default options, notable: title, footer, remote)</p>
 						<div class="table-responsive">
 							<table class="table table-bordered">
 								<thead>
@@ -109,9 +110,23 @@
 								<tr>
 									<td>gallery_parent_selector</td>
 									<td>string</td>
-									<td>*:not(.row)</td>
+									<td><code>*:not(.row)</code></td>
 									<td>If the gallery parent isn't a div, use this.</td>
 									<td><code>data-parent="any valid selector"</code></td>
+								</tr>
+								<tr>
+									<td>left_arrow_class</td>
+									<td>string</td>
+									<td><code>.glyphicon .glyphicon-chevron-left</code></td>
+									<td>The css classes to give to the left arrow</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td>right_arrow_class</td>
+									<td>string</td>
+									<td><code>.glyphicon .glyphicon-chevron-right</code></td>
+									<td>The css classes to give to the right arrow</td>
+									<td></td>
 								</tr>
 								<tr>
 									<td>type</td>
@@ -130,7 +145,7 @@
 								<tr>
 									<td>always_show_close</td>
 									<td>boolean</td>
-									<td>true</td>
+									<td><code>true</code></td>
 									<td>Always show the close button, even if no title is present</td>
 									<td></td>
 								</tr>
@@ -414,6 +429,7 @@
                     e.preventDefault();
                     $(this).ekkoLightbox();
                 });
+
             });
         </script>
     </body>

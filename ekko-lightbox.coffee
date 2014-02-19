@@ -6,24 +6,15 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
 ###
 "use strict";
 
+$ = jQuery
+
 EkkoLightbox = ( element, options ) ->
 
 	@options = $.extend({
-		gallery_parent_selector: '*:not(.row)'
 		title : null
 		footer : null
 		remote : null
-		left_arrow_class: '.glyphicon .glyphicon-chevron-left' #include class . here - they are stripped out later
-		right_arrow_class: '.glyphicon .glyphicon-chevron-right' #include class . here - they are stripped out later
-		directional_arrows: true #display the left / right arrows or not
-		type: null #force the lightbox into image / youtube mode. if null, or not image|youtube|vimeo; detect it
-		always_show_close: true #always show the close button, even if there is no title
-		onShow : ->
-		onShown : ->
-		onHide : ->
-		onHidden : ->
-		id : false
-	}, options || {})
+	}, $.fn.ekkoLightbox.defaults, options || {})
 
 	@$element = $(element)
 	content = ''
@@ -264,7 +255,6 @@ EkkoLightbox.prototype = {
 		@modal.modal('hide');
 }
 
-
 $.fn.ekkoLightbox = ( options ) ->
 	@each ->
 
@@ -276,3 +266,16 @@ $.fn.ekkoLightbox = ( options ) ->
 		}, options, $this.data())
 		new EkkoLightbox(@, options)
 		@
+
+$.fn.ekkoLightbox.defaults = {
+	gallery_parent_selector: '*:not(.row)'
+	left_arrow_class: '.glyphicon .glyphicon-chevron-left' #include class . here - they are stripped out later
+	right_arrow_class: '.glyphicon .glyphicon-chevron-right' #include class . here - they are stripped out later
+	directional_arrows: true #display the left / right arrows or not
+	type: null #force the lightbox into image / youtube mode. if null, or not image|youtube|vimeo; detect it
+	always_show_close: true #always show the close button, even if there is no title
+	onShow : ->
+	onShown : ->
+	onHide : ->
+	onHidden : ->
+}
