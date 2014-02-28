@@ -1,5 +1,13 @@
 {
     "name": "ekko-lightbox",
-    "version": "3.0.3a",
-    "main": "ekko-lightbox.js"
+    "version": "3.1.1",
+    "main": "./dist/ekko-lightbox.min.js",
+    "ignore": [
+        "**/.*",
+        "examples",
+        "node_modules"
+    ],
+    "dependencies": {
+        "bootstrap": ">= 3.0.0"
+    }
 }
