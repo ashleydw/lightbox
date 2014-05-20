@@ -178,10 +178,10 @@ EkkoLightbox.prototype = {
 	updateTitleAndFooter: ->
 		header = @modal_content.find('.modal-header')
 		footer = @modal_content.find('.modal-footer')
-		title = @$element.data('title') || "&nbsp;"
+		title = @$element.data('title') || ""
 		caption = @$element.data('footer') || ""
-		header.css('display', '').find('.modal-title').html(title)
-		if title or @options.always_show_close then header.css('display', '') else header.css('display', 'none')
+
+		if title or @options.always_show_close then header.css('display', '').find('.modal-title').html(title || "&nbsp;") else header.css('display', 'none')
 		if caption then footer.css('display', '').html(caption) else footer.css('display', 'none')
 		@
 
