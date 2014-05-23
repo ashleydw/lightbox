@@ -1,17 +1,28 @@
 {
     "name": "ekko-lightbox",
-    "version": "3.1.1-alpha",
-    "main": "./dist/ekko-lightbox.min.js",
-    "ignore": [
-        "**/.*",
-        "examples",
-        "node_modules",
-        "bower_components",
-        "test",
-        "tests"
+    "description": "A lightbox gallery plugin for Bootstrap 3 based on the modal plugin",
+    "version": "3.1.2",
+    "keywords": [
+        "lightbox",
+        "gallery",
+        "bootstrap",
+        "jquery",
+        "modal"
     ],
-    "dependencies": {
-        "bootstrap": ">= 3.0.0"
+    "homepage": "https://github.com/ashleydw/lightbox",
+    "author": "ashleydw <hello@ashleyd.ws>",
+    "style": "./dist/ekko-lightbox.css",
+    "less": "ekko-lightbox.less",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ashleydw/lightbox.git"
+    },
+    "bugs": {
+        "url": "https://github.com/ashleydw/lightbox/issues"
+    },
+    "license": {
+        "type": "GNU GENERAL PUBLIC LICENSE",
+        "url": "https://github.com/ashleydw/lightbox/blob/master/LICENSE.txt"
     },
     "devDependencies": {
         "grunt": "~0.4.1",
@@ -20,18 +31,5 @@
         "grunt-contrib-uglify": "~0.2.2",
         "grunt-contrib-watch": "~0.5.1",
         "grunt-recess": "~0.3.3"
-    },
-    "homepage": "https://github.com/ashleydw/lightbox",
-    "authors": [
-        "ashleydw <hello@ashleyd.ws>"
-    ],
-    "description": "A lightbox gallery plugin for Bootstrap 3 based on the modal plugin",
-    "keywords": [
-        "lightbox",
-        "gallery",
-        "bootstrap",
-        "jquery",
-        "modal"
-    ],
-    "license": "GNU GENERAL PUBLIC LICENSE"
+    }
 }
