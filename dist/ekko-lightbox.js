@@ -196,11 +196,10 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       var caption, footer, header, title;
       header = this.modal_content.find('.modal-header');
       footer = this.modal_content.find('.modal-footer');
-      title = this.$element.data('title') || "&nbsp;";
+      title = this.$element.data('title') || "";
       caption = this.$element.data('footer') || "";
-      header.css('display', '').find('.modal-title').html(title);
       if (title || this.options.always_show_close) {
-        header.css('display', '');
+        header.css('display', '').find('.modal-title').html(title || "&nbsp;");
       } else {
         header.css('display', 'none');
       }
