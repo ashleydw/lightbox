@@ -32,6 +32,7 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
     this.modal_body = this.modal.find('.modal-body').first();
     this.lightbox_container = this.modal_body.find('.ekko-lightbox-container').first();
     this.lightbox_body = this.lightbox_container.find('> div:first-child').first();
+    this.showLoading();
     this.modal_arrows = null;
     this.border = {
       top: parseFloat(this.modal_dialog.css('border-top-width')) + parseFloat(this.modal_content.css('border-top-width')) + parseFloat(this.modal_body.css('border-top-width')),
@@ -94,6 +95,8 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
             return this.showYoutubeVideo(video_id);
           } else if (this.options.type === 'vimeo') {
             return this.showVimeoVideo(this.options.remote);
+          } else if (this.options.type === 'instagram') {
+            return this.showInstagramVideo(this.options.remote);
           } else {
             return this.error("Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo\"");
           }
@@ -130,6 +133,13 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
         return false;
       }
     },
+    getInstagramId: function(str) {
+      if (str.indexOf('instagram') > 0) {
+        return str;
+      } else {
+        return false;
+      }
+    },
     navigate: function(event) {
       event = event || window.event;
       if (event.keyCode === 39 || event.keyCode === 37) {
@@ -142,6 +152,7 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
     },
     navigate_left: function() {
       var src;
+      this.showLoading();
       if (this.gallery_items.length === 1) {
         return;
       }
@@ -157,6 +168,7 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
     },
     navigate_right: function() {
       var next, src;
+      this.showLoading();
       if (this.gallery_items.length === 1) {
         return;
       }
@@ -188,6 +200,9 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       } else if (type === 'vimeo' || (video_id = this.getVimeoId(src))) {
         this.options.type = 'vimeo';
         return this.showVimeoVideo(video_id);
+      } else if (type === 'instagram' || (video_id = this.getInstagramId(src))) {
+        this.options.type = 'instagram';
+        return this.showInstagramVideo(video_id);
       } else {
         return this.error("Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo\"");
       }
@@ -234,6 +249,17 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       height = width / aspectRatio;
       this.resize(width);
       this.lightbox_body.html('<iframe width="' + width + '" height="' + height + '" src="' + id + '?autoplay=1" frameborder="0" allowfullscreen></iframe>');
+      if (this.modal_arrows) {
+        return this.modal_arrows.css('display', 'none');
+      }
+    },
+    showInstagramVideo: function(id) {
+      var height, width;
+      width = this.$element.data('width') || 612;
+      width = this.checkDimensions(width);
+      height = width;
+      this.resize(width);
+      this.lightbox_body.html('<iframe width="' + width + '" height="' + height + '" src="' + this.addTrailingSlash(id) + 'embed/" frameborder="0" allowfullscreen></iframe>');
       if (this.modal_arrows) {
         return this.modal_arrows.css('display', 'none');
       }
@@ -285,6 +311,12 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
     },
     close: function() {
       return this.modal.modal('hide');
+    },
+    addTrailingSlash: function(url) {
+      if (url.substr(-1) !== '/') {
+        url += '/';
+      }
+      return url;
     }
   };
 

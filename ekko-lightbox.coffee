@@ -32,6 +32,7 @@ EkkoLightbox = ( element, options ) ->
 	@lightbox_container = @modal_body.find('.ekko-lightbox-container').first()
 	@lightbox_body = @lightbox_container.find('> div:first-child').first()
 
+	@showLoading()
 	@modal_arrows = null
 
 	@border = {
@@ -98,6 +99,8 @@ EkkoLightbox.prototype = {
 					@showYoutubeVideo(video_id)
 				else if @options.type == 'vimeo'
 					@showVimeoVideo(@options.remote)
+				else if @options.type == 'instagram'
+					@showInstagramVideo(@options.remote);
 				else
 					@error "Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo\""
 
@@ -123,6 +126,9 @@ EkkoLightbox.prototype = {
 	getVimeoId: (str) ->
 		if str.indexOf('vimeo') > 0 then str else false
 
+	getInstagramId: (str) ->
+		if str.indexOf('instagram') > 0 then str else false
+
 	navigate : ( event ) ->
 
 		event = event || window.event;
@@ -133,6 +139,8 @@ EkkoLightbox.prototype = {
 				do @navigate_left
 
 	navigate_left: ->
+
+		@showLoading()
 		
 		if @gallery_items.length == 1 then return
 		
@@ -145,6 +153,8 @@ EkkoLightbox.prototype = {
 		@detectRemoteType(src, @$element.attr('data-type'))
 
 	navigate_right: ->
+
+		@showLoading()
 		
 		if @gallery_items.length == 1 then return
 		
@@ -172,6 +182,9 @@ EkkoLightbox.prototype = {
 		else if type == 'vimeo' || video_id = @getVimeoId(src)
 			@options.type = 'vimeo'
 			@showVimeoVideo(video_id)
+		else if type == 'instagram' || video_id = @getInstagramId(src)
+			@options.type = 'instagram'
+			@showInstagramVideo(video_id)
 		else
 			@error "Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo\""
 
@@ -206,6 +219,15 @@ EkkoLightbox.prototype = {
 		height = width / aspectRatio
 		@resize width
 		@lightbox_body.html '<iframe width="'+width+'" height="'+height+'" src="' + id + '?autoplay=1" frameborder="0" allowfullscreen></iframe>'
+		if @modal_arrows #hide the arrows when showing video
+			@modal_arrows.css 'display', 'none'
+
+	showInstagramVideo : (id) ->
+		width = @$element.data('width') || 612
+		width = @checkDimensions width
+		height = width
+		@resize width
+		@lightbox_body.html '<iframe width="'+width+'" height="'+height+'" src="' + @addTrailingSlash(id) + 'embed/" frameborder="0" allowfullscreen></iframe>'
 		if @modal_arrows #hide the arrows when showing video
 			@modal_arrows.css 'display', 'none'
 
@@ -253,6 +275,11 @@ EkkoLightbox.prototype = {
 
 	close : ->
 		@modal.modal('hide');
+
+	addTrailingSlash: (url) ->
+		if url.substr(-1) != '/'
+			url += '/'
+		url
 }
 
 $.fn.ekkoLightbox = ( options ) ->
