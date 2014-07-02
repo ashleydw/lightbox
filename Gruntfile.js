@@ -58,7 +58,20 @@ module.exports = function (grunt) {
                 files: ['ekko-lightbox.coffee'],
                 tasks: ['dist']
             }
-        }
+        },
+		bump: {
+			options: {
+				files: ['package.json', 'bower.json'],
+				updateConfigs: ['pkg'],
+				commit: true,
+				commitMessage: 'Release v%VERSION%',
+				commitFiles: ['package.json', 'bower.json'],
+				createTag: true,
+				tagName: 'v%VERSION%',
+				tagMessage: 'Version %VERSION%',
+				push: false
+			}
+		}
     });
 
     grunt.loadNpmTasks('grunt-banner');
@@ -66,6 +79,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-recess');
+	grunt.loadNpmTasks('grunt-bump');
 
     grunt.registerTask('dist', ['coffee', 'uglify', 'recess', 'usebanner']);
     grunt.registerTask('default', ['dist']);

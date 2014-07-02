@@ -1,6 +1,6 @@
 {
     "name": "ekko-lightbox",
-    "version": "3.1.2",
+    "version": "3.1.4",
     "main": "./dist/ekko-lightbox.min.js",
     "ignore": [
         "**/.*",
@@ -19,7 +19,8 @@
         "grunt-contrib-coffee": "~0.8.0",
         "grunt-contrib-uglify": "~0.2.2",
         "grunt-contrib-watch": "~0.5.1",
-        "grunt-recess": "~0.3.3"
+        "grunt-recess": "~0.3.3",
+        "grunt-bump": "~0.0.14"
     },
     "homepage": "https://github.com/ashleydw/lightbox",
     "authors": [
