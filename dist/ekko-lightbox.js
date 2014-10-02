@@ -152,15 +152,16 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
     },
     navigate_left: function() {
       var src;
-      this.showLoading();
       if (this.gallery_items.length === 1) {
         return;
       }
+      this.showLoading();
       if (this.gallery_index === 0) {
         this.gallery_index = this.gallery_items.length - 1;
       } else {
         this.gallery_index--;
       }
+      this.options.onNavigate('left', this.gallery_index);
       this.$element = $(this.gallery_items.get(this.gallery_index));
       this.updateTitleAndFooter();
       src = this.$element.attr('data-remote') || this.$element.attr('href');
@@ -168,15 +169,16 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
     },
     navigate_right: function() {
       var next, src;
-      this.showLoading();
       if (this.gallery_items.length === 1) {
         return;
       }
+      this.showLoading();
       if (this.gallery_index === this.gallery_items.length - 1) {
         this.gallery_index = 0;
       } else {
         this.gallery_index++;
       }
+      this.options.onNavigate('right', this.gallery_index);
       this.$element = $(this.gallery_items.get(this.gallery_index));
       src = this.$element.attr('data-remote') || this.$element.attr('href');
       this.updateTitleAndFooter();
@@ -344,7 +346,8 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
     onShow: function() {},
     onShown: function() {},
     onHide: function() {},
-    onHidden: function() {}
+    onHidden: function() {},
+    onNavigate: function() {}
   };
 
 }).call(this);

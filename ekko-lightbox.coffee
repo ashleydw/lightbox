@@ -140,11 +140,13 @@ EkkoLightbox.prototype = {
 
 	navigate_left: ->
 
-		@showLoading()
-		
 		if @gallery_items.length == 1 then return
-		
+
+		@showLoading()
+
 		if @gallery_index == 0 then @gallery_index = @gallery_items.length-1 else @gallery_index-- #circular
+
+		@options.onNavigate('left', @gallery_index)
 
 		@$element = $(@gallery_items.get(@gallery_index))
 		@updateTitleAndFooter()
@@ -154,11 +156,12 @@ EkkoLightbox.prototype = {
 
 	navigate_right: ->
 
-		@showLoading()
-		
 		if @gallery_items.length == 1 then return
-		
+		@showLoading()
+
 		if @gallery_index == @gallery_items.length-1 then @gallery_index = 0 else @gallery_index++ #circular
+
+		@options.onNavigate('right', @gallery_index)
 
 		@$element = $(@gallery_items.get(@gallery_index))
 		src = @$element.attr('data-remote') || @$element.attr('href')
@@ -305,4 +308,5 @@ $.fn.ekkoLightbox.defaults = {
 	onShown : ->
 	onHide : ->
 	onHidden : ->
+	onNavigate : ->
 }
