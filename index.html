@@ -5,7 +5,7 @@
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
         <link href="//rawgithub.com/ashleydw/lightbox/master/dist/ekko-lightbox.css" rel="stylesheet">
 
         <style type="text/css">
@@ -191,6 +191,7 @@
                         <li><a href="#check-is-image">Example #13: No-extension images / presume everything is an image</a></li>
 						<li><a href="#on-navigate">Example #14: On navigate event example</a></li>
                         <li><a href="#hidden-elements">Example #15: Hidden elements</a></li>
+						<li><a href="#remote-content">Example #16: Remote content</a></li>
                     </ul>
 
                     <h3 class="page-header" id="single-image">Example #1: Single Image</h3>
@@ -445,6 +446,34 @@
                         </div>
                     </div>
 
+					<h3 class="page-header" id="remote-content">Example #16: Remote content</h3>
+                    <p>The Bootstrap modal originally allowed for remote loading, but this is to be removed in v4; this functionality demonstrates the work around.</p>
+					<p>Given a URL, that is not an image or video (including unforced types [see example 13]), load the content using jQuery load(). An image and video is given below as proof gallery.</p>
+					<div class="row">
+                        <div class="col-md-offset-1 col-md-10">
+                            <div class="row">
+                                <p class="col-sm-3"><a href="./remote/page1.html" data-title="Page 1" data-toggle="lightbox" data-parent="" data-gallery="remoteload">Open up local Page 1</a></p>
+                                <a href="http://distilleryimage10.ak.instagram.com/85c5d0e4039411e3bd9b22000aa82186_7.jpg" data-parent="" data-toggle="lightbox" data-gallery="remoteload" class="col-sm-3">
+                                    <img src="//distilleryimage10.ak.instagram.com/85c5d0e4039411e3bd9b22000aa82186_7.jpg" class="img-responsive">
+                                </a>
+								<p class="col-sm-3"><a href="./remote/page2.html" data-title="Page 2" data-toggle="lightbox" data-parent="" data-gallery="remoteload">Open up local Page 2</a></p>
+                                <a href="http://vimeo.com/80629469" data-remote="http://player.vimeo.com/video/80629469" data-toggle="lightbox" data-parent="" data-gallery="remoteload" class="col-sm-3">
+                                    <img src="//b.vimeocdn.com/ts/458/070/458070637_200.jpg" class="img-responsive">
+                                </a>
+                            </div>
+                            <div class="row">
+                                <p class="col-sm-3"><a href="http://news.bbc.co.uk" data-title="BBC News - not responsive" data-toggle="lightbox" data-parent="" data-gallery="remoteload">Open up BBC news</a></p>
+                                <a href="http://vimeo.com/80629469" data-remote="http://player.vimeo.com/video/80629469" data-toggle="lightbox" data-parent="" data-gallery="remoteload" class="col-sm-3">
+                                    <img src="//b.vimeocdn.com/ts/458/070/458070637_200.jpg" class="img-responsive">
+                                </a>
+								<p class="col-sm-3"><a href="http://getbootstrap.com" data-title="Bootstrap - Responsive" data-toggle="lightbox" data-parent="" data-gallery="remoteload">Open up Bootstrap</a></p>
+                                <a href="http://distilleryimage10.ak.instagram.com/85c5d0e4039411e3bd9b22000aa82186_7.jpg" data-toggle="lightbox" data-parent="" data-gallery="remoteload" class="col-sm-3">
+                                    <img src="//distilleryimage10.ak.instagram.com/85c5d0e4039411e3bd9b22000aa82186_7.jpg" class="img-responsive">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -483,7 +512,7 @@
 				});
 			});
 		</script>
-		<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+		<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
 		<script>
 		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
