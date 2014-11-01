@@ -101,8 +101,10 @@ EkkoLightbox.prototype = {
 					@showVimeoVideo(@options.remote)
 				else if @options.type == 'instagram'
 					@showInstagramVideo(@options.remote);
+				else if @options.type == 'url'
+					@showInstagramVideo(@options.remote);
 				else
-					@error "Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo\""
+					@error "Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo|url\""
 
 			else
 				@detectRemoteType(@options.remote)
@@ -176,20 +178,30 @@ EkkoLightbox.prototype = {
 				@preloadImage(src, false)
 
 	detectRemoteType: (src, type) ->
+
 		if type == 'image' || @isImage(src)
 			@options.type = 'image'
 			@preloadImage(src, true)
+
 		else if type == 'youtube' || video_id = @getYoutubeId(src)
 			@options.type = 'youtube'
 			@showYoutubeVideo(video_id)
+
 		else if type == 'vimeo' || video_id = @getVimeoId(src)
 			@options.type = 'vimeo'
 			@showVimeoVideo(video_id)
+
 		else if type == 'instagram' || video_id = @getInstagramId(src)
 			@options.type = 'instagram'
 			@showInstagramVideo(video_id)
+
+		else if type == 'url' || video_id = @getInstagramId(src)
+			@options.type = 'instagram'
+			@showInstagramVideo(video_id)
+			
 		else
-			@error "Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo\""
+			@options.type = 'url'
+			@loadRemoteContent(src)
 
 	updateTitleAndFooter: ->
 		header = @modal_content.find('.modal-header')
@@ -228,11 +240,33 @@ EkkoLightbox.prototype = {
 	showInstagramVideo : (id) ->
 		width = @$element.data('width') || 612
 		width = @checkDimensions width
-		height = width
 		@resize width
-		@lightbox_body.html '<iframe width="'+width+'" height="'+height+'" src="' + @addTrailingSlash(id) + 'embed/" frameborder="0" allowfullscreen></iframe>'
+		@lightbox_body.html '<iframe width="'+width+'" height="'+width+'" src="' + @addTrailingSlash(id) + 'embed/" frameborder="0" allowfullscreen></iframe>'
 		if @modal_arrows #hide the arrows when showing video
 			@modal_arrows.css 'display', 'none'
+
+	loadRemoteContent : (url) ->
+		width = @$element.data('width') || 560
+		@resize width
+
+		disableExternalCheck = @$element.data('disableExternalCheck') || false
+
+		# external urls are loading into an iframe
+		console.log(disableExternalCheck, @isExternal(url))
+		if !disableExternalCheck && !@isExternal(url)
+			@lightbox_body.load url, $.proxy =>
+		  		@$element.trigger('loaded.bs.modal')
+
+		else
+			@lightbox_body.html '<iframe width="'+width+'" height="'+width+'" src="' + url + '" frameborder="0" allowfullscreen></iframe>'
+
+		@modal_arrows.css 'display', 'block' if @modal_arrows
+
+	isExternal : (url) ->
+		match = url.match(/^([^:\/?#]+:)?(?:\/\/([^\/?#]*))?([^?#]+)?(\?[^#]*)?(#.*)?/);
+		return true if typeof match[1] == "string" && match[1].length > 0 && match[1].toLowerCase() != location.protocol
+		return true if typeof match[2] == "string" && match[2].length > 0 && match[2].replace(new RegExp(":("+{"http:":80,"https:":443}[location.protocol]+")?$"), "") != location.host
+		false
 
 	error : ( message ) ->
 		@lightbox_body.html message
@@ -247,8 +281,7 @@ EkkoLightbox.prototype = {
 				image.attr('src', img.src)
 				image.addClass('img-responsive')
 				@lightbox_body.html image
-				if @modal_arrows #show the arrows
-					@modal_arrows.css 'display', 'block'
+				@modal_arrows.css 'display', 'block' if @modal_arrows
 				@resize img.width
 			img.onerror = =>
 				@error 'Failed to load image: ' + src

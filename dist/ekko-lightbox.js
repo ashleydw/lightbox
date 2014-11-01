@@ -97,8 +97,10 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
             return this.showVimeoVideo(this.options.remote);
           } else if (this.options.type === 'instagram') {
             return this.showInstagramVideo(this.options.remote);
+          } else if (this.options.type === 'url') {
+            return this.showInstagramVideo(this.options.remote);
           } else {
-            return this.error("Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo\"");
+            return this.error("Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo|url\"");
           }
         } else {
           return this.detectRemoteType(this.options.remote);
@@ -205,8 +207,12 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       } else if (type === 'instagram' || (video_id = this.getInstagramId(src))) {
         this.options.type = 'instagram';
         return this.showInstagramVideo(video_id);
+      } else if (type === 'url' || (video_id = this.getInstagramId(src))) {
+        this.options.type = 'instagram';
+        return this.showInstagramVideo(video_id);
       } else {
-        return this.error("Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo\"");
+        this.options.type = 'url';
+        return this.loadRemoteContent(src);
       }
     },
     updateTitleAndFooter: function() {
@@ -256,15 +262,46 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       }
     },
     showInstagramVideo: function(id) {
-      var height, width;
+      var width;
       width = this.$element.data('width') || 612;
       width = this.checkDimensions(width);
-      height = width;
       this.resize(width);
-      this.lightbox_body.html('<iframe width="' + width + '" height="' + height + '" src="' + this.addTrailingSlash(id) + 'embed/" frameborder="0" allowfullscreen></iframe>');
+      this.lightbox_body.html('<iframe width="' + width + '" height="' + width + '" src="' + this.addTrailingSlash(id) + 'embed/" frameborder="0" allowfullscreen></iframe>');
       if (this.modal_arrows) {
         return this.modal_arrows.css('display', 'none');
       }
+    },
+    loadRemoteContent: function(url) {
+      var disableExternalCheck, width,
+        _this = this;
+      width = this.$element.data('width') || 560;
+      this.resize(width);
+      disableExternalCheck = this.$element.data('disableExternalCheck') || false;
+      console.log(disableExternalCheck, this.isExternal(url));
+      if (!disableExternalCheck && !this.isExternal(url)) {
+        this.lightbox_body.load(url, $.proxy(function() {
+          return _this.$element.trigger('loaded.bs.modal');
+        }));
+      } else {
+        this.lightbox_body.html('<iframe width="' + width + '" height="' + width + '" src="' + url + '" frameborder="0" allowfullscreen></iframe>');
+      }
+      if (this.modal_arrows) {
+        return this.modal_arrows.css('display', 'block');
+      }
+    },
+    isExternal: function(url) {
+      var match;
+      match = url.match(/^([^:\/?#]+:)?(?:\/\/([^\/?#]*))?([^?#]+)?(\?[^#]*)?(#.*)?/);
+      if (typeof match[1] === "string" && match[1].length > 0 && match[1].toLowerCase() !== location.protocol) {
+        return true;
+      }
+      if (typeof match[2] === "string" && match[2].length > 0 && match[2].replace(new RegExp(":(" + {
+        "http:": 80,
+        "https:": 443
+      }[location.protocol] + ")?$"), "") !== location.host) {
+        return true;
+      }
+      return false;
     },
     error: function(message) {
       this.lightbox_body.html(message);
