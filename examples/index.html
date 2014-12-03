@@ -192,6 +192,7 @@
                         <li><a href="#on-navigate">Example #14: On navigate event example</a></li>
                         <li><a href="#hidden-elements">Example #15: Hidden elements</a></li>
                         <li><a href="#remote-content">Example #16: Remote content</a></li>
+                        <li><a href="#navigateTo">Example #17: navigateTo</a></li>
                     </ul>
 
                     <h3 class="page-header" id="single-image">Example #1: Single Image</h3>
@@ -474,6 +475,23 @@
                         </div>
                     </div>
 
+                    <h3 class="page-header" id="navigateTo">Example #17: navigateTo</h3>
+					<p>Must be setup programatically to run the setup (view the source of this page)</p>
+					<div class="row">
+                        <div class="col-md-offset-2 col-md-8">
+                            <div class="row">
+                                <a href="http://distilleryimage6.ak.instagram.com/ba70b8e8030011e3a31b22000a1fbb63_7.jpg" data-toggle="lightbox" data-gallery="navigateTo" data-footer="Click <a href='#'>here</a> to jump to image 3" class="col-sm-4">
+                                    <img src="//distilleryimage6.ak.instagram.com/ba70b8e8030011e3a31b22000a1fbb63_7.jpg" class="img-responsive">
+                                </a>
+                                <a href="http://distilleryimage3.ak.instagram.com/f0c3343c046511e393b222000aa8011b_7.jpg" data-toggle="lightbox" data-gallery="navigateTo" class="col-sm-4">
+                                    <img src="//distilleryimage3.ak.instagram.com/f0c3343c046511e393b222000aa8011b_7.jpg" class="img-responsive">
+                                </a>
+                                <a href="http://distilleryimage5.ak.instagram.com/59e9419c05d111e3896922000a1fbe1a_7.jpg" data-toggle="lightbox" data-gallery="navigateTo" class="col-sm-4">
+                                    <img src="//distilleryimage5.ak.instagram.com/59e9419c05d111e3896922000a1fbe1a_7.jpg" class="img-responsive">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
             </div>
@@ -486,7 +504,7 @@
         <script type="text/javascript">
             $(document).ready(function ($) {
                 // delegate calls to data-toggle="lightbox"
-                $(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
+                $(document).delegate('*[data-toggle="lightbox"]:not([data-gallery="navigateTo"])', 'click', function(event) {
                     event.preventDefault();
                     return $(this).ekkoLightbox({
                         onShown: function() {
@@ -511,6 +529,29 @@
                     e.preventDefault();
                     $(this).ekkoLightbox();
                 });
+
+				// navigateTo
+                $(document).delegate('*[data-gallery="navigateTo"]', 'click', function(event) {
+                    event.preventDefault();
+                    return $(this).ekkoLightbox({
+                        onShown: function() {
+
+							var a = this.modal_content.find('.modal-footer a');
+							if(a.length > 0) {
+
+								a.click(function(e) {
+
+									e.preventDefault();
+									this.navigateTo(2);
+
+								}.bind(this));
+
+							}
+
+                        }
+                    });
+                });
+
 
             });
         </script>
