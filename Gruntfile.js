@@ -2,7 +2,6 @@ module.exports = function (grunt) {
     "use strict";
 
     grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
         banner:
             '/*!\n' +
             ' * Lightbox for Bootstrap 3 by @ashleydw\n' +
@@ -61,11 +60,10 @@ module.exports = function (grunt) {
         },
 		bump: {
 			options: {
-				files: ['package.json', 'bower.json'],
-				updateConfigs: ['pkg'],
+				files: ['bower.json'],
 				commit: true,
 				commitMessage: 'Release v%VERSION%',
-				commitFiles: ['package.json', 'bower.json'],
+				commitFiles: ['bower.json'],
 				createTag: true,
 				tagName: 'v%VERSION%',
 				tagMessage: 'Version %VERSION%',

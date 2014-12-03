@@ -152,39 +152,18 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
         }
       }
     },
-    navigate_left: function() {
-      var src;
-      if (this.gallery_items.length === 1) {
-        return;
-      }
-      this.showLoading();
-      if (this.gallery_index === 0) {
-        this.gallery_index = this.gallery_items.length - 1;
-      } else {
-        this.gallery_index--;
-      }
-      this.options.onNavigate.call(this, 'left', this.gallery_index);
-      this.$element = $(this.gallery_items.get(this.gallery_index));
-      this.updateTitleAndFooter();
-      src = this.$element.attr('data-remote') || this.$element.attr('href');
-      return this.detectRemoteType(src, this.$element.attr('data-type'));
-    },
-    navigate_right: function() {
+    navigateTo: function(index) {
       var next, src;
-      if (this.gallery_items.length === 1) {
-        return;
+      if (index < 0 || index > this.gallery_items.length - 1) {
+        return this;
       }
       this.showLoading();
-      if (this.gallery_index === this.gallery_items.length - 1) {
-        this.gallery_index = 0;
-      } else {
-        this.gallery_index++;
-      }
-      this.options.onNavigate.call(this, 'right', this.gallery_index);
+      this.gallery_index = index;
+      this.options.onNavigate.call(this, this.gallery_index);
       this.$element = $(this.gallery_items.get(this.gallery_index));
-      src = this.$element.attr('data-remote') || this.$element.attr('href');
       this.updateTitleAndFooter();
-      this.detectRemoteType(src, this.$element.attr('data-type'));
+      src = this.$element.attr('data-remote') || this.$element.attr('href');
+      this.detectRemoteType(src, this.$element.attr('data-type') || false);
       if (this.gallery_index + 1 < this.gallery_items.length) {
         next = $(this.gallery_items.get(this.gallery_index + 1), false);
         src = next.attr('data-remote') || next.attr('href');
@@ -192,6 +171,30 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
           return this.preloadImage(src, false);
         }
       }
+    },
+    navigate_left: function() {
+      if (this.gallery_items.length === 1) {
+        return;
+      }
+      if (this.gallery_index === 0) {
+        this.gallery_index = this.gallery_items.length - 1;
+      } else {
+        this.gallery_index--;
+      }
+      this.options.onNavigate.call(this, 'left', this.gallery_index);
+      return this.navigateTo(this.gallery_index);
+    },
+    navigate_right: function() {
+      if (this.gallery_items.length === 1) {
+        return;
+      }
+      if (this.gallery_index === this.gallery_items.length - 1) {
+        this.gallery_index = 0;
+      } else {
+        this.gallery_index++;
+      }
+      this.options.onNavigate.call(this, 'right', this.gallery_index);
+      return this.navigateTo(this.gallery_index);
     },
     detectRemoteType: function(src, type) {
       var video_id;

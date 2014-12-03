@@ -140,42 +140,43 @@ EkkoLightbox.prototype = {
 			else if event.keyCode == 37
 				do @navigate_left
 
-	navigate_left: ->
+	navigateTo: (index) ->
 
-		if @gallery_items.length == 1 then return
+		return @ if index < 0 or index > @gallery_items.length-1
 
 		@showLoading()
 
-		if @gallery_index == 0 then @gallery_index = @gallery_items.length-1 else @gallery_index-- #circular
-
-		@options.onNavigate.call(@, 'left', @gallery_index)
+		@gallery_index = index
+		@options.onNavigate.call(@, @gallery_index)
 
 		@$element = $(@gallery_items.get(@gallery_index))
 		@updateTitleAndFooter()
+
 		src = @$element.attr('data-remote') || @$element.attr('href')
-
-		@detectRemoteType(src, @$element.attr('data-type'))
-
-	navigate_right: ->
-
-		if @gallery_items.length == 1 then return
-		@showLoading()
-
-		if @gallery_index == @gallery_items.length-1 then @gallery_index = 0 else @gallery_index++ #circular
-
-		@options.onNavigate.call(@, 'right', @gallery_index)
-
-		@$element = $(@gallery_items.get(@gallery_index))
-		src = @$element.attr('data-remote') || @$element.attr('href')
-		@updateTitleAndFooter()
-
-		@detectRemoteType(src, @$element.attr('data-type'))
+		@detectRemoteType(src, @$element.attr('data-type') || false)
 
 		if @gallery_index + 1 < @gallery_items.length
 			next = $(@gallery_items.get(@gallery_index + 1), false)
 			src = next.attr('data-remote') || next.attr('href')
 			if next.attr('data-type') == 'image' || @isImage(src)
 				@preloadImage(src, false)
+
+
+	navigate_left: ->
+
+		if @gallery_items.length == 1 then return
+		if @gallery_index == 0 then @gallery_index = @gallery_items.length-1 else @gallery_index-- #circular
+
+		@options.onNavigate.call(@, 'left', @gallery_index)
+		@navigateTo(@gallery_index)
+
+	navigate_right: ->
+
+		if @gallery_items.length == 1 then return
+		if @gallery_index == @gallery_items.length-1 then @gallery_index = 0 else @gallery_index++ #circular
+
+		@options.onNavigate.call(@, 'right', @gallery_index)
+		@navigateTo(@gallery_index)
 
 	detectRemoteType: (src, type) ->
 
