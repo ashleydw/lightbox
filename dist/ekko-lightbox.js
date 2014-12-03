@@ -163,7 +163,7 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       } else {
         this.gallery_index--;
       }
-      this.options.onNavigate('left', this.gallery_index);
+      this.options.onNavigate.call(this, 'left', this.gallery_index);
       this.$element = $(this.gallery_items.get(this.gallery_index));
       this.updateTitleAndFooter();
       src = this.$element.attr('data-remote') || this.$element.attr('href');
@@ -180,7 +180,7 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       } else {
         this.gallery_index++;
       }
-      this.options.onNavigate('right', this.gallery_index);
+      this.options.onNavigate.call(this, 'right', this.gallery_index);
       this.$element = $(this.gallery_items.get(this.gallery_index));
       src = this.$element.attr('data-remote') || this.$element.attr('href');
       this.updateTitleAndFooter();
@@ -245,6 +245,7 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       height = width / aspectRatio;
       this.resize(width);
       this.lightbox_body.html('<iframe width="' + width + '" height="' + height + '" src="//www.youtube.com/embed/' + id + '?badge=0&autoplay=1&html5=1" frameborder="0" allowfullscreen></iframe>');
+      this.options.onContentLoaded.call(this);
       if (this.modal_arrows) {
         return this.modal_arrows.css('display', 'none');
       }
@@ -257,6 +258,7 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       height = width / aspectRatio;
       this.resize(width);
       this.lightbox_body.html('<iframe width="' + width + '" height="' + height + '" src="' + id + '?autoplay=1" frameborder="0" allowfullscreen></iframe>');
+      this.options.onContentLoaded.call(this);
       if (this.modal_arrows) {
         return this.modal_arrows.css('display', 'none');
       }
@@ -267,6 +269,7 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       width = this.checkDimensions(width);
       this.resize(width);
       this.lightbox_body.html('<iframe width="' + width + '" height="' + width + '" src="' + this.addTrailingSlash(id) + 'embed/" frameborder="0" allowfullscreen></iframe>');
+      this.options.onContentLoaded.call(this);
       if (this.modal_arrows) {
         return this.modal_arrows.css('display', 'none');
       }
@@ -284,6 +287,7 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
         }));
       } else {
         this.lightbox_body.html('<iframe width="' + width + '" height="' + width + '" src="' + url + '" frameborder="0" allowfullscreen></iframe>');
+        this.options.onContentLoaded.call(this);
       }
       if (this.modal_arrows) {
         return this.modal_arrows.css('display', 'block');
@@ -321,7 +325,8 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
           if (_this.modal_arrows) {
             _this.modal_arrows.css('display', 'block');
           }
-          return _this.resize(img.width);
+          _this.resize(img.width);
+          return _this.options.onContentLoaded.call(_this);
         };
         img.onerror = function() {
           return _this.error('Failed to load image: ' + src);
@@ -384,7 +389,8 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
     onShown: function() {},
     onHide: function() {},
     onHidden: function() {},
-    onNavigate: function() {}
+    onNavigate: function() {},
+    onContentLoaded: function() {}
   };
 
 }).call(this);

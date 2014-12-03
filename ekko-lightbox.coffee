@@ -148,7 +148,7 @@ EkkoLightbox.prototype = {
 
 		if @gallery_index == 0 then @gallery_index = @gallery_items.length-1 else @gallery_index-- #circular
 
-		@options.onNavigate('left', @gallery_index)
+		@options.onNavigate.call(@, 'left', @gallery_index)
 
 		@$element = $(@gallery_items.get(@gallery_index))
 		@updateTitleAndFooter()
@@ -163,7 +163,7 @@ EkkoLightbox.prototype = {
 
 		if @gallery_index == @gallery_items.length-1 then @gallery_index = 0 else @gallery_index++ #circular
 
-		@options.onNavigate('right', @gallery_index)
+		@options.onNavigate.call(@, 'right', @gallery_index)
 
 		@$element = $(@gallery_items.get(@gallery_index))
 		src = @$element.attr('data-remote') || @$element.attr('href')
@@ -198,7 +198,7 @@ EkkoLightbox.prototype = {
 		else if type == 'url' || video_id = @getInstagramId(src)
 			@options.type = 'instagram'
 			@showInstagramVideo(video_id)
-			
+
 		else
 			@options.type = 'url'
 			@loadRemoteContent(src)
@@ -224,6 +224,7 @@ EkkoLightbox.prototype = {
 		height = width / aspectRatio
 		@resize width
 		@lightbox_body.html '<iframe width="'+width+'" height="'+height+'" src="//www.youtube.com/embed/' + id + '?badge=0&autoplay=1&html5=1" frameborder="0" allowfullscreen></iframe>'
+		@options.onContentLoaded.call(@)
 		if @modal_arrows #hide the arrows when showing video
 			@modal_arrows.css 'display', 'none'
 
@@ -234,6 +235,7 @@ EkkoLightbox.prototype = {
 		height = width / aspectRatio
 		@resize width
 		@lightbox_body.html '<iframe width="'+width+'" height="'+height+'" src="' + id + '?autoplay=1" frameborder="0" allowfullscreen></iframe>'
+		@options.onContentLoaded.call(@)
 		if @modal_arrows #hide the arrows when showing video
 			@modal_arrows.css 'display', 'none'
 
@@ -242,6 +244,7 @@ EkkoLightbox.prototype = {
 		width = @checkDimensions width
 		@resize width
 		@lightbox_body.html '<iframe width="'+width+'" height="'+width+'" src="' + @addTrailingSlash(id) + 'embed/" frameborder="0" allowfullscreen></iframe>'
+		@options.onContentLoaded.call(@)
 		if @modal_arrows #hide the arrows when showing video
 			@modal_arrows.css 'display', 'none'
 
@@ -259,6 +262,7 @@ EkkoLightbox.prototype = {
 
 		else
 			@lightbox_body.html '<iframe width="'+width+'" height="'+width+'" src="' + url + '" frameborder="0" allowfullscreen></iframe>'
+			@options.onContentLoaded.call(@)
 
 		@modal_arrows.css 'display', 'block' if @modal_arrows
 
@@ -283,6 +287,7 @@ EkkoLightbox.prototype = {
 				@lightbox_body.html image
 				@modal_arrows.css 'display', 'block' if @modal_arrows
 				@resize img.width
+				@options.onContentLoaded.call(@)
 			img.onerror = =>
 				@error 'Failed to load image: ' + src
 
@@ -342,4 +347,5 @@ $.fn.ekkoLightbox.defaults = {
 	onHide : ->
 	onHidden : ->
 	onNavigate : ->
+	onContentLoaded : ->
 }
