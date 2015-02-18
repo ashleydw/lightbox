@@ -300,8 +300,8 @@ EkkoLightbox.prototype = {
 		width_total = width + @border.left + @padding.left + @padding.right + @border.right
 		@modal_dialog.css('width', 'auto') .css('max-width', width_total);
 
-		@lightbox_container.find('a').css 'padding-top', ->
-			$(@).parent().height() / 2
+		@lightbox_container.find('a').css 'line-height', ->
+			$(@).parent().height() + 'px'
 		@
 
 	checkDimensions: (width) ->
