@@ -256,7 +256,6 @@ EkkoLightbox.prototype = {
 		disableExternalCheck = @$element.data('disableExternalCheck') || false
 
 		# external urls are loading into an iframe
-		console.log(disableExternalCheck, @isExternal(url))
 		if !disableExternalCheck && !@isExternal(url)
 			@lightbox_body.load url, $.proxy =>
 		  		@$element.trigger('loaded.bs.modal')

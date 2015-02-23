@@ -283,7 +283,6 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
       width = this.$element.data('width') || 560;
       this.resize(width);
       disableExternalCheck = this.$element.data('disableExternalCheck') || false;
-      console.log(disableExternalCheck, this.isExternal(url));
       if (!disableExternalCheck && !this.isExternal(url)) {
         this.lightbox_body.load(url, $.proxy(function() {
           return _this.$element.trigger('loaded.bs.modal');

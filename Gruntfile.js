@@ -60,7 +60,7 @@ module.exports = function (grunt) {
         },
 		bump: {
 			options: {
-				files: ['bower.json'],
+				files: ['bower.json', 'package.json'],
 				commit: true,
 				commitMessage: 'Release v%VERSION%',
 				commitFiles: ['bower.json'],
