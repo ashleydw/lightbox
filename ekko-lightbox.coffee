@@ -224,7 +224,7 @@ EkkoLightbox.prototype = {
 		width = @checkDimensions width
 		height = width / aspectRatio
 		@resize width
-		@lightbox_body.html '<iframe width="'+width+'" height="'+height+'" src="//www.youtube.com/embed/' + id + '?badge=0&autoplay=1&html5=1" frameborder="0" allowfullscreen></iframe>'
+		@lightbox_body.html '<div class="embed-responsive embed-responsive-16by9"><iframe width="'+width+'" height="'+height+'" src="//www.youtube.com/embed/' + id + '?badge=0&autoplay=1&html5=1" frameborder="0" allowfullscreen class="embed-responsive-item"></iframe></div>'
 		@options.onContentLoaded.call(@)
 		if @modal_arrows #hide the arrows when showing video
 			@modal_arrows.css 'display', 'none'
@@ -235,7 +235,7 @@ EkkoLightbox.prototype = {
 		width = @checkDimensions width
 		height = width / aspectRatio
 		@resize width
-		@lightbox_body.html '<iframe width="'+width+'" height="'+height+'" src="' + id + '?autoplay=1" frameborder="0" allowfullscreen></iframe>'
+		@lightbox_body.html '<div class="embed-responsive embed-responsive-16by9"><iframe width="'+width+'" height="'+height+'" src="' + id + '?autoplay=1" frameborder="0" allowfullscreen class="embed-responsive-item"></iframe></div>'
 		@options.onContentLoaded.call(@)
 		if @modal_arrows #hide the arrows when showing video
 			@modal_arrows.css 'display', 'none'
@@ -244,7 +244,7 @@ EkkoLightbox.prototype = {
 		width = @$element.data('width') || 612
 		width = @checkDimensions width
 		@resize width
-		@lightbox_body.html '<iframe width="'+width+'" height="'+width+'" src="' + @addTrailingSlash(id) + 'embed/" frameborder="0" allowfullscreen></iframe>'
+		@lightbox_body.html '<div class="embed-responsive embed-responsive-16by9"><iframe width="'+width+'" height="'+width+'" src="' + @addTrailingSlash(id) + 'embed/" frameborder="0" allowfullscreen class="embed-responsive-item"></iframe></div>'
 		@options.onContentLoaded.call(@)
 		if @modal_arrows #hide the arrows when showing video
 			@modal_arrows.css 'display', 'none'
