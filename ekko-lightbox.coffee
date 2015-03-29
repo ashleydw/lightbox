@@ -336,7 +336,7 @@ $.fn.ekkoLightbox = ( options ) ->
 		@
 
 $.fn.ekkoLightbox.defaults = {
-	gallery_parent_selector: '*:not(.row)'
+	gallery_parent_selector: 'document.body'
 	left_arrow_class: '.glyphicon .glyphicon-chevron-left' #include class . here - they are stripped out later
 	right_arrow_class: '.glyphicon .glyphicon-chevron-right' #include class . here - they are stripped out later
 	directional_arrows: true #display the left / right arrows or not

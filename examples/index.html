@@ -115,8 +115,8 @@
 								<tr>
 									<td>gallery_parent_selector</td>
 									<td>string</td>
-									<td><code>*:not(.row)</code></td>
-									<td>If the gallery parent isn't a div, use this.</td>
+									<td><code>document.body</code></td>
+									<td>If you have multiple galleries per page, this will restrict the gallery items to the parent that matches this selector.</td>
 									<td><code>data-parent="any valid selector"</code></td>
 								</tr>
 								<tr>
@@ -145,7 +145,7 @@
 									<td>integer</td>
 									<td></td>
 									<td>Force the width</td>
-									<td><code>data-width="[0-9]+]"</code></td>
+									<td><code>data-width="[0-9]+"</code></td>
 								</tr>
 								<tr>
 									<td>always_show_close</td>
@@ -346,12 +346,6 @@
                             <figure>
                                 <img src="//25.media.tumblr.com/de356cd6570d7c26e73979467f296f67/tumblr_mrn3dc10Wa1r1thfzo6_400.jpg" class="img-responsive" alt="">
                                 <figcaption>@gregfoster</figcaption>
-                            </figure>
-                        </a>
-                        <a href="http://31.media.tumblr.com/c8bdcc303df762a14df18e518128c4dd/tumblr_mrn3dc10Wa1r1thfzo7_1280.jpg" class="col-sm-3" data-toggle="lightbox">
-                            <figure>
-                                <img src="//31.media.tumblr.com/c8bdcc303df762a14df18e518128c4dd/tumblr_mrn3dc10Wa1r1thfzo7_400.jpg" class="img-responsive" alt="">
-                                <figcaption>@littlecoal</figcaption>
                             </figure>
                         </a>
                     </div>
