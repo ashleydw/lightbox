@@ -102,9 +102,11 @@ EkkoLightbox.prototype = {
 				else if @options.type == 'instagram'
 					@showInstagramVideo(@options.remote);
 				else if @options.type == 'url'
-					@showInstagramVideo(@options.remote);
+					@loadRemoteContent(@options.remote);
+				else if @options.type == 'video'
+					@showVideoIframe(@options.remote)
 				else
-					@error "Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo|url\""
+					@error "Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo|instagram|url|video\""
 
 			else
 				@detectRemoteType(@options.remote)
@@ -179,6 +181,8 @@ EkkoLightbox.prototype = {
 
 	detectRemoteType: (src, type) ->
 
+		type = type || false
+
 		if type == 'image' || @isImage(src)
 			@options.type = 'image'
 			@preloadImage(src, true)
@@ -195,9 +199,9 @@ EkkoLightbox.prototype = {
 			@options.type = 'instagram'
 			@showInstagramVideo(video_id)
 
-		else if type == 'url' || video_id = @getInstagramId(src)
-			@options.type = 'instagram'
-			@showInstagramVideo(video_id)
+		else if type == 'video'
+			@options.type = 'video'
+			@showVideoIframe(video_id)
 
 		else
 			@options.type = 'url'
@@ -218,35 +222,33 @@ EkkoLightbox.prototype = {
 		@
 
 	showYoutubeVideo : (id) ->
-		aspectRatio = 560/315
-		width = @$element.data('width') || 560
-		width = @checkDimensions width
-		height = width / aspectRatio
-		@resize width
-		@lightbox_body.html '<div class="embed-responsive embed-responsive-16by9"><iframe width="'+width+'" height="'+height+'" src="//www.youtube.com/embed/' + id + '?badge=0&autoplay=1&html5=1" frameborder="0" allowfullscreen class="embed-responsive-item"></iframe></div>'
-		@options.onContentLoaded.call(@)
-		if @modal_arrows #hide the arrows when showing video
-			@modal_arrows.css 'display', 'none'
+		width = @checkDimensions( @$element.data('width') || 560 )
+		height = width / ( 560/315 ) # aspect ratio
+		@showVideoIframe('//www.youtube.com/embed/' + id + '?badge=0&autoplay=1&html5=1', width, height)
 
 	showVimeoVideo : (id) ->
-		aspectRatio = 500/281
-		width = @$element.data('width') || 560
-		width = @checkDimensions width
-		height = width / aspectRatio
+		width = @checkDimensions( @$element.data('width') || 560 )
+		height = width / ( 500/281 ) # aspect ratio
+		@showVideoIframe(id + '?autoplay=1', width, height)
+
+	showInstagramVideo : (id) ->
+		# instagram load their content into iframe's so this can be put straight into the element
+		width = @checkDimensions @$element.data('width') || 612
 		@resize width
-		@lightbox_body.html '<div class="embed-responsive embed-responsive-16by9"><iframe width="'+width+'" height="'+height+'" src="' + id + '?autoplay=1" frameborder="0" allowfullscreen class="embed-responsive-item"></iframe></div>'
+		height = width + 80
+		@lightbox_body.html '<iframe width="'+width+'" height="'+height+'" src="' + @addTrailingSlash(id) + 'embed/" frameborder="0" allowfullscreen></iframe>'
 		@options.onContentLoaded.call(@)
 		if @modal_arrows #hide the arrows when showing video
 			@modal_arrows.css 'display', 'none'
 
-	showInstagramVideo : (id) ->
-		width = @$element.data('width') || 612
-		width = @checkDimensions width
+	showVideoIframe: (url, width, height) -> # should be used for videos only. for remote content use loadRemoteContent (data-type=url)
+		height = height || width # default to square
 		@resize width
-		@lightbox_body.html '<div class="embed-responsive embed-responsive-16by9"><iframe width="'+width+'" height="'+width+'" src="' + @addTrailingSlash(id) + 'embed/" frameborder="0" allowfullscreen class="embed-responsive-item"></iframe></div>'
+		@lightbox_body.html '<div class="embed-responsive embed-responsive-16by9"><iframe width="' + width + '" height="' + height + '" src="' + url + '" frameborder="0" allowfullscreenclass="embed-responsive-item"></iframe></div>'
 		@options.onContentLoaded.call(@)
 		if @modal_arrows #hide the arrows when showing video
 			@modal_arrows.css 'display', 'none'
+		@
 
 	loadRemoteContent : (url) ->
 		width = @$element.data('width') || 560
@@ -264,6 +266,7 @@ EkkoLightbox.prototype = {
 			@options.onContentLoaded.call(@)
 
 		@modal_arrows.css 'display', 'block' if @modal_arrows
+		@
 
 	isExternal : (url) ->
 		match = url.match(/^([^:\/?#]+:)?(?:\/\/([^\/?#]*))?([^?#]+)?(\?[^#]*)?(#.*)?/);
