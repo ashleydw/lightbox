@@ -1,7 +1,7 @@
 {
 	"name": "ekko-lightbox",
 	"description": "A lightbox gallery plugin for Bootstrap 3 based on the modal plugin",
-	"version": "3.2.3",
+	"version": "3.3.0",
 	"keywords": [
 		"lightbox",
 		"gallery",
@@ -31,7 +31,8 @@
 		"grunt-contrib-coffee": "~0.8.0",
 		"grunt-contrib-uglify": "~0.2.2",
 		"grunt-contrib-watch": "~0.5.1",
-		"grunt-recess": "~0.3.3"
+		"grunt-recess": "~0.3.3",
+		"grunt-bump": "~0.0.14"
 	},
 	"npmName": "ekko-lightbox",
 	"npmFileMap": [
