@@ -214,7 +214,7 @@ EkkoLightbox.prototype = {
 		@
 
 	showLoading : ->
-		@lightbox_body.html '<div class="modal-loading">Loading..</div>'
+		@lightbox_body.html '<div class="modal-loading">'+@options.loadingMessage+'</div>'
 		@
 
 	showYoutubeVideo : (id) ->
@@ -341,6 +341,7 @@ $.fn.ekkoLightbox.defaults = {
 	directional_arrows: true #display the left / right arrows or not
 	type: null #force the lightbox into image / youtube mode. if null, or not image|youtube|vimeo; detect it
 	always_show_close: true #always show the close button, even if there is no title
+	loadingMessage: 'Loading...',
 	onShow : ->
 	onShown : ->
 	onHide : ->
