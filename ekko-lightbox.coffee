@@ -147,7 +147,6 @@ EkkoLightbox.prototype = {
 		@showLoading()
 
 		@gallery_index = index
-		@options.onNavigate.call(@, @gallery_index)
 
 		@$element = $(@gallery_items.get(@gallery_index))
 		@updateTitleAndFooter()
