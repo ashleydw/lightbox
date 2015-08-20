@@ -286,8 +286,9 @@ EkkoLightbox.prototype = {
 				image.addClass('img-responsive')
 				@lightbox_body.html image
 				@modal_arrows.css 'display', 'block' if @modal_arrows
-				@resize img.width
-				@options.onContentLoaded.call(@)
+				image.load =>
+					@resize img.width
+					@options.onContentLoaded.call(@)
 			img.onerror = =>
 				@error 'Failed to load image: ' + src
 
