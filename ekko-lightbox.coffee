@@ -243,7 +243,7 @@ EkkoLightbox.prototype = {
 	showVideoIframe: (url, width, height) -> # should be used for videos only. for remote content use loadRemoteContent (data-type=url)
 		height = height || width # default to square
 		@resize width
-		@lightbox_body.html '<div class="embed-responsive embed-responsive-16by9"><iframe width="' + width + '" height="' + height + '" src="' + url + '" frameborder="0" allowfullscreenclass="embed-responsive-item"></iframe></div>'
+		@lightbox_body.html '<div class="embed-responsive embed-responsive-16by9"><iframe width="' + width + '" height="' + height + '" src="' + url + '" frameborder="0" allowfullscreen class="embed-responsive-item"></iframe></div>'
 		@options.onContentLoaded.call(@)
 		@modal_arrows.css 'display', 'none' if @modal_arrows #hide the arrows when showing video
 		@
