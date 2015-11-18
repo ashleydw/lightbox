@@ -333,7 +333,6 @@ $.fn.ekkoLightbox = ( options ) ->
 			remote : $this.attr('data-remote') || $this.attr('href')
 			gallery_parent_selector : $this.attr('data-parent')
 			type : $this.attr('data-type')
-			no_related : false if $this.attr('data-norelated')
 		}, options, $this.data())
 		new EkkoLightbox(@, options)
 		@
