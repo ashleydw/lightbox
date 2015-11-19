@@ -222,9 +222,10 @@ EkkoLightbox.prototype = {
 		@
 
 	showYoutubeVideo : (id) ->
+		if @$element.attr('data-norelated')? || @options.no_related then rel="&rel=0" else rel=""
 		width = @checkDimensions( @$element.data('width') || 560 )
 		height = width / ( 560/315 ) # aspect ratio
-		@showVideoIframe('//www.youtube.com/embed/' + id + '?badge=0&autoplay=1&html5=1', width, height)
+		@showVideoIframe('//www.youtube.com/embed/' + id + '?badge=0&autoplay=1&html5=1' + rel, width, height)
 
 	showVimeoVideo : (id) ->
 		width = @checkDimensions( @$element.data('width') || 560 )
@@ -343,6 +344,7 @@ $.fn.ekkoLightbox.defaults = {
 	directional_arrows: true #display the left / right arrows or not
 	type: null #force the lightbox into image / youtube mode. if null, or not image|youtube|vimeo; detect it
 	always_show_close: true #always show the close button, even if there is no title
+	no_related: false
 	loadingMessage: 'Loading...',
 	onShow : ->
 	onShown : ->

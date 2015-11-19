@@ -168,6 +168,13 @@
 										<td>Message injected for loading</td>
 										<td></td>
 									</tr>
+									<tr>
+										<td>no_related</td>
+										<td>boolean</td>
+										<td><code>false</code></td>
+										<td>Don't show related videos when finished playing</td>
+										<td><code>data-norelated</code></td>
+									</tr>
 								</tbody>
 							</table>
                     	</div>
@@ -247,6 +254,7 @@
                     <p>You can use various YouTube URL formats, the regex used is: <code>/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/</code></p>
                     <p><a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox">Ghostpoet - Cash and Carry Me Home</a></p>
                     <p><a href="http://youtu.be/b0jqPvpn3sY" data-toggle="lightbox">Tame Impala - Elephant (using youtu.be link)</a></p>
+                    <p><a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-norelated data-toggle="lightbox">Ghostpoet - Cash and Carry Me Home</a> (suppress related videos with data-norelated)</p>
                     <br />
                     <h4>Vimeo</h4>
                     <p>You cannot embed Vimeo videos using the standard url (ie http://vimeo.com/80629469); you must link to the embed source (ie player.vimeo.com/video/80629469). This will mean your link url - if the JavaScript fails, will open the full screen player (try opening the first link below in a new tab); the solution to this is to set the lightbox source directly - the second link below does this.</p>
