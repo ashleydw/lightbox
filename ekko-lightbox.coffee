@@ -75,9 +75,9 @@ EkkoLightbox.prototype = {
 			if @gallery
 				# parents('document.body') fails for some reason, so do this manually
 				if this.options.gallery_parent_selector == 'document.body' || this.options.gallery_parent_selector == ''
-					@gallery_items = $(document.body).find('*[data-toggle="lightbox"][data-gallery="' + @gallery + '"]')
+					@gallery_items = $(document.body).find('*[data-gallery="' + @gallery + '"]')
 				else
-					@gallery_items = @$element.parents(this.options.gallery_parent_selector).first().find('*[data-toggle="lightbox"][data-gallery="' + @gallery + '"]')
+					@gallery_items = @$element.parents(this.options.gallery_parent_selector).first().find('*[data-gallery="' + @gallery + '"]')
 				@gallery_index = @gallery_items.index(@$element)
 				$(document).on 'keydown.ekkoLightbox', @navigate.bind(@)
 
