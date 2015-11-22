@@ -82,102 +82,126 @@
 						<p>If you plan on having galleries, be sure to include the LESS / CSS files.</p>
                     </div>
 
-                    <div class="top-header">
-                        <h2>Options</h2>
-                        <p>Options are passed down to the modal object so you can also use any of the <a href="http://getbootstrap.com/javascript/#modals-usage">original modal options</a>.</p>
-						<p>Pass the options to the calling function as an object, or set defaults using <code>$.fn.ekkoLightbox.defaults</code> (excluding modal default options, notable: title, footer, remote)</p>
-						<div class="table-responsive">
-							<table class="table table-bordered">
-								<thead>
-								<tr>
-									<th>Name</th>
-									<th>type</th>
-									<th>default</th>
-									<th>description</th>
-									<th>data-*</th>
-								</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>remote</td>
-										<td>string</td>
-										<td></td>
-										<td>If you can't/don't want to set the href property of an element</td>
-										<td><code>data-remote="http://www...."</code></td>
-									</tr>
-									<tr>
-										<td>gallery</td>
-										<td>string</td>
-										<td></td>
-										<td>For grouping elements</td>
-										<td><code>data-gallery="galleryname"</code></td>
-									</tr>
-									<tr>
-										<td>gallery_parent_selector</td>
-										<td>string</td>
-										<td><code>document.body</code></td>
-										<td>If you have multiple galleries per page, this will restrict the gallery items to the parent that matches this selector.</td>
-										<td><code>data-parent="any valid selector"</code></td>
-									</tr>
-									<tr>
-										<td>left_arrow_class</td>
-										<td>string</td>
-										<td><code>.glyphicon .glyphicon-chevron-left</code></td>
-										<td>The css classes to give to the left arrow</td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>right_arrow_class</td>
-										<td>string</td>
-										<td><code>.glyphicon .glyphicon-chevron-right</code></td>
-										<td>The css classes to give to the right arrow</td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>type</td>
-										<td>string</td>
-										<td></td>
-										<td>Force the lightbox into image/YouTube mode.</td>
-										<td><code>data-type="(image|youtube|vimeo)"</code></td>
-									</tr>
-									<tr>
-										<td>width (videos only; height is calculated by ratio)</td>
-										<td>integer</td>
-										<td></td>
-										<td>Force the width</td>
-										<td><code>data-width="[0-9]+"</code></td>
-									</tr>
-									<tr>
-										<td>always_show_close</td>
-										<td>boolean</td>
-										<td><code>true</code></td>
-										<td>Always show the close button, even if no title is present</td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>onNavigate</td>
-										<td>callable</td>
-										<td><code>false</code></td>
-										<td>Function call when navigate right or left. First argument is the direction</td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>loadingMessage</td>
-										<td>string</td>
-										<td><code>Loading...</code></td>
-										<td>Message injected for loading</td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>no_related</td>
-										<td>boolean</td>
-										<td><code>false</code></td>
-										<td>Don't show related videos when finished playing</td>
-										<td><code>data-norelated</code></td>
-									</tr>
-								</tbody>
-							</table>
-                    	</div>
+                    <h2>Options</h2>
+                    <p>Options are passed down to the modal object so you can also use any of the <a href="http://getbootstrap.com/javascript/#modals-usage">original modal options</a>.</p>
+                    <p>Pass the options to the calling function as an object, or set defaults using <code>$.fn.ekkoLightbox.defaults</code> (excluding modal default options, notable: title, footer, remote)</p>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>type</th>
+                                <th>default</th>
+                                <th>description</th>
+                                <th>data-*</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>remote</td>
+                                <td>string</td>
+                                <td></td>
+                                <td>If you can't/don't want to set the href property of an element</td>
+                                <td><code>data-remote="http://www...."</code></td>
+                            </tr>
+                            <tr>
+                                <td>gallery</td>
+                                <td>string</td>
+                                <td></td>
+                                <td>For grouping elements</td>
+                                <td><code>data-gallery="galleryname"</code></td>
+                            </tr>
+                            <tr>
+                                <td>gallery_parent_selector</td>
+                                <td>string</td>
+                                <td><code>document.body</code></td>
+                                <td>If you have multiple galleries per page, this will restrict the gallery items to the parent that matches this selector.</td>
+                                <td><code>data-parent="any valid selector"</code></td>
+                            </tr>
+                            <tr>
+                                <td>left_arrow_class</td>
+                                <td>string</td>
+                                <td><code>.glyphicon .glyphicon-chevron-left</code></td>
+                                <td>The css classes to give to the left arrow</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>right_arrow_class</td>
+                                <td>string</td>
+                                <td><code>.glyphicon .glyphicon-chevron-right</code></td>
+                                <td>The css classes to give to the right arrow</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>type</td>
+                                <td>string</td>
+                                <td></td>
+                                <td>Force the lightbox into image/YouTube mode.</td>
+                                <td><code>data-type="(image|youtube|vimeo)"</code></td>
+                            </tr>
+                            <tr>
+                                <td>width (videos only; height is calculated by ratio)</td>
+                                <td>integer</td>
+                                <td></td>
+                                <td>Force the width</td>
+                                <td><code>data-width="[0-9]+"</code></td>
+                            </tr>
+                            <tr>
+                                <td>always_show_close</td>
+                                <td>boolean</td>
+                                <td><code>true</code></td>
+                                <td>Always show the close button, even if no title is present</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>onNavigate</td>
+                                <td>callable</td>
+                                <td><code>false</code></td>
+                                <td>Function call when navigate right or left. First argument is the direction</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>loadingMessage</td>
+                                <td>string</td>
+                                <td><code>Loading...</code></td>
+                                <td>Message injected for loading</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>no_related</td>
+                                <td>boolean</td>
+                                <td><code>false</code></td>
+                                <td>Don't show related videos when finished playing</td>
+                                <td><code>data-norelated</code></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h2>Events</h2>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>onContentLoaded</td>
+                                <td>Fired when content (image/video/remote page etc) has been fully loaded.</td>
+                            </tr>
+                            <tr>
+                                <td>onNavigate</td>
+                                <td>Fired before navigating a gallery.</td>
+                            </tr>
+                            <tr>
+                                <td>onShow/onShown/onHide/onHidden</td>
+                                <td>Inherited from the bootstrap modal.</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
 
 					<h1 class="page-header">Themes</h1>
