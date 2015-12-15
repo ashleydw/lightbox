@@ -8,3 +8,8 @@ See the github page for docs: http://ashleydw.github.io/lightbox
 Contributing
 ----
 Instead of modifying the JavaScript files directly, you should instead modify the coffeescript file and run the grunt task.
+
+Copyright and license
+----
+
+Code released under [the MIT license](https://github.com/ashleydw/lightbox/blob/master/LICENSE).
