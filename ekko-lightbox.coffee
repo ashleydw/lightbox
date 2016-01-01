@@ -28,6 +28,8 @@ EkkoLightbox = ( element, options ) ->
 	@modal_dialog = @modal.find('.modal-dialog').first()
 	@modal_content = @modal.find('.modal-content').first()
 	@modal_body = @modal.find('.modal-body').first()
+	@modal_header = @modal.find('.modal-header').first()
+	@modal_footer = @modal.find('.modal-footer').first()
 
 	@lightbox_container = @modal_body.find('.ekko-lightbox-container').first()
 	@lightbox_body = @lightbox_container.find('> div:first-child').first()
@@ -288,13 +290,38 @@ EkkoLightbox.prototype = {
 				@lightbox_body.html image
 				@modal_arrows.css 'display', 'block' if @modal_arrows
 				image.load =>
-					@resize img.width
+					if @options.scale_height
+						@scaleHeight img.height, img.width
+					else
+						@resize img.width
 					@options.onContentLoaded.call(@)
 			img.onerror = =>
 				@error 'Failed to load image: ' + src
 
 		img.src = src
 		img
+
+	scaleHeight : ( height, width ) ->
+		#scales the dialog based on height and width, takes all padding, borders, margins into account
+		#only used if options.scale_height is true
+		header_height = @modal_header.outerHeight(true) || 0
+		footer_height = @modal_footer.outerHeight(true) || 0
+
+		if not @modal_footer.is ':visible'
+			footer_height = 0
+
+		if not @modal_header.is ':visible'
+			header_height = 0
+
+		border_padding = @border.top + @border.bottom + @padding.top + @padding.bottom
+		#calculated each time as resizing the window can cause them to change due to Bootstraps fluid margins
+		margins = parseFloat(@modal_dialog.css('margin-top')) + parseFloat(@modal_dialog.css('margin-bottom'))
+
+		max_height = $(window).height() - border_padding - margins - header_height - footer_height
+		factor = Math.min max_height / height, 1
+
+		@modal_dialog.css('height', 'auto').css('max-height', max_height);
+		@resize factor * width
 
 	resize : ( width ) ->
 		#resize the dialog based on the width given, and adjust the directional arrow padding
@@ -345,6 +372,7 @@ $.fn.ekkoLightbox.defaults = {
 	type: null #force the lightbox into image / youtube mode. if null, or not image|youtube|vimeo; detect it
 	always_show_close: true #always show the close button, even if there is no title
 	no_related: false
+	scale_height: false #scales height and width if the image is taller than window size
 	loadingMessage: 'Loading...',
 	onShow : ->
 	onShown : ->
