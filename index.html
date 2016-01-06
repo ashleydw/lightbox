@@ -154,13 +154,6 @@
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>onNavigate</td>
-                                <td>callable</td>
-                                <td><code>false</code></td>
-                                <td>Function call when navigate right or left. First argument is the direction</td>
-                                <td></td>
-                            </tr>
-                            <tr>
                                 <td>loadingMessage</td>
                                 <td>string</td>
                                 <td><code>Loading...</code></td>
@@ -542,7 +535,12 @@
 					return $(this).ekkoLightbox({
 						onShown: function() {
 							if (window.console) {
-								return console.log('Checking our the events huh?');
+								return console.log('onShown event fired');
+							}
+						},
+						onContentLoaded: function() {
+							if (window.console) {
+								return console.log('onContentLoaded event fired');
 							}
 						},
 						onNavigate: function(direction, itemIndex) {
