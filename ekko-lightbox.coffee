@@ -372,7 +372,7 @@ $.fn.ekkoLightbox.defaults = {
 	type: null #force the lightbox into image / youtube mode. if null, or not image|youtube|vimeo; detect it
 	always_show_close: true #always show the close button, even if there is no title
 	no_related: false
-	scale_height: false #scales height and width if the image is taller than window size
+	scale_height: true #scales height and width if the image is taller than window size
 	loadingMessage: 'Loading...',
 	onShow : ->
 	onShown : ->
