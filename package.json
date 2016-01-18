@@ -21,10 +21,7 @@
 	"bugs": {
 		"url": "https://github.com/ashleydw/lightbox/issues"
 	},
-	"license": {
-		"type": "GNU GENERAL PUBLIC LICENSE",
-		"url": "https://github.com/ashleydw/lightbox/blob/master/LICENSE.txt"
-	},
+	"license": "MIT",
 	"devDependencies": {
 		"grunt": "^0.4.5",
 		"grunt-banner": "^0.6.0",
