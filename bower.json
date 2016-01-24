@@ -33,5 +33,5 @@
         "jquery",
         "modal"
     ],
-    "license": "GNU GENERAL PUBLIC LICENSE"
+    "license": "MIT"
 }
