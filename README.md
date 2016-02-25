@@ -7,6 +7,8 @@ See the github page for docs: http://ashleydw.github.io/lightbox
 
 ## Install
 
+CDN-JS: https://cdnjs.com/libraries/ekko-lightbox
+
 Install with Bower:
 
 ```
