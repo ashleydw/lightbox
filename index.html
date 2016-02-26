@@ -513,7 +513,7 @@
 					<div class="row">
                         <div class="col-md-offset-2 col-md-8">
                             <div class="row">
-                                <a href="http://41.media.tumblr.com/f37ac708134914c471073e4c0b47328d/tumblr_mrn3dc10Wa1r1thfzo8_1280.jpg" data-toggle="lightbox" data-gallery="navigateTo" data-footer="Click <a href='#'>here</a> to jump to image 3" class="col-sm-4">
+                                <a href="http://41.media.tumblr.com/f37ac708134914c471073e4c0b47328d/tumblr_mrn3dc10Wa1r1thfzo8_1280.jpg" data-toggle="lightbox" data-gallery="navigateTo" data-footer="Click <a href='#' id='jumpit'>here</a> to jump to image 3. Click <a href='#' id='closeit'>here to close</a>." class="col-sm-4">
                                     <img src="//41.media.tumblr.com/f37ac708134914c471073e4c0b47328d/tumblr_mrn3dc10Wa1r1thfzo8_1280.jpg" class="img-responsive">
                                 </a>
                                 <a href="http://41.media.tumblr.com/838b44224e39c30cd43490deb11b919d/tumblr_mrn3dc10Wa1r1thfzo1_1280.jpg" data-toggle="lightbox" data-gallery="navigateTo" class="col-sm-4">
@@ -573,9 +573,13 @@
 					return $(this).ekkoLightbox({
 						onShown: function() {
 							var lb = this;
-							$(lb.modal_content).on('click', '.modal-footer a', function(e) {
+							$(lb.modal_content).on('click', '.modal-footer a#jumpit', function(e) {
 								e.preventDefault();
 								lb.navigateTo(2);
+							});
+							$(lb.modal_content).on('click', '.modal-footer a#closeit', function(e) {
+								e.preventDefault();
+								lb.close();
 							});
 						}
 					});
