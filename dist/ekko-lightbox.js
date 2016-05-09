@@ -222,7 +222,7 @@ License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
         return this.showInstagramVideo(video_id);
       } else if (type === 'video') {
         this.options.type = 'video';
-        return this.showVideoIframe(video_id);
+        return this.showVideoIframe(src);
       } else {
         this.options.type = 'url';
         return this.loadRemoteContent(src);
