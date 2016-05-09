@@ -203,7 +203,7 @@ EkkoLightbox.prototype = {
 
 		else if type == 'video'
 			@options.type = 'video'
-			@showVideoIframe(video_id)
+			@showVideoIframe(src)
 
 		else
 			@options.type = 'url'
