@@ -15,9 +15,16 @@ Install with Bower:
 $ bower install ekko-lightbox --save
 ```
 
+ChangeLog
+----
+From version 4.1.0:
+
+navigate_left and navigate_right functions are camelCased
+gallery_parent_selector has been deprecated - document.body is default
+
 Contributing
 ----
-Instead of modifying the JavaScript files directly, you should instead modify the coffeescript file and run the grunt task.
+Instead of modifying the /dist/*.js JavaScript files directly, you should instead modify the ekko-lightbox.js file and run the grunt task.
 
 Copyright and license
 ----
