@@ -11,7 +11,6 @@ const Lightbox = (($) => {
 		directional_arrows: true, //display the left / right arrows or not
 		type: null, //force the lightbox into image / youtube mode. if null, or not image|youtube|vimeo; detect it
 		always_show_close: true, //always show the close button, even if there is no title
-		no_related: false,
 		scale_height: true, //scales height and width if the image is taller than window size
 		loadingMessage: 'Loading...',
 		onShow() {},
@@ -243,7 +242,7 @@ const Lightbox = (($) => {
 					return this._preloadImage(currentRemote, true);
 					break;
 				case 'youtube':
-					return this._showYoutubeVideo(this._getYoutubeId(currentRemote));
+					return this._showYoutubeVideo(currentRemote);
 					break;
 				case 'vimeo':
 					return this._showVimeoVideo(this._getVimeoId(currentRemote));
@@ -324,10 +323,11 @@ const Lightbox = (($) => {
 			return this;
 		}
 
-		_showYoutubeVideo(id) {
-			let rel = ((this._$element.attr('data-norelated') != null) || this._config.no_related)  ? "&rel=0" : '';
+		_showYoutubeVideo(remote) {
+			let id = this._getYoutubeId(remote);
+			let query = remote.indexOf('&') > 0 ? remote.substr(remote.indexOf('&')) : '';
 			let width = this._checkDimensions( this._$element.data('width') || 560 );
-			return this._showVideoIframe(`//www.youtube.com/embed/${id}?badge=0&autoplay=1&html5=1${rel}`, width, width / ( 560/315 ));
+			return this._showVideoIframe(`//www.youtube.com/embed/${id}?badge=0&autoplay=1&html5=1${query}`, width, width / ( 560/315 ));
 		}
 
 		_showVimeoVideo(id) {
