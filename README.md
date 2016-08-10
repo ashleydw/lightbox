@@ -5,16 +5,6 @@ A lightbox module for Bootstrap that supports images, YouTube videos, and galler
 
 See the github page for docs: http://ashleydw.github.io/lightbox
 
-## Install
-
-CDN-JS: https://cdnjs.com/libraries/ekko-lightbox
-
-Install with Bower:
-
-```
-$ bower install ekko-lightbox --save
-```
-
 ChangeLog
 ----
 From version 4.1.0:
