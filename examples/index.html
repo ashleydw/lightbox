@@ -5,7 +5,7 @@
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.3/css/bootstrap.min.css">
         <link href="../dist/ekko-lightbox.css" rel="stylesheet">
 
         <style type="text/css">
@@ -51,11 +51,11 @@
     <body>
         <div class="container">
             <div class="row">
-                <div class="col-md-10 col-md-offset-1">
+                <div class="col-md-10 offset-md-1">
 
                     <div class="top-header">
                         <h1 class="page-header">Lightbox for Bootstrap 3</h1>
-                        <p class="lead">Utilizes Bootstraps modal plugin to implement a lightbox gallery - <a href="https://github.com/ashleydw/lightbox">GitHub</a></p>
+                        <p class="lead">Utilizes Bootstraps modal plugin to implement a lightbox gallery - <a href="//github.com/ashleydw/lightbox">GitHub</a></p>
 						<div class="text-center">
 							<iframe src="http://ghbtns.com/github-btn.html?user=ashleydw&repo=lightbox&type=watch&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="100	" height="20"></iframe>
 							<iframe src="http://ghbtns.com/github-btn.html?user=ashleydw&repo=lightbox&type=fork&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"></iframe>
@@ -236,9 +236,9 @@
                     <h3 class="page-header" id="single-image">Example #1: Single Image</h3>
                     <p>Note: uses modal plugin title option via <code>data-title</code>, and the custom footer tag using <code>data-footer</code></p>
                     <div class="row">
-                        <div class="col-sm-offset-4 col-sm-3">
+                        <div class="offset-sm-4 col-sm-3">
                             <a href="http://41.media.tumblr.com/f37ac708134914c471073e4c0b47328d/tumblr_mrn3dc10Wa1r1thfzo8_1280.jpg" data-toggle="lightbox" data-title="A random title" data-footer="A custom footer text">
-                                <img src="//41.media.tumblr.com/f37ac708134914c471073e4c0b47328d/tumblr_mrn3dc10Wa1r1thfzo8_1280.jpg" class="img-responsive">
+                                <img src="//41.media.tumblr.com/f37ac708134914c471073e4c0b47328d/tumblr_mrn3dc10Wa1r1thfzo8_1280.jpg" class="img-fluid">
                             </a>
                         </div>
                     </div>
@@ -247,27 +247,27 @@
                     <p>By default, gallery images must be wrapped in a tag (probably <code>&lt;div&gt;</code>) - which doesn't have the class <code>.row</code>. This is so you can create columns/rows.</p>
                     <p>A custom selector for the parent can be used, see <a href="#wrappers">example #11</a>. Note how the final image is not in the gallery intentionally.</p>
                     <div class="row">
-                        <div class="col-md-offset-2 col-md-8">
+                        <div class="offset-md-2 col-md-8">
                             <div class="row">
                                 <a href="http://41.media.tumblr.com/f37ac708134914c471073e4c0b47328d/tumblr_mrn3dc10Wa1r1thfzo8_1280.jpg" data-toggle="lightbox" data-gallery="multiimages" data-title="People walking down stairs" class="col-sm-4">
-                                    <img src="//41.media.tumblr.com/f37ac708134914c471073e4c0b47328d/tumblr_mrn3dc10Wa1r1thfzo8_1280.jpg" class="img-responsive">
+                                    <img src="//41.media.tumblr.com/f37ac708134914c471073e4c0b47328d/tumblr_mrn3dc10Wa1r1thfzo8_1280.jpg" class="img-fluid">
                                 </a>
                                 <a href="http://41.media.tumblr.com/838b44224e39c30cd43490deb11b919d/tumblr_mrn3dc10Wa1r1thfzo1_1280.jpg" data-toggle="lightbox" data-gallery="multiimages" data-title="Man getting wet" class="col-sm-4">
-                                    <img src="//41.media.tumblr.com/838b44224e39c30cd43490deb11b919d/tumblr_mrn3dc10Wa1r1thfzo1_1280.jpg" class="img-responsive">
+                                    <img src="//41.media.tumblr.com/838b44224e39c30cd43490deb11b919d/tumblr_mrn3dc10Wa1r1thfzo1_1280.jpg" class="img-fluid">
                                 </a>
                                 <a href="http://41.media.tumblr.com/e06a3513b0b36843f54bee99aeac689a/tumblr_mrn3dc10Wa1r1thfzo2_1280.jpg" data-toggle="lightbox" data-gallery="multiimages" data-title="Someone lost their dress" class="col-sm-4">
-                                    <img src="//41.media.tumblr.com/e06a3513b0b36843f54bee99aeac689a/tumblr_mrn3dc10Wa1r1thfzo2_1280.jpg" class="img-responsive">
+                                    <img src="//41.media.tumblr.com/e06a3513b0b36843f54bee99aeac689a/tumblr_mrn3dc10Wa1r1thfzo2_1280.jpg" class="img-fluid">
                                 </a>
                             </div>
                             <div class="row">
                                 <a href="http://41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" data-toggle="lightbox" data-gallery="multiimages" data-footer="Big ass waterfall- using footer instead of title" class="col-sm-4">
-                                    <img src="//41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" class="img-responsive">
+                                    <img src="//41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" class="img-fluid">
                                 </a>
                                 <a href="http://41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" data-toggle="lightbox" data-gallery="multiimages" data-title="Cool bottle" data-footer="Now fill it with whiskey" class="col-sm-4">
-                                    <img src="//41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" class="img-responsive">
+                                    <img src="//41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" class="img-fluid">
                                 </a>
                                 <a href="http://36.media.tumblr.com/de356cd6570d7c26e73979467f296f67/tumblr_mrn3dc10Wa1r1thfzo6_1280.jpg" data-toggle="lightbox" class="col-sm-4">
-                                    <img src="//36.media.tumblr.com/de356cd6570d7c26e73979467f296f67/tumblr_mrn3dc10Wa1r1thfzo6_1280.jpg" class="img-responsive">
+                                    <img src="//36.media.tumblr.com/de356cd6570d7c26e73979467f296f67/tumblr_mrn3dc10Wa1r1thfzo6_1280.jpg" class="img-fluid">
                                 </a>
                             </div>
                         </div>
@@ -288,7 +288,7 @@
                     <h4>Instagram</h4>
                     <p></p>
                     <p><a href="http://instagram.com/p/pZfG1fPfuX/" data-toggle="lightbox" data-title="Plug for our new service">GOtags.co.uk</a></p>
-                    <p>This also works with photos: <a href="https://instagram.com/p/0wbypvPfmQ/" data-toggle="lightbox">GOtags.co.uk</a></p>
+                    <p>This also works with photos: <a href="//instagram.com/p/0wbypvPfmQ/" data-toggle="lightbox">GOtags.co.uk</a></p>
                     <br />
                     <h4>Forcing width</h4>
                     <p>Set the width of the video</p>
@@ -298,16 +298,16 @@
 
                     <h3 class="page-header" id="youtube-gallery">Example #4: Gallery of YouTube Videos</h3>
                     <div class="row">
-                        <div class="col-md-offset-1 col-md-10">
+                        <div class="offset-md-1 col-md-10">
                             <div class="row">
                                 <a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox" data-gallery="youtubevideos" class="col-sm-4">
-                                    <img src="//i1.ytimg.com/vi/yP11r5n5RNg/mqdefault.jpg" class="img-responsive">
+                                    <img src="//i1.ytimg.com/vi/yP11r5n5RNg/mqdefault.jpg" class="img-fluid">
                                 </a>
                                 <a href="http://youtu.be/iQ4D273C7Ac" data-toggle="lightbox" data-gallery="youtubevideos" class="col-sm-4">
-                                    <img src="//i1.ytimg.com/vi/iQ4D273C7Ac/mqdefault.jpg" class="img-responsive">
+                                    <img src="//i1.ytimg.com/vi/iQ4D273C7Ac/mqdefault.jpg" class="img-fluid">
                                 </a>
                                 <a href="//www.youtube.com/embed/b0jqPvpn3sY" data-toggle="lightbox" data-gallery="youtubevideos" class="col-sm-4">
-                                    <img src="//i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" class="img-responsive">
+                                    <img src="//i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" class="img-fluid">
                                 </a>
                             </div>
                         </div>
@@ -315,16 +315,16 @@
 
                     <h3 class="page-header" id="mixed-gallery">Example #5: Mixed gallery</h3>
                     <div class="row">
-                        <div class="col-md-offset-1 col-md-10">
+                        <div class="offset-md-1 col-md-10">
                             <div class="row">
                                 <a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox" data-gallery="mixedgallery" class="col-sm-4">
-                                    <img src="//i1.ytimg.com/vi/yP11r5n5RNg/mqdefault.jpg" class="img-responsive">
+                                    <img src="//i1.ytimg.com/vi/yP11r5n5RNg/mqdefault.jpg" class="img-fluid">
                                 </a>
                                 <a href="http://41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" data-toggle="lightbox" data-gallery="mixedgallery" class="col-sm-4">
-                                    <img src="//41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" class="img-responsive">
+                                    <img src="//41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" class="img-fluid">
                                 </a>
                                 <a href="http://vimeo.com/80629469" data-remote="http://player.vimeo.com/video/80629469" data-toggle="lightbox" data-gallery="mixedgallery" class="col-sm-4">
-                                    <img src="//b.vimeocdn.com/ts/458/070/458070637_200.jpg" class="img-responsive">
+                                    <img src="//b.vimeocdn.com/ts/458/070/458070637_200.jpg" class="img-fluid">
                                 </a>
                             </div>
                         </div>
@@ -333,13 +333,13 @@
                     <h3 class="page-header" id="programatically-call">Example #6: Programatically call</h3>
                     <p>These two examples are opened via the JavaScript at the bottom of the source.</p>
                     <div class="row">
-                        <div class="col-md-offset-1 col-md-10">
+                        <div class="offset-md-1 col-md-10">
                             <div class="row">
                                 <a href="http://41.media.tumblr.com/838b44224e39c30cd43490deb11b919d/tumblr_mrn3dc10Wa1r1thfzo1_1280.jpg" id="open-image" class="col-sm-4">
-                                    <img src="//41.media.tumblr.com/838b44224e39c30cd43490deb11b919d/tumblr_mrn3dc10Wa1r1thfzo1_1280.jpg" class="img-responsive">
+                                    <img src="//41.media.tumblr.com/838b44224e39c30cd43490deb11b919d/tumblr_mrn3dc10Wa1r1thfzo1_1280.jpg" class="img-fluid">
                                 </a>
                                 <a href="http://youtu.be/iQ4D273C7Ac" id="open-youtube" class="col-sm-4">
-                                    <img src="//i1.ytimg.com/vi/iQ4D273C7Ac/mqdefault.jpg" class="img-responsive">
+                                    <img src="//i1.ytimg.com/vi/iQ4D273C7Ac/mqdefault.jpg" class="img-fluid">
                                 </a>
                             </div>
                         </div>
@@ -347,29 +347,29 @@
 
                     <h3 class="page-header" id="data-remote">Example #7: Via <code>data-remote</code></h3>
                     <div class="row">
-                        <div class="col-md-offset-1 col-md-10">
+                        <div class="offset-md-1 col-md-10">
                             <div class="row">
-                                <img src="//41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" data-toggle="lightbox" data-remote="http://41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" class="img-responsive col-sm-4">
-                                <img src="//i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" data-toggle="lightbox" data-remote="//www.youtube.com/embed/b0jqPvpn3sY" class="img-responsive col-sm-4">
+                                <img src="//41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" data-toggle="lightbox" data-remote="http://41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" class="img-fluid col-sm-4">
+                                <img src="//i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" data-toggle="lightbox" data-remote="//www.youtube.com/embed/b0jqPvpn3sY" class="img-fluid col-sm-4">
                             </div>
                         </div>
                     </div>
 
                     <h3 class="page-header" id="different-sizes">Example #8: Gallery of different sized images</h3>
                     <div class="row">
-                        <div class="col-md-offset-1 col-md-10">
+                        <div class="offset-md-1 col-md-10">
                             <div class="row">
-                                <a href="https://lh5.googleusercontent.com/-jl_I19YyRVM/T0oJ3PCKZuI/AAAAAAAARRs/-gfmn1LxMJ8/s1280/tilt%2520shift%2520baseball.jpg" data-toggle="lightbox" data-gallery="imagesizes" class="col-sm-3">
-                                    <img src="//lh5.googleusercontent.com/-jl_I19YyRVM/T0oJ3PCKZuI/AAAAAAAARRs/-gfmn1LxMJ8/s128/tilt%20shift%20baseball.jpg" class="img-responsive">
+                                <a href="//lh5.googleusercontent.com/-jl_I19YyRVM/T0oJ3PCKZuI/AAAAAAAARRs/-gfmn1LxMJ8/s1280/tilt%2520shift%2520baseball.jpg" data-toggle="lightbox" data-gallery="imagesizes" class="col-sm-3">
+                                    <img src="//lh5.googleusercontent.com/-jl_I19YyRVM/T0oJ3PCKZuI/AAAAAAAARRs/-gfmn1LxMJ8/s128/tilt%20shift%20baseball.jpg" class="img-fluid">
                                 </a>
-                                <a href="https://lh4.googleusercontent.com/-lB-KDQlhdAE/T0oJGy0-UOI/AAAAAAAAQyw/K-1hc5M7EQM/s800/IMG_1193%2520-%2520original.jpg" data-toggle="lightbox" data-gallery="imagesizes" class="col-sm-3">
-                                    <img src="//lh4.googleusercontent.com/-lB-KDQlhdAE/T0oJGy0-UOI/AAAAAAAAQyw/K-1hc5M7EQM/s128/IMG_1193%20-%20original.jpg" class="img-responsive">
+                                <a href="//lh4.googleusercontent.com/-lB-KDQlhdAE/T0oJGy0-UOI/AAAAAAAAQyw/K-1hc5M7EQM/s800/IMG_1193%2520-%2520original.jpg" data-toggle="lightbox" data-gallery="imagesizes" class="col-sm-3">
+                                    <img src="//lh4.googleusercontent.com/-lB-KDQlhdAE/T0oJGy0-UOI/AAAAAAAAQyw/K-1hc5M7EQM/s128/IMG_1193%20-%20original.jpg" class="img-fluid">
                                 </a>
-                                <a href="https://lh5.googleusercontent.com/-cfT_8CMK26k/T0oJMAxOl2I/AAAAAAAAQzI/TaDocinT6So/s912/P1010046%2520-%2520original.jpg" data-toggle="lightbox" data-gallery="imagesizes" class="col-sm-3">
-                                    <img src="//lh5.googleusercontent.com/-cfT_8CMK26k/T0oJMAxOl2I/AAAAAAAAQzI/TaDocinT6So/s128/P1010046%20-%20original.jpg" class="img-responsive">
+                                <a href="//lh5.googleusercontent.com/-cfT_8CMK26k/T0oJMAxOl2I/AAAAAAAAQzI/TaDocinT6So/s912/P1010046%2520-%2520original.jpg" data-toggle="lightbox" data-gallery="imagesizes" class="col-sm-3">
+                                    <img src="//lh5.googleusercontent.com/-cfT_8CMK26k/T0oJMAxOl2I/AAAAAAAAQzI/TaDocinT6So/s128/P1010046%20-%20original.jpg" class="img-fluid">
                                 </a>
-                                <a href="https://lh3.googleusercontent.com/-kgMllZrb20s/T0oJD2nFklI/AAAAAAAAQyg/pnMfqLAGNJs/s1024/IMG_0736%2520-%2520original.jpg" data-toggle="lightbox" data-gallery="imagesizes" class="col-sm-3">
-                                    <img src="//lh3.googleusercontent.com/-kgMllZrb20s/T0oJD2nFklI/AAAAAAAAQyg/pnMfqLAGNJs/s128/IMG_0736%20-%20original.jpg" class="img-responsive">
+                                <a href="//lh3.googleusercontent.com/-kgMllZrb20s/T0oJD2nFklI/AAAAAAAAQyg/pnMfqLAGNJs/s1024/IMG_0736%2520-%2520original.jpg" data-toggle="lightbox" data-gallery="imagesizes" class="col-sm-3">
+                                    <img src="//lh3.googleusercontent.com/-kgMllZrb20s/T0oJD2nFklI/AAAAAAAAQyg/pnMfqLAGNJs/s128/IMG_0736%20-%20original.jpg" class="img-fluid">
                                 </a>
                             </div>
                         </div>
@@ -383,7 +383,7 @@
                     <div class="row">
                         <a href="http://25.media.tumblr.com/de356cd6570d7c26e73979467f296f67/tumblr_mrn3dc10Wa1r1thfzo6_1280.jpg" class="col-sm-3" data-toggle="lightbox">
                             <figure>
-                                <img src="//25.media.tumblr.com/de356cd6570d7c26e73979467f296f67/tumblr_mrn3dc10Wa1r1thfzo6_400.jpg" class="img-responsive" alt="">
+                                <img src="//25.media.tumblr.com/de356cd6570d7c26e73979467f296f67/tumblr_mrn3dc10Wa1r1thfzo6_400.jpg" class="img-fluid" alt="">
                                 <figcaption>@gregfoster</figcaption>
                             </figure>
                         </a>
@@ -394,17 +394,17 @@
                     <div class="row wrapper-parent">
                         <div class="col-sm-3">
                             <a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox" data-gallery="columnwrappers" data-parent=".wrapper-parent">
-                                <img src="//i1.ytimg.com/vi/yP11r5n5RNg/mqdefault.jpg" class="img-responsive">
+                                <img src="//i1.ytimg.com/vi/yP11r5n5RNg/mqdefault.jpg" class="img-fluid">
                             </a>
                         </div>
                         <div class="col-sm-3">
                             <a href="http://41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" data-toggle="lightbox" data-gallery="columnwrappers" data-parent=".wrapper-parent">
-                                <img src="//41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" class="img-responsive">
+                                <img src="//41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" class="img-fluid">
                             </a>
                         </div>
                         <div class="col-sm-3">
                             <a href="//www.youtube.com/embed/b0jqPvpn3sY" data-toggle="lightbox" data-gallery="columnwrappers" data-parent=".wrapper-parent">
-                                <img src="//i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" class="img-responsive">
+                                <img src="//i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" class="img-fluid">
                             </a>
                         </div>
                     </div>
@@ -416,19 +416,19 @@
                         <div class="col-sm-4">
                             <a href="http://25.media.tumblr.com/de356cd6570d7c26e73979467f296f67/tumblr_mrn3dc10Wa1r1thfzo6_1280.jpg" data-gallery="global-gallery" data-parent="" data-toggle="lightbox">
                                 <figure>
-                                    <img src="//25.media.tumblr.com/de356cd6570d7c26e73979467f296f67/tumblr_mrn3dc10Wa1r1thfzo6_400.jpg" class="img-responsive" alt="">
+                                    <img src="//25.media.tumblr.com/de356cd6570d7c26e73979467f296f67/tumblr_mrn3dc10Wa1r1thfzo6_400.jpg" class="img-fluid" alt="">
                                     <figcaption>@gregfoster</figcaption>
                                 </figure>
                             </a>
                         </div>
                         <div class="col-sm-4">
                             <a href="http://41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" data-toggle="lightbox" data-gallery="global-gallery" data-parent="">
-                                <img src="//41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" class="img-responsive">
+                                <img src="//41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" class="img-fluid">
                             </a>
                         </div>
                         <div class="col-sm-4">
-                            <a href="https://lh4.googleusercontent.com/-lB-KDQlhdAE/T0oJGy0-UOI/AAAAAAAAQyw/K-1hc5M7EQM/s800/IMG_1193%2520-%2520original.jpg" data-toggle="lightbox"  data-gallery="global-gallery" data-parent=".container">
-                                <img src="//lh4.googleusercontent.com/-lB-KDQlhdAE/T0oJGy0-UOI/AAAAAAAAQyw/K-1hc5M7EQM/s800/IMG_1193%2520-%2520original.jpg" class="img-responsive">
+                            <a href="//lh4.googleusercontent.com/-lB-KDQlhdAE/T0oJGy0-UOI/AAAAAAAAQyw/K-1hc5M7EQM/s800/IMG_1193%2520-%2520original.jpg" data-toggle="lightbox"  data-gallery="global-gallery" data-parent=".container">
+                                <img src="//lh4.googleusercontent.com/-lB-KDQlhdAE/T0oJGy0-UOI/AAAAAAAAQyw/K-1hc5M7EQM/s800/IMG_1193%2520-%2520original.jpg" class="img-fluid">
                             </a>
                         </div>
                     </div>
@@ -436,13 +436,13 @@
                         <div class="col-sm-4">
                         </div>
                         <div class="col-sm-4">
-                            <a href="https://lh5.googleusercontent.com/-jl_I19YyRVM/T0oJ3PCKZuI/AAAAAAAARRs/-gfmn1LxMJ8/s1280/tilt%2520shift%2520baseball.jpg" data-toggle="lightbox"  data-gallery="global-gallery" data-parent=".container">
-                                <img src="//lh5.googleusercontent.com/-jl_I19YyRVM/T0oJ3PCKZuI/AAAAAAAARRs/-gfmn1LxMJ8/s1280/tilt%2520shift%2520baseball.jpg" class="img-responsive">
+                            <a href="//lh5.googleusercontent.com/-jl_I19YyRVM/T0oJ3PCKZuI/AAAAAAAARRs/-gfmn1LxMJ8/s1280/tilt%2520shift%2520baseball.jpg" data-toggle="lightbox"  data-gallery="global-gallery" data-parent=".container">
+                                <img src="//lh5.googleusercontent.com/-jl_I19YyRVM/T0oJ3PCKZuI/AAAAAAAARRs/-gfmn1LxMJ8/s1280/tilt%2520shift%2520baseball.jpg" class="img-fluid">
                             </a>
                         </div>
                         <div class="col-sm-4">
                             <a href="//www.youtube.com/embed/b0jqPvpn3sY" data-toggle="lightbox" data-gallery="global-gallery" data-parent="">
-                                <img src="//i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" class="img-responsive">
+                                <img src="//i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" class="img-fluid">
                             </a>
                         </div>
                     </div>
@@ -459,16 +459,16 @@
                     <h3 class="page-header" id="hidden-elements">Example #15: Hidden elements</h3>
                     <p>Facebook style, only show a few images but have a large gallery</p>
 					<div class="row">
-                        <div class="col-md-offset-2 col-md-8">
+                        <div class="offset-md-2 col-md-8">
                             <div class="row">
                                 <a href="http://41.media.tumblr.com/f37ac708134914c471073e4c0b47328d/tumblr_mrn3dc10Wa1r1thfzo8_1280.jpg" data-toggle="lightbox" data-gallery="hiddenimages" data-title="People walking down stairs" class="col-sm-4">
-                                    <img src="//41.media.tumblr.com/f37ac708134914c471073e4c0b47328d/tumblr_mrn3dc10Wa1r1thfzo8_1280.jpg" class="img-responsive">
+                                    <img src="//41.media.tumblr.com/f37ac708134914c471073e4c0b47328d/tumblr_mrn3dc10Wa1r1thfzo8_1280.jpg" class="img-fluid">
                                 </a>
                                 <a href="http://41.media.tumblr.com/838b44224e39c30cd43490deb11b919d/tumblr_mrn3dc10Wa1r1thfzo1_1280.jpg" data-toggle="lightbox" data-gallery="hiddenimages" data-title="Man getting wet" class="col-sm-4">
-                                    <img src="//41.media.tumblr.com/838b44224e39c30cd43490deb11b919d/tumblr_mrn3dc10Wa1r1thfzo1_1280.jpg" class="img-responsive">
+                                    <img src="//41.media.tumblr.com/838b44224e39c30cd43490deb11b919d/tumblr_mrn3dc10Wa1r1thfzo1_1280.jpg" class="img-fluid">
                                 </a>
                                 <a href="http://41.media.tumblr.com/e06a3513b0b36843f54bee99aeac689a/tumblr_mrn3dc10Wa1r1thfzo2_1280.jpg" data-toggle="lightbox" data-gallery="hiddenimages" data-title="Someone lost their dress" class="col-sm-4">
-                                    <img src="//41.media.tumblr.com/e06a3513b0b36843f54bee99aeac689a/tumblr_mrn3dc10Wa1r1thfzo2_1280.jpg" class="img-responsive">
+                                    <img src="//41.media.tumblr.com/e06a3513b0b36843f54bee99aeac689a/tumblr_mrn3dc10Wa1r1thfzo2_1280.jpg" class="img-fluid">
                                 </a>
 								<!-- elements not showing, use data-remote -->
 								<div data-toggle="lightbox" data-gallery="hiddenimages" data-remote="http://41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" data-title="Hidden item 1"></div>
@@ -484,25 +484,25 @@
                     <p>The Bootstrap modal originally allowed for remote loading, but this is to be removed in v4; this functionality demonstrates the work around.</p>
 					<p>Given a URL, that is not an image or video (including unforced types [see example 13]), load the content using jQuery load(). An image and video is given below as proof gallery.</p>
 					<div class="row">
-                        <div class="col-md-offset-1 col-md-10">
+                        <div class="offset-md-1 col-md-10">
                             <div class="row">
                                 <p class="col-sm-3"><a href="./remote/page1.html" data-title="Page 1" data-toggle="lightbox" data-parent="" data-gallery="remoteload">Open up local Page 1</a></p>
                                 <a href="http://41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" data-parent="" data-toggle="lightbox" data-gallery="remoteload" class="col-sm-3">
-                                    <img src="//41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" class="img-responsive">
+                                    <img src="//41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" class="img-fluid">
                                 </a>
 								<p class="col-sm-3"><a href="./remote/page2.html" data-title="Page 2" data-toggle="lightbox" data-parent="" data-gallery="remoteload">Open up local Page 2</a></p>
                                 <a href="http://vimeo.com/80629469" data-remote="http://player.vimeo.com/video/80629469" data-toggle="lightbox" data-parent="" data-gallery="remoteload" class="col-sm-3">
-                                    <img src="//b.vimeocdn.com/ts/458/070/458070637_200.jpg" class="img-responsive">
+                                    <img src="//b.vimeocdn.com/ts/458/070/458070637_200.jpg" class="img-fluid">
                                 </a>
                             </div>
                             <div class="row">
                                 <p class="col-sm-3"><a href="http://news.bbc.co.uk" data-title="BBC News - not responsive" data-toggle="lightbox" data-parent="" data-gallery="remoteload">Open up BBC news</a></p>
                                 <a href="http://vimeo.com/80629469" data-remote="http://player.vimeo.com/video/80629469" data-toggle="lightbox" data-parent="" data-gallery="remoteload" class="col-sm-3">
-                                    <img src="//b.vimeocdn.com/ts/458/070/458070637_200.jpg" class="img-responsive">
+                                    <img src="//b.vimeocdn.com/ts/458/070/458070637_200.jpg" class="img-fluid">
                                 </a>
 								<p class="col-sm-3"><a href="http://getbootstrap.com" data-title="Bootstrap - Responsive" data-toggle="lightbox" data-parent="" data-gallery="remoteload">Open up Bootstrap</a></p>
                                 <a href="http://41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" data-toggle="lightbox" data-parent="" data-gallery="remoteload" class="col-sm-3">
-                                    <img src="//41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" class="img-responsive">
+                                    <img src="//41.media.tumblr.com/9d3e6a9c89a856a2ad0be3ab4ca598b2/tumblr_mrn3dc10Wa1r1thfzo4_1280.jpg" class="img-fluid">
                                 </a>
                             </div>
                         </div>
@@ -511,16 +511,16 @@
                     <h3 class="page-header" id="navigateTo">Example #17: navigateTo</h3>
 					<p>Must be setup programatically to run the setup (view the source of this page)</p>
 					<div class="row">
-                        <div class="col-md-offset-2 col-md-8">
+                        <div class="offset-md-2 col-md-8">
                             <div class="row">
                                 <a href="http://41.media.tumblr.com/f37ac708134914c471073e4c0b47328d/tumblr_mrn3dc10Wa1r1thfzo8_1280.jpg" data-toggle="lightbox" data-gallery="navigateTo" data-footer="Click <a href='#'>here</a> to jump to image 3" class="col-sm-4">
-                                    <img src="//41.media.tumblr.com/f37ac708134914c471073e4c0b47328d/tumblr_mrn3dc10Wa1r1thfzo8_1280.jpg" class="img-responsive">
+                                    <img src="//41.media.tumblr.com/f37ac708134914c471073e4c0b47328d/tumblr_mrn3dc10Wa1r1thfzo8_1280.jpg" class="img-fluid">
                                 </a>
                                 <a href="http://41.media.tumblr.com/838b44224e39c30cd43490deb11b919d/tumblr_mrn3dc10Wa1r1thfzo1_1280.jpg" data-toggle="lightbox" data-gallery="navigateTo" class="col-sm-4">
-                                    <img src="//41.media.tumblr.com/838b44224e39c30cd43490deb11b919d/tumblr_mrn3dc10Wa1r1thfzo1_1280.jpg" class="img-responsive">
+                                    <img src="//41.media.tumblr.com/838b44224e39c30cd43490deb11b919d/tumblr_mrn3dc10Wa1r1thfzo1_1280.jpg" class="img-fluid">
                                 </a>
                                 <a href="http://41.media.tumblr.com/e06a3513b0b36843f54bee99aeac689a/tumblr_mrn3dc10Wa1r1thfzo2_1280.jpg" data-toggle="lightbox" data-gallery="navigateTo" class="col-sm-4">
-                                    <img src="//41.media.tumblr.com/e06a3513b0b36843f54bee99aeac689a/tumblr_mrn3dc10Wa1r1thfzo2_1280.jpg" class="img-responsive">
+                                    <img src="//41.media.tumblr.com/e06a3513b0b36843f54bee99aeac689a/tumblr_mrn3dc10Wa1r1thfzo2_1280.jpg" class="img-fluid">
                                 </a>
                             </div>
                         </div>
@@ -530,8 +530,9 @@
             </div>
         </div>
 
-        <script src="//code.jquery.com/jquery.js"></script>
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.3/js/bootstrap.min.js"></script>
         <script src="../dist/ekko-lightbox.js"></script>
 
         <script type="text/javascript">
@@ -567,18 +568,15 @@
                 $(document).delegate('*[data-gallery="navigateTo"]', 'click', function(event) {
                     event.preventDefault();
 
-                    var lb;
                     return $(this).ekkoLightbox({
                         onShown: function() {
 
-                            lb = this;
-
-							$(lb.modal_content).on('click', '.modal-footer a', function(e) {
+							this.modal().on('click', '.modal-footer a', function(e) {
 
 								e.preventDefault();
-								lb.navigateTo(2);
+								this.navigateTo(2);
 
-							});
+                            }.bind(this));
 
                         }
                     });
