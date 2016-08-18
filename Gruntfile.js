@@ -61,7 +61,7 @@ module.exports = function (grunt) {
 	    },
         watch: {
             babel: {
-                files: ['ekko-lightbox.js'],
+                files: ['ekko-lightbox.js', 'ekko-lightbox.less'],
                 tasks: ['dev']
             }
         }
