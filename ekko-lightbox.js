@@ -6,13 +6,13 @@ const Lightbox = (($) => {
 	const Default = {
 		title: '',
 		footer: '',
-		left_arrow_class: '.glyphicon .glyphicon-chevron-left', //include class . here - they are stripped out later
-		right_arrow_class: '.glyphicon .glyphicon-chevron-right', //include class . here - they are stripped out later
-		directional_arrows: true, //display the left / right arrows or not
+		showArrows: true, //display the left / right arrows or not
 		type: null, //force the lightbox into image / youtube mode. if null, or not image|youtube|vimeo; detect it
-		always_show_close: true, //always show the close button, even if there is no title
-		scale_height: true, //scales height and width if the image is taller than window size
+		alwaysShowClose: true, //always show the close button, even if there is no title
+		scaleHeight: true, //scales height and width if the image is taller than window size
 		loadingMessage: 'Loading...',
+		leftArrow: '<span>&#10094;</span>',
+		rightArrow: '<span>&#10095;</span>',
 		onShow() {},
 		onShown() {},
 		onHide() {},
@@ -62,7 +62,7 @@ const Lightbox = (($) => {
 			this._modalId = `ekkoLightbox-${Math.floor((Math.random() * 1000) + 1)}`;
 			this._$element = $element instanceof jQuery ? $element : $($element)
 
-			let header = `<div class="modal-header"${this._config.title || this._config.always_show_close ? '' : ' style="display:none"'}><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">${this._config.title || "&nbsp;"}</h4></div>`;
+			let header = `<div class="modal-header"${this._config.title || this._config.alwaysShowClow ? '' : ' style="display:none"'}><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">${this._config.title || "&nbsp;"}</h4></div>`;
 			let footer = `<div class="modal-footer"${this._config.footer ? '' : ' style="display:none"'}>${this._config.footer || "&nbsp;"}</div>`;
 			let body = '<div class="modal-body"><div class="ekko-lightbox-container"><div></div></div></div>'
 			$(document.body).append(`<div id="${this._modalId}" class="ekko-lightbox modal fade" tabindex="-1" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content">${header}${body}${footer}</div></div></div>`)
@@ -89,14 +89,14 @@ const Lightbox = (($) => {
 				$(document).on('keydown.ekkoLightbox', this._navigationalBinder.bind(this))
 
 				// add the directional arrows to the modal
-				if (this._config.directional_arrows && this._$galleryItems.length > 1) {
-					this._$lightboxContainer.append(`<div class="ekko-lightbox-nav-overlay"><a href="#" class="${this._stripStops(this._config.left_arrow_class)}"></a><a href="#" class="${this._stripStops(this._config.right_arrow_class)}"></a></div>`)
+				if (this._config.showArrows && this._$galleryItems.length > 1) {
+					this._$lightboxContainer.append(`<div class="ekko-lightbox-nav-overlay"><a href="#">${this._config.leftArrow}</a><a href="#">${this._config.rightArrow}</a></div>`)
 					this._$modalArrows = this._$lightboxContainer.find('div.ekko-lightbox-nav-overlay').first()
-					this._$lightboxContainer.find(`a${this._stripSpaces(this._config.left_arrow_class)}`).on('click', event => {
+					this._$lightboxContainer.on('click', 'a:first-child', event => {
 						event.preventDefault()
 						return this.navigateLeft()
 					})
-					this._$lightboxContainer.find(`a${this._stripSpaces(this._config.right_arrow_class)}`).on('click', event => {
+					this._$lightboxContainer.on('click', 'a:last-child', event => {
 						event.preventDefault()
 						return this.navigateRight()
 					})
@@ -138,13 +138,6 @@ const Lightbox = (($) => {
 
 			this._$element = $(this._$galleryItems.get(this._galleryIndex))
 			this._handle();
-
-			if (this._galleryIndex + 1 < this._$galleryItems.length) {
-				let next = $(this._$galleryItems.get(this._galleryIndex + 1), false)
-				let src = next.attr('data-remote') || next.attr('href')
-				if (next.attr('data-type') === 'image' || this._isImage(src))
-					return this._preloadImage(src, false)
-			}
 		}
 
 		navigateLeft() {
@@ -199,14 +192,6 @@ const Lightbox = (($) => {
 				return this.navigateLeft()
 		}
 
-		_stripStops(str) {
-			return str.replace(/\./g, '')
-		}
-
-		_stripSpaces(str) {
-			return str.replace(/\s/g, '')
-		}
-
 		// type detection private methods
 		_detectRemoteType(src, type) {
 
@@ -239,7 +224,9 @@ const Lightbox = (($) => {
 
 			switch(currentType) {
 				case 'image':
-					return this._preloadImage(currentRemote, true);
+					let ret = this._preloadImage(currentRemote, true)
+					this._preloadImageByIndex(this._galleryIndex, 3)
+					return ret;
 					break;
 				case 'youtube':
 					return this._showYoutubeVideo(currentRemote);
@@ -260,20 +247,22 @@ const Lightbox = (($) => {
 		}
 
 		_isImage(string) {
-			return string.match(/(^data:image\/.*,)|(\.(jp(e|g|eg)|gif|png|bmp|webp|svg)((\?|#).*)?$)/i)
+			return string && string.match(/(^data:image\/.*,)|(\.(jp(e|g|eg)|gif|png|bmp|webp|svg)((\?|#).*)?$)/i)
 		}
 
 		_getYoutubeId(string) {
+			if(!string)
+				return false;
 			let matches = string.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/)
-			return (matches && matches[2].length === 11) ? matches[2] : false;
+			return (matches && matches[2].length === 11) ? matches[2] : false
 		}
 
 		_getVimeoId(string) {
-			return  string.indexOf('vimeo') > 0 ? string : false;
+			return string && string.indexOf('vimeo') > 0 ? string : false
 		}
 
 		_getInstagramId(string) {
-			return  string.indexOf('instagram') > 0 ? string : false;
+			return string && string.indexOf('instagram') > 0 ? string : false
 		}
 
 		// layout private methods
@@ -305,7 +294,7 @@ const Lightbox = (($) => {
 			let title = this._$element.data('title') || "";
 			let caption = this._$element.data('footer') || "";
 
-			if (title || this._config.always_show_close)
+			if (title || this._config.alwaysShowClow)
 				header.css('display', '').find('.modal-title').html(title || "&nbsp;");
 			else
 				header.css('display', 'none');
@@ -398,6 +387,23 @@ const Lightbox = (($) => {
 			return this;
 		}
 
+		_preloadImageByIndex(startIndex, numberOfTimes) {
+
+			console.log('a _preloadImageByIndex', startIndex, numberOfTimes);
+			let next = $(this._$galleryItems.get(startIndex), false)
+			if(typeof next == 'undefined')
+				return
+
+			console.log(startIndex, next, numberOfTimes);
+
+			let src = next.attr('data-remote') || next.attr('href')
+			if (next.attr('data-type') === 'image' || this._isImage(src))
+				this._preloadImage(src, false)
+
+			if(numberOfTimes > 0)
+				return this._preloadImageByIndex(startIndex + 1, numberOfTimes-1);
+		}
+
 		_preloadImage( src, onLoadShowImage) {
 
 			let img = new Image();
@@ -407,8 +413,8 @@ const Lightbox = (($) => {
 					image.attr('src', img.src);
 					image.addClass('img-fluid');
 					this._$lightboxBody.html(image);
-					if (this._$modalArrows) { this._$modalArrows.css('display', 'block'); }
-					if (this._config.scale_height) {
+					if (this._$modalArrows) { this._$modalArrows.css('display', ''); }
+					if (this._config.scaleHeight) {
 						this._scaleHeight(img.height, img.width);
 					} else {
 						this.resize(img.width);
@@ -429,7 +435,7 @@ const Lightbox = (($) => {
 			//console.log(this, this._$modal, this._$modal.data('bs.modal'))
 			//this._$modal.data('bs.modal')._handleUpdate()
 			//scales the dialog based on height and width, takes all padding, borders, margins into account
-			//only used if options.scale_height is true
+			//only used if options.scaleHeight is true
 			let headerHeight = this._$modalHeader.outerHeight(true) || 0;
 			let footerHeight = this._$modalFooter.outerHeight(true) || 0;
 
