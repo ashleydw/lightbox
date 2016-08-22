@@ -9,7 +9,6 @@ const Lightbox = (($) => {
 		showArrows: true, //display the left / right arrows or not
 		type: null, //force the lightbox into image / youtube mode. if null, or not image|youtube|vimeo; detect it
 		alwaysShowClose: false, //always show the close button, even if there is no title
-		scaleHeight: true, //scales height and width if the image is taller than window size
 		loadingMessage: '<div class="ekko-lightbox-loader"><div><div></div><div></div></div></div>', // http://tobiasahlin.com/spinkit/
 		leftArrow: '<span>&#10094;</span>',
 		rightArrow: '<span>&#10095;</span>',
@@ -66,6 +65,8 @@ const Lightbox = (($) => {
 			this._border = null
 			this._titleIsShown = false
 			this._footerIsShown = false
+			this._wantedWidth = 0
+			this._wantedHeight = 0
 			this._modalId = `ekkoLightbox-${Math.floor((Math.random() * 1000) + 1)}`;
 			this._$element = $element instanceof jQuery ? $element : $($element)
 
@@ -119,12 +120,18 @@ const Lightbox = (($) => {
 			})
 			.on('hide.bs.modal', this._config.onHide.bind(this))
 			.on('hidden.bs.modal', () => {
-				if (this._galleryName)
+				if (this._galleryName) {
 					$(document).off('keydown.ekkoLightbox')
+					$(window).off('resize.ekkoLightbox')
+				}
 				this._$modal.remove()
 				return this._config.onHidden.call(this)
 			})
 			.modal(this._config)
+
+			$(window).on('resize.ekkoLightbox', () => {
+				this._resize(this._wantedWidth, this._wantedHeight)
+			})
 		}
 
 		element() {
@@ -319,7 +326,9 @@ const Lightbox = (($) => {
 		}
 
 		_totalCssByAttribute(attribute) {
-			return parseFloat(this._$modalDialog.css(attribute)) + parseFloat(this._$modalContent.css(attribute)) + parseFloat(this._$modalBody.css(attribute))
+			return parseInt(this._$modalDialog.css(attribute), 10) +
+				parseInt(this._$modalContent.css(attribute), 10) +
+				parseInt(this._$modalBody.css(attribute), 10)
 		}
 
 		_updateTitleAndFooter() {
@@ -346,9 +355,9 @@ const Lightbox = (($) => {
 		}
 
 		_showYoutubeVideo(remote, $containerForElement) {
-			let id = this._getYoutubeId(remote);
-			let query = remote.indexOf('&') > 0 ? remote.substr(remote.indexOf('&')) : '';
-			let width = this._checkDimensions( this._$element.data('width') || 560 );
+			let id = this._getYoutubeId(remote)
+			let query = remote.indexOf('&') > 0 ? remote.substr(remote.indexOf('&')) : ''
+			let width = this._$element.data('width') || 560
 			return this._showVideoIframe(
 				`//www.youtube.com/embed/${id}?badge=0&autoplay=1&html5=1${query}`,
 				width,
@@ -358,14 +367,14 @@ const Lightbox = (($) => {
 		}
 
 		_showVimeoVideo(id, $containerForElement) {
-			let width = this._checkDimensions( this._$element.data('width') || 560 );
-			let height = width / ( 500/281 ); // aspect ratio
-			return this._showVideoIframe(id + '?autoplay=1', width, height, $containerForElement);
+			let width = 560
+			let height = width / ( 500/281 ) // aspect ratio
+			return this._showVideoIframe(id + '?autoplay=1', width, height, $containerForElement)
 		}
 
 		_showInstagramVideo(id, $containerForElement) {
 			// instagram load their content into iframe's so this can be put straight into the element
-			let width = this._checkDimensions(this._$element.data('width') || 612);
+			let width = this._$element.data('width') || 612
 			let height = width + 80;
 			id = id.substr(-1) !== '/' ? id + '/' : id; // ensure id has trailing slash
 			$containerForElement.html(`<iframe width="${width}" height="${height}" src="${id}embed/" frameborder="0" allowfullscreen></iframe>`);
@@ -491,42 +500,46 @@ const Lightbox = (($) => {
 
 		_resize( width, height ) {
 
-			if(this._config.scaleHeight) {
-				//scales the dialog based on height and width, takes all padding, borders, margins into account
-				let headerHeight = 0,
-					footerHeight = 0
+			height = height || width
+			this._wantedWidth = width
+			this._wantedHeight = height
 
-				// as the resize is performed the modal is show, the calculate might fail
-				// if so, default to the default sizes
-				if (this._titleIsShown)
-					footerHeight = this._$modalFooter.outerHeight(true) || 67
-
-				if (this._footerIsShown)
-					headerHeight = this._$modalHeader.outerHeight(true) || 55
-
-				let borderPadding = this._border.top + this._border.bottom + this._padding.top + this._padding.bottom;
-
-				//calculated each time as resizing the window can cause them to change due to Bootstraps fluid margins
-				let margins = parseFloat(this._$modalDialog.css('margin-top')) + parseFloat(this._$modalDialog.css('margin-bottom'));
-
-				let maxHeight = Math.min(height, $(window).height() - borderPadding - margins - headerHeight - footerHeight);
-				let factor = Math.min(maxHeight / height, 1);
-				width = factor * width;
-
-				this._$lightboxContainer.css('height', maxHeight)
+			// if width > the available space, scale down the expected width and height
+			let widthBorderAndPadding = this._padding.left + this._padding.right + this._border.left + this._border.right
+			let maxWidth = Math.min(width + widthBorderAndPadding, document.body.clientWidth)
+			if(width > maxWidth) {
+				height = ((maxWidth - widthBorderAndPadding) /  width) * height
+				width = maxWidth
 			}
 
-			let width_total = width + this._border.left + this._padding.left + this._padding.right + this._border.right;
-			this._$modalDialog.css('width', 'auto') .css('maxWidth', width_total);
+			let headerHeight = 0,
+				footerHeight = 0
+
+			// as the resize is performed the modal is show, the calculate might fail
+			// if so, default to the default sizes
+			if (this._footerIsShown)
+				footerHeight = this._$modalFooter.outerHeight(true) || 55
+
+			if (this._titleIsShown)
+				headerHeight = this._$modalHeader.outerHeight(true) || 67
+
+			let borderPadding = this._padding.top + this._padding.bottom + this._border.bottom + this._border.top
+
+			//calculated each time as resizing the window can cause them to change due to Bootstraps fluid margins
+			let margins = parseFloat(this._$modalDialog.css('margin-top')) + parseFloat(this._$modalDialog.css('margin-bottom'));
+
+			let maxHeight = Math.min(height, $(window).height() - borderPadding - margins - headerHeight - footerHeight);
+			if(height > maxHeight) {
+				// if height > the available height, scale down the width
+				let factor = Math.min(maxHeight / height, 1);
+				width = Math.ceil(factor * width);
+			}
+
+			this._$lightboxContainer.css('height', maxHeight)
+			this._$modalDialog.css('width', 'auto') .css('maxWidth', width);
 
 			this._$modal.modal('_handleUpdate');
 			return this;
-		}
-
-		_checkDimensions(width) {
-			//check that the width given can be displayed, if not return the maximum size that can be
-			let width_total = width + this._border.left + this._padding.left + this._padding.right + this._border.right;
-			return (width_total > document.body.clientWidth) ? this._$modalBody.width() : width;
 		}
 
 		static _jQueryInterface(config) {

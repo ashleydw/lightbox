@@ -178,46 +178,45 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>left_arrow_class</td>
-                                    <td>string</td>
-                                    <td><code>.glyphicon .glyphicon-chevron-left</code></td>
-                                    <td>The css classes to give to the left arrow</td>
+                                    <td>leftArrow / rightArrow</td>
+                                    <td>html</td>
+                                    <td><code>&#10094;</code> / <code>&#10095;</code></td>
+                                    <td>HTML for the arrows</td>
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td>right_arrow_class</td>
-                                    <td>string</td>
-                                    <td><code>.glyphicon .glyphicon-chevron-right</code></td>
-                                    <td>The css classes to give to the right arrow</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>width (videos only; height is calculated by ratio)</td>
+                                    <td>width / height</td>
                                     <td>integer</td>
                                     <td></td>
-                                    <td>Force the width</td>
-                                    <td><code>data-width="[0-9]+"</code></td>
+                                    <td>Force the width / height</td>
+                                    <td><code>data-(width|height)="[0-9]+"</code></td>
                                 </tr>
                                 <tr>
-                                    <td>always_show_close</td>
+                                    <td>alwaysShowClose</td>
                                     <td>boolean</td>
-                                    <td><code>true</code></td>
+                                    <td><code>false</code></td>
                                     <td>Always show the close button, even if no title is present</td>
                                     <td></td>
                                 </tr>
                                 <tr>
                                     <td>loadingMessage</td>
-                                    <td>string</td>
-                                    <td><code>Loading...</code></td>
-                                    <td>Message injected for loading</td>
+                                    <td>html</td>
+                                    <td>A fancy loader</td>
+                                    <td>HTML injected for loading</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>showArrows</td>
+                                    <td>bool</td>
+                                    <td>true</td>
+                                    <td>Disable the navigation overlay</td>
                                     <td></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                     <code class="block-code">$(this).ekkoLightbox({
-    left_arrow_class: '.glyphicon .glyphicon-chevron-left',
-    right_arrow_class: '.glyphicon .glyphicon-chevron-right',
+    alwaysShowClose: true,
     onShown: function() {
         console.log('Checking our the events huh?');
     },
@@ -286,14 +285,6 @@
                             </tbody>
                         </table>
                     </div>
-
-					<h2>Themes</h2>
-					<p>Some quick themes to show how customisation is possible.</p>
-					<ul>
-						<li><a href="dark.html">Dark, full screen</a></li>
-						<li><a href="nyan.html">Nyan</a></li>
-					</ul>
-
 
                     <h2>Examples</h2>
                     <p>Thanks to <a href="https://unsplash.it/">https://unsplash.it/</a> for the images.</p>

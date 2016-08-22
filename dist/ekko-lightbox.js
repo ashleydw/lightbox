@@ -15,7 +15,6 @@ var Lightbox = (function ($) {
 		showArrows: true, //display the left / right arrows or not
 		type: null, //force the lightbox into image / youtube mode. if null, or not image|youtube|vimeo; detect it
 		alwaysShowClose: false, //always show the close button, even if there is no title
-		scaleHeight: true, //scales height and width if the image is taller than window size
 		loadingMessage: '<div class="ekko-lightbox-loader"><div><div></div><div></div></div></div>', // http://tobiasahlin.com/spinkit/
 		leftArrow: '<span>&#10094;</span>',
 		rightArrow: '<span>&#10095;</span>',
@@ -76,6 +75,8 @@ var Lightbox = (function ($) {
 			this._border = null;
 			this._titleIsShown = false;
 			this._footerIsShown = false;
+			this._wantedWidth = 0;
+			this._wantedHeight = 0;
 			this._modalId = 'ekkoLightbox-' + Math.floor(Math.random() * 1000 + 1);
 			this._$element = $element instanceof jQuery ? $element : $($element);
 
@@ -125,10 +126,17 @@ var Lightbox = (function ($) {
 				_this._handle();
 				return _this._config.onShown.call(_this);
 			}).on('hide.bs.modal', this._config.onHide.bind(this)).on('hidden.bs.modal', function () {
-				if (_this._galleryName) $(document).off('keydown.ekkoLightbox');
+				if (_this._galleryName) {
+					$(document).off('keydown.ekkoLightbox');
+					$(window).off('resize.ekkoLightbox');
+				}
 				_this._$modal.remove();
 				return _this._config.onHidden.call(_this);
 			}).modal(this._config);
+
+			$(window).on('resize.ekkoLightbox', function () {
+				_this._resize(_this._wantedWidth, _this._wantedHeight);
+			});
 		}
 
 		_createClass(Lightbox, [{
@@ -329,7 +337,7 @@ var Lightbox = (function ($) {
 		}, {
 			key: '_totalCssByAttribute',
 			value: function _totalCssByAttribute(attribute) {
-				return parseFloat(this._$modalDialog.css(attribute)) + parseFloat(this._$modalContent.css(attribute)) + parseFloat(this._$modalBody.css(attribute));
+				return parseInt(this._$modalDialog.css(attribute), 10) + parseInt(this._$modalContent.css(attribute), 10) + parseInt(this._$modalBody.css(attribute), 10);
 			}
 		}, {
 			key: '_updateTitleAndFooter',
@@ -356,13 +364,13 @@ var Lightbox = (function ($) {
 			value: function _showYoutubeVideo(remote, $containerForElement) {
 				var id = this._getYoutubeId(remote);
 				var query = remote.indexOf('&') > 0 ? remote.substr(remote.indexOf('&')) : '';
-				var width = this._checkDimensions(this._$element.data('width') || 560);
+				var width = this._$element.data('width') || 560;
 				return this._showVideoIframe('//www.youtube.com/embed/' + id + '?badge=0&autoplay=1&html5=1' + query, width, width / (560 / 315), $containerForElement);
 			}
 		}, {
 			key: '_showVimeoVideo',
 			value: function _showVimeoVideo(id, $containerForElement) {
-				var width = this._checkDimensions(this._$element.data('width') || 560);
+				var width = 560;
 				var height = width / (500 / 281); // aspect ratio
 				return this._showVideoIframe(id + '?autoplay=1', width, height, $containerForElement);
 			}
@@ -370,7 +378,7 @@ var Lightbox = (function ($) {
 			key: '_showInstagramVideo',
 			value: function _showInstagramVideo(id, $containerForElement) {
 				// instagram load their content into iframe's so this can be put straight into the element
-				var width = this._checkDimensions(this._$element.data('width') || 612);
+				var width = this._$element.data('width') || 612;
 				var height = width + 80;
 				id = id.substr(-1) !== '/' ? id + '/' : id; // ensure id has trailing slash
 				$containerForElement.html('<iframe width="' + width + '" height="' + height + '" src="' + id + 'embed/" frameborder="0" allowfullscreen></iframe>');
@@ -499,41 +507,44 @@ var Lightbox = (function ($) {
 			key: '_resize',
 			value: function _resize(width, height) {
 
-				if (this._config.scaleHeight) {
-					//scales the dialog based on height and width, takes all padding, borders, margins into account
-					var headerHeight = 0,
-					    footerHeight = 0;
+				height = height || width;
+				this._wantedWidth = width;
+				this._wantedHeight = height;
 
-					// as the resize is performed the modal is show, the calculate might fail
-					// if so, default to the default sizes
-					if (this._titleIsShown) footerHeight = this._$modalFooter.outerHeight(true) || 67;
-
-					if (this._footerIsShown) headerHeight = this._$modalHeader.outerHeight(true) || 55;
-
-					var borderPadding = this._border.top + this._border.bottom + this._padding.top + this._padding.bottom;
-
-					//calculated each time as resizing the window can cause them to change due to Bootstraps fluid margins
-					var margins = parseFloat(this._$modalDialog.css('margin-top')) + parseFloat(this._$modalDialog.css('margin-bottom'));
-
-					var maxHeight = Math.min(height, $(window).height() - borderPadding - margins - headerHeight - footerHeight);
-					var factor = Math.min(maxHeight / height, 1);
-					width = factor * width;
-
-					this._$lightboxContainer.css('height', maxHeight);
+				// if width > the available space, scale down the expected width and height
+				var widthBorderAndPadding = this._padding.left + this._padding.right + this._border.left + this._border.right;
+				var maxWidth = Math.min(width + widthBorderAndPadding, document.body.clientWidth);
+				if (width > maxWidth) {
+					height = (maxWidth - widthBorderAndPadding) / width * height;
+					width = maxWidth;
 				}
 
-				var width_total = width + this._border.left + this._padding.left + this._padding.right + this._border.right;
-				this._$modalDialog.css('width', 'auto').css('maxWidth', width_total);
+				var headerHeight = 0,
+				    footerHeight = 0;
+
+				// as the resize is performed the modal is show, the calculate might fail
+				// if so, default to the default sizes
+				if (this._footerIsShown) footerHeight = this._$modalFooter.outerHeight(true) || 55;
+
+				if (this._titleIsShown) headerHeight = this._$modalHeader.outerHeight(true) || 67;
+
+				var borderPadding = this._padding.top + this._padding.bottom + this._border.bottom + this._border.top;
+
+				//calculated each time as resizing the window can cause them to change due to Bootstraps fluid margins
+				var margins = parseFloat(this._$modalDialog.css('margin-top')) + parseFloat(this._$modalDialog.css('margin-bottom'));
+
+				var maxHeight = Math.min(height, $(window).height() - borderPadding - margins - headerHeight - footerHeight);
+				if (height > maxHeight) {
+					// if height > the available height, scale down the width
+					var factor = Math.min(maxHeight / height, 1);
+					width = Math.ceil(factor * width);
+				}
+
+				this._$lightboxContainer.css('height', maxHeight);
+				this._$modalDialog.css('width', 'auto').css('maxWidth', width);
 
 				this._$modal.modal('_handleUpdate');
 				return this;
-			}
-		}, {
-			key: '_checkDimensions',
-			value: function _checkDimensions(width) {
-				//check that the width given can be displayed, if not return the maximum size that can be
-				var width_total = width + this._border.left + this._padding.left + this._padding.right + this._border.right;
-				return width_total > document.body.clientWidth ? this._$modalBody.width() : width;
 			}
 		}], [{
 			key: '_jQueryInterface',
