@@ -13,6 +13,10 @@ const Lightbox = (($) => {
 		loadingMessage: '<div class="ekko-lightbox-loader"><div><div></div><div></div></div></div>', // http://tobiasahlin.com/spinkit/
 		leftArrow: '<span>&#10094;</span>',
 		rightArrow: '<span>&#10095;</span>',
+		errors: {
+			fail: 'Failed to load image:',
+			type: 'Could not detect remote target type. Force the type using data-type',
+		},
 		onShow() {},
 		onShown() {},
 		onHide() {},
@@ -236,7 +240,7 @@ const Lightbox = (($) => {
 			let currentType = this._detectRemoteType(currentRemote, this._$element.attr('data-type') || false)
 
 			if(['image', 'youtube', 'vimeo', 'instagram', 'video', 'url'].indexOf(currentType) < 0)
-				return this._error("Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo|instagram|url|video\"")
+				return this._error(this._config.errors.type)
 
 			switch(currentType) {
 				case 'image':
@@ -421,6 +425,7 @@ const Lightbox = (($) => {
 		_error( message ) {
 			console.error(message);
 			this._containerToUse().html(message);
+			this._resize(300, 300);
 			return this;
 		}
 
@@ -461,7 +466,7 @@ const Lightbox = (($) => {
 				};
 				img.onerror = () => {
 					this._toggleLoading(false);
-					return this._error(`Failed to load image: ${src}`);
+					return this._error(this._config.errors.fail+`  ${src}`);
 				};
 			}
 
@@ -497,7 +502,7 @@ const Lightbox = (($) => {
 			let width_total = width + this._border.left + this._padding.left + this._padding.right + this._border.right;
 			this._$modalDialog.css('width', 'auto') .css('maxWidth', width_total);
 
-			console.log(this._$modal.modal('_handleUpdate'));
+			this._$modal.modal('_handleUpdate');
 			return this;
 		}
 

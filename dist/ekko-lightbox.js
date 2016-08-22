@@ -1,11 +1,3 @@
-/*!
- * Lightbox for Bootstrap by @ashleydw
- * https://github.com/ashleydw/lightbox
- *
- * License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
- */
-+function ($) {
-
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -27,6 +19,10 @@ var Lightbox = (function ($) {
 		loadingMessage: '<div class="ekko-lightbox-loader"><div><div></div><div></div></div></div>', // http://tobiasahlin.com/spinkit/
 		leftArrow: '<span>&#10094;</span>',
 		rightArrow: '<span>&#10095;</span>',
+		errors: {
+			fail: 'Failed to load image:',
+			type: 'Could not detect remote target type. Force the type using data-type'
+		},
 		onShow: function onShow() {},
 		onShown: function onShown() {},
 		onHide: function onHide() {},
@@ -247,7 +243,7 @@ var Lightbox = (function ($) {
 				var currentRemote = this._$element.attr('data-remote') || this._$element.attr('href');
 				var currentType = this._detectRemoteType(currentRemote, this._$element.attr('data-type') || false);
 
-				if (['image', 'youtube', 'vimeo', 'instagram', 'video', 'url'].indexOf(currentType) < 0) return this._error("Could not detect remote target type. Force the type using data-type=\"image|youtube|vimeo|instagram|url|video\"");
+				if (['image', 'youtube', 'vimeo', 'instagram', 'video', 'url'].indexOf(currentType) < 0) return this._error(this._config.errors.type);
 
 				switch (currentType) {
 					case 'image':
@@ -435,6 +431,7 @@ var Lightbox = (function ($) {
 			value: function _error(message) {
 				console.error(message);
 				this._containerToUse().html(message);
+				this._resize(300, 300);
 				return this;
 			}
 		}, {
@@ -473,7 +470,7 @@ var Lightbox = (function ($) {
 					};
 					img.onerror = function () {
 						_this4._toggleLoading(false);
-						return _this4._error('Failed to load image: ' + src);
+						return _this4._error(_this4._config.errors.fail + ('  ' + src));
 					};
 				}
 
@@ -508,7 +505,7 @@ var Lightbox = (function ($) {
 				var width_total = width + this._border.left + this._padding.left + this._padding.right + this._border.right;
 				this._$modalDialog.css('width', 'auto').css('maxWidth', width_total);
 
-				console.log(this._$modal.modal('_handleUpdate'));
+				this._$modal.modal('_handleUpdate');
 				return this;
 			}
 		}, {
@@ -546,5 +543,3 @@ var Lightbox = (function ($) {
 	return Lightbox;
 })(jQuery);
 //# sourceMappingURL=ekko-lightbox.js.map
-
-}(jQuery);
