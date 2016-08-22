@@ -95,6 +95,9 @@
 .ekko-lightbox-loader > div > div:last-child {
   animation-delay: -1s;
 }
+.modal-dialog .ekko-lightbox-loader > div > div {
+  background-color: #333;
+}
 @-webkit-keyframes sk-bounce {
   0%,
   100% {

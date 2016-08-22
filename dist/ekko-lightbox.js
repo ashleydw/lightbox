@@ -14,7 +14,7 @@ var Lightbox = (function ($) {
 		footer: '',
 		showArrows: true, //display the left / right arrows or not
 		type: null, //force the lightbox into image / youtube mode. if null, or not image|youtube|vimeo; detect it
-		alwaysShowClose: true, //always show the close button, even if there is no title
+		alwaysShowClose: false, //always show the close button, even if there is no title
 		scaleHeight: true, //scales height and width if the image is taller than window size
 		loadingMessage: '<div class="ekko-lightbox-loader"><div><div></div><div></div></div></div>', // http://tobiasahlin.com/spinkit/
 		leftArrow: '<span>&#10094;</span>',
@@ -74,10 +74,12 @@ var Lightbox = (function ($) {
 			this._galleryName = null;
 			this._padding = null;
 			this._border = null;
+			this._titleIsShown = false;
+			this._footerIsShown = false;
 			this._modalId = 'ekkoLightbox-' + Math.floor(Math.random() * 1000 + 1);
 			this._$element = $element instanceof jQuery ? $element : $($element);
 
-			var header = '<div class="modal-header"' + (this._config.title || this._config.alwaysShowClow ? '' : ' style="display:none"') + '><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">' + (this._config.title || "&nbsp;") + '</h4></div>';
+			var header = '<div class="modal-header"' + (this._config.title || this._config.alwaysShowClose ? '' : ' style="display:none"') + '><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">' + (this._config.title || "&nbsp;") + '</h4></div>';
 			var footer = '<div class="modal-footer"' + (this._config.footer ? '' : ' style="display:none"') + '>' + (this._config.footer || "&nbsp;") + '</div>';
 			var body = '<div class="modal-body"><div class="ekko-lightbox-container"><div class="ekko-lightbox-item fade in"></div><div class="ekko-lightbox-item fade"></div></div></div>';
 			var dialog = '<div class="modal-dialog" role="document"><div class="modal-content">' + header + body + footer + '</div></div>';
@@ -332,14 +334,20 @@ var Lightbox = (function ($) {
 		}, {
 			key: '_updateTitleAndFooter',
 			value: function _updateTitleAndFooter() {
-				var header = this._$modalContent.find('.modal-header');
-				var footer = this._$modalContent.find('.modal-footer');
 				var title = this._$element.data('title') || "";
 				var caption = this._$element.data('footer') || "";
 
-				if (title || this._config.alwaysShowClow) header.css('display', '').find('.modal-title').html(title || "&nbsp;");else header.css('display', 'none');
+				this._titleIsShown = false;
+				if (title || this._config.alwaysShowClose) {
+					this._titleIsShown = true;
+					this._$modalHeader.css('display', '').find('.modal-title').html(title || "&nbsp;");
+				} else this._$modalHeader.css('display', 'none');
 
-				if (caption) footer.css('display', '').html(caption);else footer.css('display', 'none');
+				this._footerIsShown = false;
+				if (caption) {
+					this._footerIsShown = true;
+					this._$modalFooter.css('display', '').html(caption);
+				} else this._$modalFooter.css('display', 'none');
 
 				return this;
 			}
@@ -457,21 +465,31 @@ var Lightbox = (function ($) {
 
 				var img = new Image();
 				if ($containerForImage) {
-					img.onload = function () {
-						var image = $('<img />');
-						image.attr('src', img.src);
-						image.addClass('img-fluid');
-						$containerForImage.html(image);
-						if (_this4._$modalArrows) _this4._$modalArrows.css('display', ''); // remove display to default to css property
+					(function () {
 
-						_this4._resize(img.width, img.height);
-						_this4._toggleLoading(false);
-						return _this4._config.onContentLoaded.call(_this4);
-					};
-					img.onerror = function () {
-						_this4._toggleLoading(false);
-						return _this4._error(_this4._config.errors.fail + ('  ' + src));
-					};
+						// if loading takes > 200ms show a loader
+						var loadingTimeout = setTimeout(function () {
+							$containerForImage.append(_this4._config.loadingMessage);
+						}, 200);
+
+						img.onload = function () {
+							if (loadingTimeout) clearTimeout(loadingTimeout);
+							loadingTimeout = null;
+							var image = $('<img />');
+							image.attr('src', img.src);
+							image.addClass('img-fluid');
+							$containerForImage.html(image);
+							if (_this4._$modalArrows) _this4._$modalArrows.css('display', ''); // remove display to default to css property
+
+							_this4._resize(img.width, img.height);
+							_this4._toggleLoading(false);
+							return _this4._config.onContentLoaded.call(_this4);
+						};
+						img.onerror = function () {
+							_this4._toggleLoading(false);
+							return _this4._error(_this4._config.errors.fail + ('  ' + src));
+						};
+					})();
 				}
 
 				img.src = src;
@@ -486,9 +504,11 @@ var Lightbox = (function ($) {
 					var headerHeight = 0,
 					    footerHeight = 0;
 
-					if (this._$modalFooter.is(':visible')) footerHeight = this._$modalHeader.outerHeight(true) || 0;
+					// as the resize is performed the modal is show, the calculate might fail
+					// if so, default to the default sizes
+					if (this._titleIsShown) footerHeight = this._$modalFooter.outerHeight(true) || 67;
 
-					if (this._$modalHeader.is(':visible')) headerHeight = this._$modalHeader.outerHeight(true) || 0;
+					if (this._footerIsShown) headerHeight = this._$modalHeader.outerHeight(true) || 55;
 
 					var borderPadding = this._border.top + this._border.bottom + this._padding.top + this._padding.bottom;
 

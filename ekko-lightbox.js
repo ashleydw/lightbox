@@ -8,7 +8,7 @@ const Lightbox = (($) => {
 		footer: '',
 		showArrows: true, //display the left / right arrows or not
 		type: null, //force the lightbox into image / youtube mode. if null, or not image|youtube|vimeo; detect it
-		alwaysShowClose: true, //always show the close button, even if there is no title
+		alwaysShowClose: false, //always show the close button, even if there is no title
 		scaleHeight: true, //scales height and width if the image is taller than window size
 		loadingMessage: '<div class="ekko-lightbox-loader"><div><div></div><div></div></div></div>', // http://tobiasahlin.com/spinkit/
 		leftArrow: '<span>&#10094;</span>',
@@ -64,10 +64,12 @@ const Lightbox = (($) => {
 			this._galleryName = null
 			this._padding = null
 			this._border = null
+			this._titleIsShown = false
+			this._footerIsShown = false
 			this._modalId = `ekkoLightbox-${Math.floor((Math.random() * 1000) + 1)}`;
 			this._$element = $element instanceof jQuery ? $element : $($element)
 
-			let header = `<div class="modal-header"${this._config.title || this._config.alwaysShowClow ? '' : ' style="display:none"'}><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">${this._config.title || "&nbsp;"}</h4></div>`;
+			let header = `<div class="modal-header"${this._config.title || this._config.alwaysShowClose ? '' : ' style="display:none"'}><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">${this._config.title || "&nbsp;"}</h4></div>`;
 			let footer = `<div class="modal-footer"${this._config.footer ? '' : ' style="display:none"'}>${this._config.footer || "&nbsp;"}</div>`;
 			let body = '<div class="modal-body"><div class="ekko-lightbox-container"><div class="ekko-lightbox-item fade in"></div><div class="ekko-lightbox-item fade"></div></div></div>'
 			let dialog = `<div class="modal-dialog" role="document"><div class="modal-content">${header}${body}${footer}</div></div>`
@@ -321,21 +323,25 @@ const Lightbox = (($) => {
 		}
 
 		_updateTitleAndFooter() {
-			let header = this._$modalContent.find('.modal-header');
-			let footer = this._$modalContent.find('.modal-footer');
-			let title = this._$element.data('title') || "";
-			let caption = this._$element.data('footer') || "";
+			let title = this._$element.data('title') || ""
+			let caption = this._$element.data('footer') || ""
 
-			if (title || this._config.alwaysShowClow)
-				header.css('display', '').find('.modal-title').html(title || "&nbsp;");
+			this._titleIsShown = false
+			if (title || this._config.alwaysShowClose) {
+				this._titleIsShown = true
+				this._$modalHeader.css('display', '').find('.modal-title').html(title || "&nbsp;")
+			}
 			else
-				header.css('display', 'none');
+				this._$modalHeader.css('display', 'none')
 
-			if (caption)
-				footer.css('display', '').html(caption);
+			this._footerIsShown = false
+			if (caption) {
+				this._footerIsShown = true
+				this._$modalFooter.css('display', '').html(caption)
+			}
 			else
-				footer.css('display', 'none');
-			
+				this._$modalFooter.css('display', 'none')
+
 			return this;
 		}
 
@@ -452,7 +458,16 @@ const Lightbox = (($) => {
 
 			let img = new Image();
 			if ($containerForImage) {
+
+				// if loading takes > 200ms show a loader
+				let loadingTimeout = setTimeout(() => {
+					$containerForImage.append(this._config.loadingMessage)
+				}, 200)
+
 				img.onload = () => {
+					if(loadingTimeout)
+						clearTimeout(loadingTimeout)
+					loadingTimeout = null;
 					let image = $('<img />');
 					image.attr('src', img.src);
 					image.addClass('img-fluid');
@@ -481,11 +496,13 @@ const Lightbox = (($) => {
 				let headerHeight = 0,
 					footerHeight = 0
 
-				if (this._$modalFooter.is(':visible'))
-					footerHeight = this._$modalHeader.outerHeight(true) || 0;
+				// as the resize is performed the modal is show, the calculate might fail
+				// if so, default to the default sizes
+				if (this._titleIsShown)
+					footerHeight = this._$modalFooter.outerHeight(true) || 67
 
-				if (this._$modalHeader.is(':visible'))
-					headerHeight = this._$modalHeader.outerHeight(true) || 0;
+				if (this._footerIsShown)
+					headerHeight = this._$modalHeader.outerHeight(true) || 55
 
 				let borderPadding = this._border.top + this._border.bottom + this._padding.top + this._padding.bottom;
 
