@@ -1,3 +1,11 @@
+/*!
+ * Lightbox for Bootstrap by @ashleydw
+ * https://github.com/ashleydw/lightbox
+ *
+ * License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
+ */
++function ($) {
+
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -12,13 +20,13 @@ var Lightbox = (function ($) {
 	var Default = {
 		title: '',
 		footer: '',
-		left_arrow_class: '.glyphicon .glyphicon-chevron-left', //include class . here - they are stripped out later
-		right_arrow_class: '.glyphicon .glyphicon-chevron-right', //include class . here - they are stripped out later
-		directional_arrows: true, //display the left / right arrows or not
+		showArrows: true, //display the left / right arrows or not
 		type: null, //force the lightbox into image / youtube mode. if null, or not image|youtube|vimeo; detect it
-		always_show_close: true, //always show the close button, even if there is no title
-		scale_height: true, //scales height and width if the image is taller than window size
-		loadingMessage: 'Loading...',
+		alwaysShowClose: true, //always show the close button, even if there is no title
+		scaleHeight: true, //scales height and width if the image is taller than window size
+		loadingMessage: '<div class="ekko-lightbox-loader"><div><div></div><div></div></div></div>', // http://tobiasahlin.com/spinkit/
+		leftArrow: '<span>&#10094;</span>',
+		rightArrow: '<span>&#10095;</span>',
 		onShow: function onShow() {},
 		onShown: function onShown() {},
 		onHide: function onHide() {},
@@ -42,7 +50,8 @@ var Lightbox = (function ($) {
        _$modalBody: The .modal-body
        _$modalHeader: The .modal-header
        _$modalFooter: The .modal-footer
-    _$lightboxContainer: Container of the lightbox element
+    _$lightboxContainerOne: Container of the first lightbox element
+    _$lightboxContainerTwo: Container of the second lightbox element
     _$lightboxBody: First element in the container
     _$modalArrows: The overlayed arrows container
    	 _$galleryItems: Other <a>'s available for this gallery
@@ -72,10 +81,11 @@ var Lightbox = (function ($) {
 			this._modalId = 'ekkoLightbox-' + Math.floor(Math.random() * 1000 + 1);
 			this._$element = $element instanceof jQuery ? $element : $($element);
 
-			var header = '<div class="modal-header"' + (this._config.title || this._config.always_show_close ? '' : ' style="display:none"') + '><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">' + (this._config.title || "&nbsp;") + '</h4></div>';
+			var header = '<div class="modal-header"' + (this._config.title || this._config.alwaysShowClow ? '' : ' style="display:none"') + '><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">' + (this._config.title || "&nbsp;") + '</h4></div>';
 			var footer = '<div class="modal-footer"' + (this._config.footer ? '' : ' style="display:none"') + '>' + (this._config.footer || "&nbsp;") + '</div>';
-			var body = '<div class="modal-body"><div class="ekko-lightbox-container"><div></div></div></div>';
-			$(document.body).append('<div id="' + this._modalId + '" class="ekko-lightbox modal fade" tabindex="-1" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content">' + header + body + footer + '</div></div></div>');
+			var body = '<div class="modal-body"><div class="ekko-lightbox-container"><div class="ekko-lightbox-item fade in"></div><div class="ekko-lightbox-item fade"></div></div></div>';
+			var dialog = '<div class="modal-dialog" role="document"><div class="modal-content">' + header + body + footer + '</div></div>';
+			$(document.body).append('<div id="' + this._modalId + '" class="ekko-lightbox modal fade" tabindex="-1" tabindex="-1" role="dialog" aria-hidden="true">' + dialog + '</div>');
 
 			this._$modal = $('#' + this._modalId);
 			this._$modalDialog = this._$modal.find('.modal-dialog').first();
@@ -85,9 +95,8 @@ var Lightbox = (function ($) {
 			this._$modalFooter = this._$modal.find('.modal-footer').first();
 
 			this._$lightboxContainer = this._$modalBody.find('.ekko-lightbox-container').first();
-			this._$lightboxBody = this._$lightboxContainer.find('> div:first-child').first();
-
-			this._showLoading();
+			this._$lightboxBodyOne = this._$lightboxContainer.find('> div:first-child').first();
+			this._$lightboxBodyTwo = this._$lightboxContainer.find('> div:last-child').first();
 
 			this._border = this._calculateBorders();
 			this._padding = this._calculatePadding();
@@ -99,14 +108,14 @@ var Lightbox = (function ($) {
 				$(document).on('keydown.ekkoLightbox', this._navigationalBinder.bind(this));
 
 				// add the directional arrows to the modal
-				if (this._config.directional_arrows && this._$galleryItems.length > 1) {
-					this._$lightboxContainer.append('<div class="ekko-lightbox-nav-overlay"><a href="#" class="' + this._stripStops(this._config.left_arrow_class) + '"></a><a href="#" class="' + this._stripStops(this._config.right_arrow_class) + '"></a></div>');
+				if (this._config.showArrows && this._$galleryItems.length > 1) {
+					this._$lightboxContainer.append('<div class="ekko-lightbox-nav-overlay"><a href="#">' + this._config.leftArrow + '</a><a href="#">' + this._config.rightArrow + '</a></div>');
 					this._$modalArrows = this._$lightboxContainer.find('div.ekko-lightbox-nav-overlay').first();
-					this._$lightboxContainer.find('a' + this._stripSpaces(this._config.left_arrow_class)).on('click', function (event) {
+					this._$lightboxContainer.on('click', 'a:first-child', function (event) {
 						event.preventDefault();
 						return _this.navigateLeft();
 					});
-					this._$lightboxContainer.find('a' + this._stripSpaces(this._config.right_arrow_class)).on('click', function (event) {
+					this._$lightboxContainer.on('click', 'a:last-child', function (event) {
 						event.preventDefault();
 						return _this.navigateRight();
 					});
@@ -114,6 +123,7 @@ var Lightbox = (function ($) {
 			}
 
 			this._$modal.on('show.bs.modal', this._config.onShow.bind(this)).on('shown.bs.modal', function () {
+				_this._toggleLoading(true);
 				_this._handle();
 				return _this._config.onShown.call(_this);
 			}).on('hide.bs.modal', this._config.onHide.bind(this)).on('hidden.bs.modal', function () {
@@ -139,18 +149,10 @@ var Lightbox = (function ($) {
 
 				if (index < 0 || index > this._$galleryItems.length - 1) return this;
 
-				this._showLoading();
-
 				this._galleryIndex = index;
 
 				this._$element = $(this._$galleryItems.get(this._galleryIndex));
 				this._handle();
-
-				if (this._galleryIndex + 1 < this._$galleryItems.length) {
-					var next = $(this._$galleryItems.get(this._galleryIndex + 1), false);
-					var src = next.attr('data-remote') || next.attr('href');
-					if (next.attr('data-type') === 'image' || this._isImage(src)) return this._preloadImage(src, false);
-				}
 			}
 		}, {
 			key: 'navigateLeft',
@@ -181,20 +183,6 @@ var Lightbox = (function ($) {
 			value: function close() {
 				return this._$modal.modal('hide');
 			}
-		}, {
-			key: 'resize',
-			value: function resize(width) {
-				var _this2 = this;
-
-				//resize the dialog based on the width given, and adjust the directional arrow padding
-				var width_total = width + this._border.left + this._padding.left + this._padding.right + this._border.right;
-				this._$modalDialog.css('width', 'auto').css('maxWidth', width_total);
-
-				this._$lightboxContainer.find('a').css('line-height', function () {
-					return $(_this2).parent().height() + 'px';
-				});
-				return this;
-			}
 
 			// helper private methods
 		}, {
@@ -203,16 +191,6 @@ var Lightbox = (function ($) {
 				event = event || window.event;
 				if (event.keyCode === 39) return this.navigateRight();
 				if (event.keyCode === 37) return this.navigateLeft();
-			}
-		}, {
-			key: '_stripStops',
-			value: function _stripStops(str) {
-				return str.replace(/\./g, '');
-			}
-		}, {
-			key: '_stripSpaces',
-			value: function _stripSpaces(str) {
-				return str.replace(/\s/g, '');
 			}
 
 			// type detection private methods
@@ -232,9 +210,38 @@ var Lightbox = (function ($) {
 				return type;
 			}
 		}, {
+			key: '_isImage',
+			value: function _isImage(string) {
+				return string && string.match(/(^data:image\/.*,)|(\.(jp(e|g|eg)|gif|png|bmp|webp|svg)((\?|#).*)?$)/i);
+			}
+		}, {
+			key: '_containerToUse',
+			value: function _containerToUse() {
+				var _this2 = this;
+
+				// if currently showing an image, fade it out and remove
+				var $toUse = this._$lightboxBodyTwo;
+				var $current = this._$lightboxBodyOne;
+
+				if (this._$lightboxBodyTwo.hasClass('in')) {
+					$toUse = this._$lightboxBodyOne;
+					$current = this._$lightboxBodyTwo;
+				}
+
+				$current.removeClass('in');
+				setTimeout(function () {
+					if (!_this2._$lightboxBodyTwo.hasClass('in')) _this2._$lightboxBodyTwo.empty();
+					if (!_this2._$lightboxBodyOne.hasClass('in')) _this2._$lightboxBodyOne.empty();
+				}, 500);
+
+				$toUse.addClass('in');
+				return $toUse;
+			}
+		}, {
 			key: '_handle',
 			value: function _handle() {
 
+				var $toUse = this._containerToUse();
 				this._updateTitleAndFooter();
 
 				var currentRemote = this._$element.attr('data-remote') || this._$element.attr('href');
@@ -244,49 +251,63 @@ var Lightbox = (function ($) {
 
 				switch (currentType) {
 					case 'image':
-						return this._preloadImage(currentRemote, true);
+						this._preloadImage(currentRemote, $toUse);
+						this._preloadImageByIndex(this._galleryIndex, 3);
 						break;
 					case 'youtube':
-						return this._showYoutubeVideo(currentRemote);
+						this._showYoutubeVideo(currentRemote, $toUse);
 						break;
 					case 'vimeo':
-						return this._showVimeoVideo(this._getVimeoId(currentRemote));
+						this._showVimeoVideo(this._getVimeoId(currentRemote), $toUse);
 						break;
 					case 'instagram':
-						return this._showInstagramVideo(this._getInstagramId(currentRemote));
+						this._showInstagramVideo(this._getInstagramId(currentRemote), $toUse);
 						break;
 					case 'video':
-						return this._showVideoIframe(currentRemote);
+						this._showVideoIframe(currentRemote, $toUse);
 						break;
 					default:
 						// url
-						return this._loadRemoteContent(currentRemote);
+						this._loadRemoteContent(currentRemote, $toUse);
 						break;
 				}
-			}
-		}, {
-			key: '_isImage',
-			value: function _isImage(string) {
-				return string.match(/(^data:image\/.*,)|(\.(jp(e|g|eg)|gif|png|bmp|webp|svg)((\?|#).*)?$)/i);
+
+				return this;
 			}
 		}, {
 			key: '_getYoutubeId',
 			value: function _getYoutubeId(string) {
+				if (!string) return false;
 				var matches = string.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
 				return matches && matches[2].length === 11 ? matches[2] : false;
 			}
 		}, {
 			key: '_getVimeoId',
 			value: function _getVimeoId(string) {
-				return string.indexOf('vimeo') > 0 ? string : false;
+				return string && string.indexOf('vimeo') > 0 ? string : false;
 			}
 		}, {
 			key: '_getInstagramId',
 			value: function _getInstagramId(string) {
-				return string.indexOf('instagram') > 0 ? string : false;
+				return string && string.indexOf('instagram') > 0 ? string : false;
 			}
 
 			// layout private methods
+		}, {
+			key: '_toggleLoading',
+			value: function _toggleLoading(show) {
+				show = show || false;
+				if (show) {
+					this._$modalDialog.css('display', 'none');
+					this._$modal.removeClass('in');
+					$('.modal-backdrop').append(this._config.loadingMessage);
+				} else {
+					this._$modalDialog.css('display', 'block');
+					this._$modal.addClass('in');
+					$('.modal-backdrop').find('.ekko-lightbox-loader').remove();
+				}
+				return this;
+			}
 		}, {
 			key: '_calculateBorders',
 			value: function _calculateBorders() {
@@ -320,81 +341,80 @@ var Lightbox = (function ($) {
 				var title = this._$element.data('title') || "";
 				var caption = this._$element.data('footer') || "";
 
-				if (title || this._config.always_show_close) header.css('display', '').find('.modal-title').html(title || "&nbsp;");else header.css('display', 'none');
+				if (title || this._config.alwaysShowClow) header.css('display', '').find('.modal-title').html(title || "&nbsp;");else header.css('display', 'none');
 
 				if (caption) footer.css('display', '').html(caption);else footer.css('display', 'none');
 
 				return this;
 			}
 		}, {
-			key: '_showLoading',
-			value: function _showLoading() {
-				this._$lightboxBody.html('<div class="modal-loading">' + this._config.loadingMessage + '</div>');
-				return this;
-			}
-		}, {
 			key: '_showYoutubeVideo',
-			value: function _showYoutubeVideo(remote) {
+			value: function _showYoutubeVideo(remote, $containerForElement) {
 				var id = this._getYoutubeId(remote);
 				var query = remote.indexOf('&') > 0 ? remote.substr(remote.indexOf('&')) : '';
 				var width = this._checkDimensions(this._$element.data('width') || 560);
-				return this._showVideoIframe('//www.youtube.com/embed/' + id + '?badge=0&autoplay=1&html5=1' + query, width, width / (560 / 315));
+				return this._showVideoIframe('//www.youtube.com/embed/' + id + '?badge=0&autoplay=1&html5=1' + query, width, width / (560 / 315), $containerForElement);
 			}
 		}, {
 			key: '_showVimeoVideo',
-			value: function _showVimeoVideo(id) {
+			value: function _showVimeoVideo(id, $containerForElement) {
 				var width = this._checkDimensions(this._$element.data('width') || 560);
 				var height = width / (500 / 281); // aspect ratio
-				return this._showVideoIframe(id + '?autoplay=1', width, height);
+				return this._showVideoIframe(id + '?autoplay=1', width, height, $containerForElement);
 			}
 		}, {
 			key: '_showInstagramVideo',
-			value: function _showInstagramVideo(id) {
+			value: function _showInstagramVideo(id, $containerForElement) {
 				// instagram load their content into iframe's so this can be put straight into the element
 				var width = this._checkDimensions(this._$element.data('width') || 612);
-				this.resize(width);
 				var height = width + 80;
 				id = id.substr(-1) !== '/' ? id + '/' : id; // ensure id has trailing slash
-				this._$lightboxBody.html('<iframe width="' + width + '" height="' + height + '" src="' + id + 'embed/" frameborder="0" allowfullscreen></iframe>');
+				$containerForElement.html('<iframe width="' + width + '" height="' + height + '" src="' + id + 'embed/" frameborder="0" allowfullscreen></iframe>');
+				this._resize(width, height);
 				this._config.onContentLoaded.call(this);
 				if (this._$modalArrows) //hide the arrows when showing video
-					return this._$modalArrows.css('display', 'none');
+					this._$modalArrows.css('display', 'none');
+				this._toggleLoading(false);
+				return this;
 			}
 		}, {
 			key: '_showVideoIframe',
-			value: function _showVideoIframe(url, width, height) {
+			value: function _showVideoIframe(url, width, height, $containerForElement) {
 				// should be used for videos only. for remote content use loadRemoteContent (data-type=url)
 				height = height || width; // default to square
-				this.resize(width);
-				this._$lightboxBody.html('<div class="embed-responsive embed-responsive-16by9"><iframe width="' + width + '" height="' + height + '" src="' + url + '" frameborder="0" allowfullscreen class="embed-responsive-item"></iframe></div>');
+				$containerForElement.html('<div class="embed-responsive embed-responsive-16by9"><iframe width="' + width + '" height="' + height + '" src="' + url + '" frameborder="0" allowfullscreen class="embed-responsive-item"></iframe></div>');
+				this._resize(width, height);
 				this._config.onContentLoaded.call(this);
-				if (this._$modalArrows) {
-					this._$modalArrows.css('display', 'none');
-				} //hide the arrows when showing video
+				if (this._$modalArrows) this._$modalArrows.css('display', 'none'); //hide the arrows when showing video
+				this._toggleLoading(false);
 				return this;
 			}
 		}, {
 			key: '_loadRemoteContent',
-			value: function _loadRemoteContent(url) {
+			value: function _loadRemoteContent(url, $containerForElement) {
 				var _this3 = this;
 
 				var width = this._$element.data('width') || 560;
-				this.resize(width);
+				var height = this._$element.data('height') || 560;
 
 				var disableExternalCheck = this._$element.data('disableExternalCheck') || false;
+				this._toggleLoading(false);
 
 				// external urls are loading into an iframe
+				// local ajax can be loaded into the container itself
 				if (!disableExternalCheck && !this._isExternal(url)) {
-					this._$lightboxBody.load(url, $.proxy(function () {
-						return _this3._$element.trigger('loaded.bs.modal');
+					$containerForElement.load(url, $.proxy(function () {
+						return _this3._$element.trigger('loaded.bs.modal');l;
 					}));
 				} else {
-					this._$lightboxBody.html('<iframe width="' + width + '" height="' + width + '" src="' + url + '" frameborder="0" allowfullscreen></iframe>');
+					$containerForElement.html('<iframe src="' + url + '" frameborder="0" allowfullscreen></iframe>');
 					this._config.onContentLoaded.call(this);
 				}
 
 				if (this._$modalArrows) //hide the arrows when remote content
 					this._$modalArrows.css('display', 'none');
+
+				this._resize(width, height);
 				return this;
 			}
 		}, {
@@ -413,32 +433,46 @@ var Lightbox = (function ($) {
 		}, {
 			key: '_error',
 			value: function _error(message) {
-				this._$lightboxBody.html(message);
+				console.error(message);
+				this._containerToUse().html(message);
 				return this;
 			}
 		}, {
+			key: '_preloadImageByIndex',
+			value: function _preloadImageByIndex(startIndex, numberOfTimes) {
+
+				if (!this._$galleryItems) return;
+
+				var next = $(this._$galleryItems.get(startIndex), false);
+				if (typeof next == 'undefined') return;
+
+				var src = next.attr('data-remote') || next.attr('href');
+				if (next.attr('data-type') === 'image' || this._isImage(src)) this._preloadImage(src, false);
+
+				if (numberOfTimes > 0) return this._preloadImageByIndex(startIndex + 1, numberOfTimes - 1);
+			}
+		}, {
 			key: '_preloadImage',
-			value: function _preloadImage(src, onLoadShowImage) {
+			value: function _preloadImage(src, $containerForImage) {
 				var _this4 = this;
 
+				$containerForImage = $containerForImage || false;
+
 				var img = new Image();
-				if (onLoadShowImage == null || onLoadShowImage === true) {
+				if ($containerForImage) {
 					img.onload = function () {
 						var image = $('<img />');
 						image.attr('src', img.src);
 						image.addClass('img-fluid');
-						_this4._$lightboxBody.html(image);
-						if (_this4._$modalArrows) {
-							_this4._$modalArrows.css('display', 'block');
-						}
-						if (_this4._config.scale_height) {
-							_this4._scaleHeight(img.height, img.width);
-						} else {
-							_this4.resize(img.width);
-						}
+						$containerForImage.html(image);
+						if (_this4._$modalArrows) _this4._$modalArrows.css('display', ''); // remove display to default to css property
+
+						_this4._resize(img.width, img.height);
+						_this4._toggleLoading(false);
 						return _this4._config.onContentLoaded.call(_this4);
 					};
 					img.onerror = function () {
+						_this4._toggleLoading(false);
 						return _this4._error('Failed to load image: ' + src);
 					};
 				}
@@ -447,29 +481,35 @@ var Lightbox = (function ($) {
 				return img;
 			}
 		}, {
-			key: '_scaleHeight',
-			value: function _scaleHeight(height, width) {
+			key: '_resize',
+			value: function _resize(width, height) {
 
-				//console.log(this, this._$modal, this._$modal.data('bs.modal'))
-				//this._$modal.data('bs.modal')._handleUpdate()
-				//scales the dialog based on height and width, takes all padding, borders, margins into account
-				//only used if options.scale_height is true
-				var headerHeight = this._$modalHeader.outerHeight(true) || 0;
-				var footerHeight = this._$modalFooter.outerHeight(true) || 0;
+				if (this._config.scaleHeight) {
+					//scales the dialog based on height and width, takes all padding, borders, margins into account
+					var headerHeight = 0,
+					    footerHeight = 0;
 
-				if (!this._$modalFooter.is(':visible')) footerHeight = 0;
+					if (this._$modalFooter.is(':visible')) footerHeight = this._$modalHeader.outerHeight(true) || 0;
 
-				if (!this._$modalHeader.is(':visible')) headerHeight = 0;
+					if (this._$modalHeader.is(':visible')) headerHeight = this._$modalHeader.outerHeight(true) || 0;
 
-				var border_padding = this._border.top + this._border.bottom + this._padding.top + this._padding.bottom;
-				//calculated each time as resizing the window can cause them to change due to Bootstraps fluid margins
-				var margins = parseFloat(this._$modalDialog.css('margin-top')) + parseFloat(this._$modalDialog.css('margin-bottom'));
+					var borderPadding = this._border.top + this._border.bottom + this._padding.top + this._padding.bottom;
 
-				var max_height = $(window).height() - border_padding - margins - headerHeight - footerHeight;
-				var factor = Math.min(max_height / height, 1);
+					//calculated each time as resizing the window can cause them to change due to Bootstraps fluid margins
+					var margins = parseFloat(this._$modalDialog.css('margin-top')) + parseFloat(this._$modalDialog.css('margin-bottom'));
 
-				this._$modalDialog.css('height', 'auto').css('maxHeight', max_height);
-				return this.resize(factor * width);
+					var maxHeight = Math.min(height, $(window).height() - borderPadding - margins - headerHeight - footerHeight);
+					var factor = Math.min(maxHeight / height, 1);
+					width = factor * width;
+
+					this._$lightboxContainer.css('height', maxHeight);
+				}
+
+				var width_total = width + this._border.left + this._padding.left + this._padding.right + this._border.right;
+				this._$modalDialog.css('width', 'auto').css('maxWidth', width_total);
+
+				console.log(this._$modal.modal('_handleUpdate'));
+				return this;
 			}
 		}, {
 			key: '_checkDimensions',
@@ -480,9 +520,10 @@ var Lightbox = (function ($) {
 			}
 		}], [{
 			key: '_jQueryInterface',
-			value: function _jQueryInterface(config, relatedTarget) {
+			value: function _jQueryInterface(config) {
 				var _this5 = this;
 
+				config = config || {};
 				return this.each(function () {
 					var $this = $(_this5);
 					var _config = $.extend({}, Lightbox.Default, $this.data(), typeof config === 'object' && config);
@@ -505,3 +546,5 @@ var Lightbox = (function ($) {
 	return Lightbox;
 })(jQuery);
 //# sourceMappingURL=ekko-lightbox.js.map
+
+}(jQuery);

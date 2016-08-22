@@ -38,14 +38,18 @@ module.exports = function (grunt) {
                 }
             }
         },
-	    cssmin: {
+	    postcss: {
 		    options: {
-			    sourceMap: true
+			    map: true,
+			    processors: [
+				    require('autoprefixer')({
+					    browsers: ['last 2 versions']
+				    }),
+					require('cssnano')()
+			    ]
 		    },
 		    dist: {
-			    files: {
-				    'dist/ekko-lightbox.min.css': 'dist/ekko-lightbox.css'
-			    }
+			    src: 'dist/*.css'
 		    }
 	    },
 	    stamp: {
@@ -73,8 +77,9 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-less');
+	grunt.loadNpmTasks('grunt-postcss');
 
     grunt.registerTask('dev', ['babel', 'less']);
-    grunt.registerTask('dist', ['babel', 'less', 'stamp', 'uglify', 'cssmin']);
+    grunt.registerTask('dist', ['babel', 'less', 'stamp', 'postcss:dist', 'uglify']);
     grunt.registerTask('default', ['dist']);
 };

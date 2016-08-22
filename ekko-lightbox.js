@@ -10,7 +10,7 @@ const Lightbox = (($) => {
 		type: null, //force the lightbox into image / youtube mode. if null, or not image|youtube|vimeo; detect it
 		alwaysShowClose: true, //always show the close button, even if there is no title
 		scaleHeight: true, //scales height and width if the image is taller than window size
-		loadingMessage: 'Loading...',
+		loadingMessage: '<div class="ekko-lightbox-loader"><div><div></div><div></div></div></div>', // http://tobiasahlin.com/spinkit/
 		leftArrow: '<span>&#10094;</span>',
 		rightArrow: '<span>&#10095;</span>',
 		onShow() {},
@@ -57,7 +57,6 @@ const Lightbox = (($) => {
 			this._config = $.extend({}, Default, config)
 			this._$modalArrows = null
 			this._galleryIndex = 0
-			this._bodyContainerInUse = 0;
 			this._galleryName = null
 			this._padding = null
 			this._border = null
@@ -66,8 +65,9 @@ const Lightbox = (($) => {
 
 			let header = `<div class="modal-header"${this._config.title || this._config.alwaysShowClow ? '' : ' style="display:none"'}><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">${this._config.title || "&nbsp;"}</h4></div>`;
 			let footer = `<div class="modal-footer"${this._config.footer ? '' : ' style="display:none"'}>${this._config.footer || "&nbsp;"}</div>`;
-			let body = '<div class="modal-body"><div class="ekko-lightbox-container"><div class="ekko-lightbox-item"></div><div class="ekko-lightbox-item"></div></div></div>'
-			$(document.body).append(`<div id="${this._modalId}" class="ekko-lightbox modal fade" tabindex="-1" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content">${header}${body}${footer}</div></div></div>`)
+			let body = '<div class="modal-body"><div class="ekko-lightbox-container"><div class="ekko-lightbox-item fade in"></div><div class="ekko-lightbox-item fade"></div></div></div>'
+			let dialog = `<div class="modal-dialog" role="document"><div class="modal-content">${header}${body}${footer}</div></div>`
+			$(document.body).append(`<div id="${this._modalId}" class="ekko-lightbox modal fade" tabindex="-1" tabindex="-1" role="dialog" aria-hidden="true">${dialog}</div>`)
 
 			this._$modal = $(`#${this._modalId}`)
 			this._$modalDialog = this._$modal.find('.modal-dialog').first()
@@ -107,6 +107,7 @@ const Lightbox = (($) => {
 			this._$modal
 			.on('show.bs.modal', this._config.onShow.bind(this))
 			.on('shown.bs.modal', () => {
+				this._toggleLoading(true)
 				this._handle()
 				return this._config.onShown.call(this)
 			})
@@ -200,26 +201,35 @@ const Lightbox = (($) => {
 			return type;
 		}
 
-		_handle() {
+		_isImage(string) {
+			return string && string.match(/(^data:image\/.*,)|(\.(jp(e|g|eg)|gif|png|bmp|webp|svg)((\?|#).*)?$)/i)
+		}
 
+		_containerToUse() {
 			// if currently showing an image, fade it out and remove
 			let $toUse = this._$lightboxBodyTwo
 			let $current = this._$lightboxBodyOne
 
-			if(this._bodyContainerInUse == 2) {
+			if(this._$lightboxBodyTwo.hasClass('in')) {
 				$toUse = this._$lightboxBodyOne
 				$current = this._$lightboxBodyTwo
-				this._bodyContainerInUse = 1
-			} else
-				this._bodyContainerInUse = 2
+			}
 
-			$current.css('opacity', 0)
+			$current.removeClass('in')
 			setTimeout(() => {
-				$current.empty();
+				if(!this._$lightboxBodyTwo.hasClass('in'))
+					this._$lightboxBodyTwo.empty()
+				if(!this._$lightboxBodyOne.hasClass('in'))
+					this._$lightboxBodyOne.empty()
 			}, 500)
 
-			$toUse.css('opacity', 1)
+			$toUse.addClass('in')
+			return $toUse
+		}
 
+		_handle() {
+
+			let $toUse = this._containerToUse()
 			this._updateTitleAndFooter()
 
 			let currentRemote = this._$element.attr('data-remote') || this._$element.attr('href')
@@ -230,30 +240,27 @@ const Lightbox = (($) => {
 
 			switch(currentType) {
 				case 'image':
-					let ret = this._preloadImage(currentRemote, $toUse)
+					this._preloadImage(currentRemote, $toUse)
 					this._preloadImageByIndex(this._galleryIndex, 3)
-					return ret;
 					break;
 				case 'youtube':
-					return this._showYoutubeVideo(currentRemote, $toUse);
+					this._showYoutubeVideo(currentRemote, $toUse);
 					break;
 				case 'vimeo':
-					return this._showVimeoVideo(this._getVimeoId(currentRemote), $toUse);
+					this._showVimeoVideo(this._getVimeoId(currentRemote), $toUse);
 					break;
 				case 'instagram':
-					return this._showInstagramVideo(this._getInstagramId(currentRemote), $toUse);
+					this._showInstagramVideo(this._getInstagramId(currentRemote), $toUse);
 					break;
 				case 'video':
-					return this._showVideoIframe(currentRemote, $toUse);
+					this._showVideoIframe(currentRemote, $toUse);
 					break;
 				default: // url
-					return this._loadRemoteContent(currentRemote, $toUse);
+					this._loadRemoteContent(currentRemote, $toUse);
 					break;
 			}
-		}
 
-		_isImage(string) {
-			return string && string.match(/(^data:image\/.*,)|(\.(jp(e|g|eg)|gif|png|bmp|webp|svg)((\?|#).*)?$)/i)
+			return this;
 		}
 
 		_getYoutubeId(string) {
@@ -272,6 +279,21 @@ const Lightbox = (($) => {
 		}
 
 		// layout private methods
+		_toggleLoading(show) {
+			show = show || false
+			if(show) {
+				this._$modalDialog.css('display', 'none')
+				this._$modal.removeClass('in')
+				$('.modal-backdrop').append(this._config.loadingMessage)
+			}
+			else {
+				this._$modalDialog.css('display', 'block')
+				this._$modal.addClass('in')
+				$('.modal-backdrop').find('.ekko-lightbox-loader').remove()
+			}
+			return this;
+		}
+
 		_calculateBorders() {
 			return {
 				top: this._totalCssByAttribute('border-top-width'),
@@ -334,45 +356,51 @@ const Lightbox = (($) => {
 		_showInstagramVideo(id, $containerForElement) {
 			// instagram load their content into iframe's so this can be put straight into the element
 			let width = this._checkDimensions(this._$element.data('width') || 612);
-			this._resize(width);
 			let height = width + 80;
 			id = id.substr(-1) !== '/' ? id + '/' : id; // ensure id has trailing slash
 			$containerForElement.html(`<iframe width="${width}" height="${height}" src="${id}embed/" frameborder="0" allowfullscreen></iframe>`);
+			this._resize(width, height);
 			this._config.onContentLoaded.call(this);
 			if (this._$modalArrows) //hide the arrows when showing video
 				this._$modalArrows.css('display', 'none');
-			return this._scaleHeight(height, width);
+			this._toggleLoading(false);
+			return this;
 		}
 
 		_showVideoIframe(url, width, height, $containerForElement) { // should be used for videos only. for remote content use loadRemoteContent (data-type=url)
 			height = height || width; // default to square
-			this._resize(width);
 			$containerForElement.html(`<div class="embed-responsive embed-responsive-16by9"><iframe width="${width}" height="${height}" src="${url}" frameborder="0" allowfullscreen class="embed-responsive-item"></iframe></div>`);
+			this._resize(width, height);
 			this._config.onContentLoaded.call(this);
 			if (this._$modalArrows)
 				this._$modalArrows.css('display', 'none'); //hide the arrows when showing video
-			return this._scaleHeight(height, width);
+			this._toggleLoading(false);
+			return this;
 		}
 
 		_loadRemoteContent(url, $containerForElement) {
 			let width = this._$element.data('width') || 560;
-			this._resize(width);
+			let height = this._$element.data('height') || 560;
 
 			let disableExternalCheck = this._$element.data('disableExternalCheck') || false;
+			this._toggleLoading(false);
 
 			// external urls are loading into an iframe
+			// local ajax can be loaded into the container itself
 			if (!disableExternalCheck && !this._isExternal(url)) {
 				$containerForElement.load(url, $.proxy(() => {
 					return this._$element.trigger('loaded.bs.modal');l
 				}));
 
 			} else {
-				$containerForElement.html(`<iframe width="${width}" height="${width}" src="${url}" frameborder="0" allowfullscreen></iframe>`);
+				$containerForElement.html(`<iframe src="${url}" frameborder="0" allowfullscreen></iframe>`);
 				this._config.onContentLoaded.call(this);
 			}
 
 			if (this._$modalArrows) //hide the arrows when remote content
 				this._$modalArrows.css('display', 'none')
+
+			this._resize(width, height);
 			return this;
 		}
 
@@ -391,11 +419,15 @@ const Lightbox = (($) => {
 		}
 
 		_error( message ) {
-			this._$lightboxBody.html(message);
+			console.error(message);
+			this._containerToUse().html(message);
 			return this;
 		}
 
 		_preloadImageByIndex(startIndex, numberOfTimes) {
+
+			if(!this._$galleryItems)
+				return;
 
 			let next = $(this._$galleryItems.get(startIndex), false)
 			if(typeof next == 'undefined')
@@ -423,10 +455,12 @@ const Lightbox = (($) => {
 					if (this._$modalArrows)
 						this._$modalArrows.css('display', '') // remove display to default to css property
 
-					this._scaleHeight(img.height, img.width);
+					this._resize(img.width, img.height);
+					this._toggleLoading(false);
 					return this._config.onContentLoaded.call(this);
 				};
 				img.onerror = () => {
+					this._toggleLoading(false);
 					return this._error(`Failed to load image: ${src}`);
 				};
 			}
@@ -435,38 +469,36 @@ const Lightbox = (($) => {
 			return img;
 		}
 
-		_resize( width ) {
+		_resize( width, height ) {
+
+			if(this._config.scaleHeight) {
+				//scales the dialog based on height and width, takes all padding, borders, margins into account
+				let headerHeight = 0,
+					footerHeight = 0
+
+				if (this._$modalFooter.is(':visible'))
+					footerHeight = this._$modalHeader.outerHeight(true) || 0;
+
+				if (this._$modalHeader.is(':visible'))
+					headerHeight = this._$modalHeader.outerHeight(true) || 0;
+
+				let borderPadding = this._border.top + this._border.bottom + this._padding.top + this._padding.bottom;
+
+				//calculated each time as resizing the window can cause them to change due to Bootstraps fluid margins
+				let margins = parseFloat(this._$modalDialog.css('margin-top')) + parseFloat(this._$modalDialog.css('margin-bottom'));
+
+				let maxHeight = Math.min(height, $(window).height() - borderPadding - margins - headerHeight - footerHeight);
+				let factor = Math.min(maxHeight / height, 1);
+				width = factor * width;
+
+				this._$lightboxContainer.css('height', maxHeight)
+			}
+
 			let width_total = width + this._border.left + this._padding.left + this._padding.right + this._border.right;
 			this._$modalDialog.css('width', 'auto') .css('maxWidth', width_total);
+
+			console.log(this._$modal.modal('_handleUpdate'));
 			return this;
-		}
-
-		_scaleHeight( height, width ) {
-
-			if(!this._config.scaleHeight)
-				return this._resize(width)
-
-			//scales the dialog based on height and width, takes all padding, borders, margins into account
-			//only used if options.scaleHeight is true
-			let headerHeight = this._$modalHeader.outerHeight(true) || 0;
-			let footerHeight = this._$modalFooter.outerHeight(true) || 0;
-
-			if (!this._$modalFooter.is(':visible'))
-				footerHeight = 0;
-
-			if (!this._$modalHeader.is(':visible'))
-				headerHeight = 0;
-
-			let border_padding = this._border.top + this._border.bottom + this._padding.top + this._padding.bottom;
-			//calculated each time as resizing the window can cause them to change due to Bootstraps fluid margins
-			let margins = parseFloat(this._$modalDialog.css('margin-top')) + parseFloat(this._$modalDialog.css('margin-bottom'));
-
-			let max_height = Math.min(height, $(window).height() - border_padding - margins - headerHeight - footerHeight);
-			let factor = Math.min(max_height / height, 1);
-
-			this._$modalDialog.css('height', 'auto').css('maxHeight', max_height);
-			this._$lightboxContainer.css('height', max_height)
-			return this._resize(factor * width);
 		}
 
 		_checkDimensions(width) {
@@ -475,7 +507,8 @@ const Lightbox = (($) => {
 			return (width_total > document.body.clientWidth) ? this._$modalBody.width() : width;
 		}
 
-		static _jQueryInterface(config, relatedTarget) {
+		static _jQueryInterface(config) {
+			config = config || {}
 			return this.each(() => {
 				let $this = $(this)
 				let _config = $.extend(

@@ -149,7 +149,7 @@
                     <p>Or, download the files directly: <a href="https://github.com/ashleydw/lightbox/tree/master/dist">https://github.com/ashleydw/lightbox/tree/master/dist</a></p>
                     <br /><br />
                     <p>Place this near on your page, probably near the end of the body section:</p>
-<code class="block-code">$(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
+<code class="block-code">$(document).on('click', '[data-toggle="lightbox"]', function(event) {
     event.preventDefault();
     $(this).ekkoLightbox();
 });</code>
@@ -495,29 +495,11 @@ $(&#39;#open-youtube&#39;).click(function (e) {
                     <code data-code="example-9"></code>
 
                     <h3 id="remote-content">Remote content</h3>
-                    <p>The Bootstrap modal originally allowed for remote loading, but this is to be removed in v4; this functionality demonstrates the work around.</p>
-					<p>Given a URL, that is not an image or video (including unforced types [see example 13]), load the content using jQuery load(). An image and video is given below as proof gallery.</p>
+					<p>Given a URL, that is not an image or video (including unforced types), load the content using an iFrame.</p>
 					<div class="row">
                         <div class="offset-md-1 col-md-10" data-code="example-10">
                             <div class="row">
-                                <p class="col-sm-3"><a href="./remote/page1.html" data-title="Page 1" data-toggle="lightbox" data-parent="" data-gallery="remoteload">Open up local Page 1</a></p>
-                                <a href="https://unsplash.it/1200/768.jpg?image=268" data-parent="" data-toggle="lightbox" data-gallery="remoteload" class="col-sm-3">
-                                    <img src="https://unsplash.it/600.jpg?image=268" class="img-fluid">
-                                </a>
-                                <p class="col-sm-3"><a href="./remote/page2.html" data-title="Page 2" data-toggle="lightbox" data-parent="" data-gallery="remoteload">Open up local Page 2</a></p>
-                                <a href="http://vimeo.com/80629469" data-remote="http://player.vimeo.com/video/80629469" data-toggle="lightbox" data-parent="" data-gallery="remoteload" class="col-sm-3">
-                                    <img src="//b.vimeocdn.com/ts/458/070/458070637_200.jpg" class="img-fluid">
-                                </a>
-                            </div>
-                            <div class="row">
-                                <p class="col-sm-3"><a href="http://news.bbc.co.uk" data-title="BBC News" data-toggle="lightbox" data-parent="" data-gallery="remoteload">Open up BBC news</a></p>
-                                <a href="http://vimeo.com/80629469" data-remote="http://player.vimeo.com/video/80629469" data-toggle="lightbox" data-parent="" data-gallery="remoteload" class="col-sm-3">
-                                    <img src="//b.vimeocdn.com/ts/458/070/458070637_200.jpg" class="img-fluid">
-                                </a>
-                                <p class="col-sm-3"><a href="http://getbootstrap.com" data-title="Bootstrap" data-toggle="lightbox" data-parent="" data-gallery="remoteload">Open up Bootstrap</a></p>
-                                <a href="https://unsplash.it/1200/768.jpg?image=269" data-toggle="lightbox" data-parent="" data-gallery="remoteload" class="col-sm-3">
-                                    <img src="https://unsplash.it/600.jpg?image=269" class="img-fluid">
-                                </a>
+                                <p class="col-sm-3"><a href="http://getbootstrap.com" data-title="Bootstrap" data-width="1200" data-toggle="lightbox" data-gallery="remoteload">Bootstrap Docs</a></p>
                             </div>
                         </div>
                     </div>
@@ -539,7 +521,7 @@ $(&#39;#open-youtube&#39;).click(function (e) {
         <script type="text/javascript">
             $(document).ready(function ($) {
                 // delegate calls to data-toggle="lightbox"
-                $(document).delegate('*[data-toggle="lightbox"]:not([data-gallery="navigateTo"])', 'click', function(event) {
+                $(document).on('click', '[data-toggle="lightbox"]:not([data-gallery="navigateTo"])', function(event) {
                     event.preventDefault();
                     return $(this).ekkoLightbox({
                         onShown: function() {
@@ -566,7 +548,7 @@ $(&#39;#open-youtube&#39;).click(function (e) {
                 });
 
 				// navigateTo
-                $(document).delegate('*[data-gallery="navigateTo"]', 'click', function(event) {
+                $(document).on('click', '[data-toggle="lightbox"][data-gallery="navigateTo"]', function(event) {
                     event.preventDefault();
 
                     return $(this).ekkoLightbox({
