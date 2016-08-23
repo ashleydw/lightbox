@@ -12,10 +12,12 @@ const Lightbox = (($) => {
 		loadingMessage: '<div class="ekko-lightbox-loader"><div><div></div><div></div></div></div>', // http://tobiasahlin.com/spinkit/
 		leftArrow: '<span>&#10094;</span>',
 		rightArrow: '<span>&#10095;</span>',
-		errors: {
+		strings: {
+			close: 'Close',
 			fail: 'Failed to load image:',
 			type: 'Could not detect remote target type. Force the type using data-type',
 		},
+		doc: document, // if in an iframe can specify top.document
 		onShow() {},
 		onShown() {},
 		onHide() {},
@@ -70,13 +72,13 @@ const Lightbox = (($) => {
 			this._modalId = `ekkoLightbox-${Math.floor((Math.random() * 1000) + 1)}`;
 			this._$element = $element instanceof jQuery ? $element : $($element)
 
-			let header = `<div class="modal-header"${this._config.title || this._config.alwaysShowClose ? '' : ' style="display:none"'}><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">${this._config.title || "&nbsp;"}</h4></div>`;
+			let header = `<div class="modal-header"${this._config.title || this._config.alwaysShowClose ? '' : ' style="display:none"'}><button type="button" class="close" data-dismiss="modal" aria-label="${this._config.strings.close}"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">${this._config.title || "&nbsp;"}</h4></div>`;
 			let footer = `<div class="modal-footer"${this._config.footer ? '' : ' style="display:none"'}>${this._config.footer || "&nbsp;"}</div>`;
 			let body = '<div class="modal-body"><div class="ekko-lightbox-container"><div class="ekko-lightbox-item fade in"></div><div class="ekko-lightbox-item fade"></div></div></div>'
 			let dialog = `<div class="modal-dialog" role="document"><div class="modal-content">${header}${body}${footer}</div></div>`
-			$(document.body).append(`<div id="${this._modalId}" class="ekko-lightbox modal fade" tabindex="-1" tabindex="-1" role="dialog" aria-hidden="true">${dialog}</div>`)
+			$(this._config.doc.body).append(`<div id="${this._modalId}" class="ekko-lightbox modal fade" tabindex="-1" tabindex="-1" role="dialog" aria-hidden="true">${dialog}</div>`)
 
-			this._$modal = $(`#${this._modalId}`)
+			this._$modal = $(`#${this._modalId}`, this._config.doc)
 			this._$modalDialog = this._$modal.find('.modal-dialog').first()
 			this._$modalContent = this._$modal.find('.modal-content').first()
 			this._$modalBody = this._$modal.find('.modal-body').first()
@@ -249,7 +251,7 @@ const Lightbox = (($) => {
 			let currentType = this._detectRemoteType(currentRemote, this._$element.attr('data-type') || false)
 
 			if(['image', 'youtube', 'vimeo', 'instagram', 'video', 'url'].indexOf(currentType) < 0)
-				return this._error(this._config.errors.type)
+				return this._error(this._config.strings.type)
 
 			switch(currentType) {
 				case 'image':
@@ -490,7 +492,7 @@ const Lightbox = (($) => {
 				};
 				img.onerror = () => {
 					this._toggleLoading(false);
-					return this._error(this._config.errors.fail+`  ${src}`);
+					return this._error(this._config.strings.fail+`  ${src}`);
 				};
 			}
 
@@ -506,11 +508,12 @@ const Lightbox = (($) => {
 
 			// if width > the available space, scale down the expected width and height
 			let widthBorderAndPadding = this._padding.left + this._padding.right + this._border.left + this._border.right
-			let maxWidth = Math.min(width + widthBorderAndPadding, document.body.clientWidth)
-			if(width > maxWidth) {
+			let maxWidth = Math.min(width + widthBorderAndPadding, this._config.doc.body.clientWidth)
+			if((width + widthBorderAndPadding) > maxWidth) {
 				height = ((maxWidth - widthBorderAndPadding) /  width) * height
 				width = maxWidth
-			}
+			} else
+				width = (width + widthBorderAndPadding)
 
 			let headerHeight = 0,
 				footerHeight = 0

@@ -1,3 +1,11 @@
+/*!
+ * Lightbox for Bootstrap by @ashleydw
+ * https://github.com/ashleydw/lightbox
+ *
+ * License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
+ */
++function ($) {
+
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -18,10 +26,12 @@ var Lightbox = (function ($) {
 		loadingMessage: '<div class="ekko-lightbox-loader"><div><div></div><div></div></div></div>', // http://tobiasahlin.com/spinkit/
 		leftArrow: '<span>&#10094;</span>',
 		rightArrow: '<span>&#10095;</span>',
-		errors: {
+		strings: {
+			close: 'Close',
 			fail: 'Failed to load image:',
 			type: 'Could not detect remote target type. Force the type using data-type'
 		},
+		doc: document, // if in an iframe can specify top.document
 		onShow: function onShow() {},
 		onShown: function onShown() {},
 		onHide: function onHide() {},
@@ -80,13 +90,13 @@ var Lightbox = (function ($) {
 			this._modalId = 'ekkoLightbox-' + Math.floor(Math.random() * 1000 + 1);
 			this._$element = $element instanceof jQuery ? $element : $($element);
 
-			var header = '<div class="modal-header"' + (this._config.title || this._config.alwaysShowClose ? '' : ' style="display:none"') + '><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">' + (this._config.title || "&nbsp;") + '</h4></div>';
+			var header = '<div class="modal-header"' + (this._config.title || this._config.alwaysShowClose ? '' : ' style="display:none"') + '><button type="button" class="close" data-dismiss="modal" aria-label="' + this._config.strings.close + '"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">' + (this._config.title || "&nbsp;") + '</h4></div>';
 			var footer = '<div class="modal-footer"' + (this._config.footer ? '' : ' style="display:none"') + '>' + (this._config.footer || "&nbsp;") + '</div>';
 			var body = '<div class="modal-body"><div class="ekko-lightbox-container"><div class="ekko-lightbox-item fade in"></div><div class="ekko-lightbox-item fade"></div></div></div>';
 			var dialog = '<div class="modal-dialog" role="document"><div class="modal-content">' + header + body + footer + '</div></div>';
-			$(document.body).append('<div id="' + this._modalId + '" class="ekko-lightbox modal fade" tabindex="-1" tabindex="-1" role="dialog" aria-hidden="true">' + dialog + '</div>');
+			$(this._config.doc.body).append('<div id="' + this._modalId + '" class="ekko-lightbox modal fade" tabindex="-1" tabindex="-1" role="dialog" aria-hidden="true">' + dialog + '</div>');
 
-			this._$modal = $('#' + this._modalId);
+			this._$modal = $('#' + this._modalId, this._config.doc);
 			this._$modalDialog = this._$modal.find('.modal-dialog').first();
 			this._$modalContent = this._$modal.find('.modal-content').first();
 			this._$modalBody = this._$modal.find('.modal-body').first();
@@ -253,7 +263,7 @@ var Lightbox = (function ($) {
 				var currentRemote = this._$element.attr('data-remote') || this._$element.attr('href');
 				var currentType = this._detectRemoteType(currentRemote, this._$element.attr('data-type') || false);
 
-				if (['image', 'youtube', 'vimeo', 'instagram', 'video', 'url'].indexOf(currentType) < 0) return this._error(this._config.errors.type);
+				if (['image', 'youtube', 'vimeo', 'instagram', 'video', 'url'].indexOf(currentType) < 0) return this._error(this._config.strings.type);
 
 				switch (currentType) {
 					case 'image':
@@ -495,7 +505,7 @@ var Lightbox = (function ($) {
 						};
 						img.onerror = function () {
 							_this4._toggleLoading(false);
-							return _this4._error(_this4._config.errors.fail + ('  ' + src));
+							return _this4._error(_this4._config.strings.fail + ('  ' + src));
 						};
 					})();
 				}
@@ -513,11 +523,11 @@ var Lightbox = (function ($) {
 
 				// if width > the available space, scale down the expected width and height
 				var widthBorderAndPadding = this._padding.left + this._padding.right + this._border.left + this._border.right;
-				var maxWidth = Math.min(width + widthBorderAndPadding, document.body.clientWidth);
-				if (width > maxWidth) {
+				var maxWidth = Math.min(width + widthBorderAndPadding, this._config.doc.body.clientWidth);
+				if (width + widthBorderAndPadding > maxWidth) {
 					height = (maxWidth - widthBorderAndPadding) / width * height;
 					width = maxWidth;
-				}
+				} else width = width + widthBorderAndPadding;
 
 				var headerHeight = 0,
 				    footerHeight = 0;
@@ -574,3 +584,5 @@ var Lightbox = (function ($) {
 	return Lightbox;
 })(jQuery);
 //# sourceMappingURL=ekko-lightbox.js.map
+
+}(jQuery);
