@@ -280,7 +280,7 @@ var Lightbox = (function ($) {
 						this._showInstagramVideo(this._getInstagramId(currentRemote), $toUse);
 						break;
 					case 'video':
-						this._showVideoIframe(currentRemote, $toUse);
+						this._showHtml5Video(currentRemote, $toUse);
 						break;
 					default:
 						// url
@@ -375,13 +375,14 @@ var Lightbox = (function ($) {
 				var id = this._getYoutubeId(remote);
 				var query = remote.indexOf('&') > 0 ? remote.substr(remote.indexOf('&')) : '';
 				var width = this._$element.data('width') || 560;
-				return this._showVideoIframe('//www.youtube.com/embed/' + id + '?badge=0&autoplay=1&html5=1' + query, width, width / (560 / 315), $containerForElement);
+				var height = this._$element.data('height') || width / (560 / 315);
+				return this._showVideoIframe('//www.youtube.com/embed/' + id + '?badge=0&autoplay=1&html5=1' + query, width, height, $containerForElement);
 			}
 		}, {
 			key: '_showVimeoVideo',
 			value: function _showVimeoVideo(id, $containerForElement) {
-				var width = 560;
-				var height = width / (500 / 281); // aspect ratio
+				var width = 500;
+				var height = this._$element.data('height') || width / (560 / 315);
 				return this._showVideoIframe(id + '?autoplay=1', width, height, $containerForElement);
 			}
 		}, {
@@ -405,6 +406,19 @@ var Lightbox = (function ($) {
 				// should be used for videos only. for remote content use loadRemoteContent (data-type=url)
 				height = height || width; // default to square
 				$containerForElement.html('<div class="embed-responsive embed-responsive-16by9"><iframe width="' + width + '" height="' + height + '" src="' + url + '" frameborder="0" allowfullscreen class="embed-responsive-item"></iframe></div>');
+				this._resize(width, height);
+				this._config.onContentLoaded.call(this);
+				if (this._$modalArrows) this._$modalArrows.css('display', 'none'); //hide the arrows when showing video
+				this._toggleLoading(false);
+				return this;
+			}
+		}, {
+			key: '_showHtml5Video',
+			value: function _showHtml5Video(url, $containerForElement) {
+				// should be used for videos only. for remote content use loadRemoteContent (data-type=url)
+				var width = this._$element.data('width') || 560;
+				var height = this._$element.data('height') || width / (560 / 315);
+				$containerForElement.html('<div class="embed-responsive embed-responsive-16by9"><video width="' + width + '" height="' + height + '" src="' + url + '" preload="auto" autoplay controls class="embed-responsive-item"></video></div>');
 				this._resize(width, height);
 				this._config.onContentLoaded.call(this);
 				if (this._$modalArrows) this._$modalArrows.css('display', 'none'); //hide the arrows when showing video

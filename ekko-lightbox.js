@@ -268,7 +268,7 @@ const Lightbox = (($) => {
 					this._showInstagramVideo(this._getInstagramId(currentRemote), $toUse);
 					break;
 				case 'video':
-					this._showVideoIframe(currentRemote, $toUse);
+					this._showHtml5Video(currentRemote, $toUse);
 					break;
 				default: // url
 					this._loadRemoteContent(currentRemote, $toUse);
@@ -360,17 +360,18 @@ const Lightbox = (($) => {
 			let id = this._getYoutubeId(remote)
 			let query = remote.indexOf('&') > 0 ? remote.substr(remote.indexOf('&')) : ''
 			let width = this._$element.data('width') || 560
+			let height = this._$element.data('height') ||  width / ( 560/315 )
 			return this._showVideoIframe(
 				`//www.youtube.com/embed/${id}?badge=0&autoplay=1&html5=1${query}`,
 				width,
-				width / ( 560/315 ),
+				height,
 				$containerForElement
 			);
 		}
 
 		_showVimeoVideo(id, $containerForElement) {
-			let width = 560
-			let height = width / ( 500/281 ) // aspect ratio
+			let width = 500
+			let height = this._$element.data('height') ||  width / ( 560/315 )
 			return this._showVideoIframe(id + '?autoplay=1', width, height, $containerForElement)
 		}
 
@@ -391,6 +392,18 @@ const Lightbox = (($) => {
 		_showVideoIframe(url, width, height, $containerForElement) { // should be used for videos only. for remote content use loadRemoteContent (data-type=url)
 			height = height || width; // default to square
 			$containerForElement.html(`<div class="embed-responsive embed-responsive-16by9"><iframe width="${width}" height="${height}" src="${url}" frameborder="0" allowfullscreen class="embed-responsive-item"></iframe></div>`);
+			this._resize(width, height);
+			this._config.onContentLoaded.call(this);
+			if (this._$modalArrows)
+				this._$modalArrows.css('display', 'none'); //hide the arrows when showing video
+			this._toggleLoading(false);
+			return this;
+		}
+
+		_showHtml5Video(url, $containerForElement) { // should be used for videos only. for remote content use loadRemoteContent (data-type=url)
+			let width = this._$element.data('width') || 560
+			let height = this._$element.data('height') ||  width / ( 560/315 )
+			$containerForElement.html(`<div class="embed-responsive embed-responsive-16by9"><video width="${width}" height="${height}" src="${url}" preload="auto" autoplay controls class="embed-responsive-item"></video></div>`);
 			this._resize(width, height);
 			this._config.onContentLoaded.call(this);
 			if (this._$modalArrows)
