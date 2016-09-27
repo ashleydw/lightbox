@@ -1,16 +1,11 @@
-Bootstrap 3 Lightbox
+Bootstrap Lightbox
 ========
 
 A lightbox module for Bootstrap that supports images, YouTube videos, and galleries - built around Bootstrap's Modal plugin.
 
 See the github page for docs: http://ashleydw.github.io/lightbox
 
-ChangeLog
-----
-From version 4.1.0:
-
-navigate_left and navigate_right functions are camelCased
-gallery_parent_selector has been deprecated - document.body is default
+>= v5 is for Boostrap 4, for Bootstrap 3 use the v4: https://github.com/ashleydw/lightbox/releases/tag/v4.0.2
 
 Contributing
 ----
