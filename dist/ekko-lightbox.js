@@ -510,6 +510,10 @@ var Lightbox = (function ($) {
 							var image = $('<img />');
 							image.attr('src', img.src);
 							image.addClass('img-fluid');
+
+							// backward compatibility for bootstrap v3
+							image.css('width', '100%');
+
 							$containerForImage.html(image);
 							if (_this4._$modalArrows) _this4._$modalArrows.css('display', ''); // remove display to default to css property
 
@@ -567,7 +571,12 @@ var Lightbox = (function ($) {
 				this._$lightboxContainer.css('height', maxHeight);
 				this._$modalDialog.css('width', 'auto').css('maxWidth', width);
 
-				this._$modal.modal('_handleUpdate');
+				try {
+					this._$modal.modal('_handleUpdate');
+				} catch (e) {
+					// backward compatibility for bootstrap v3
+					this._$modal.data('bs.modal').handleUpdate();
+				}
 				return this;
 			}
 		}], [{
