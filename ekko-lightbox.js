@@ -74,7 +74,7 @@ const Lightbox = (($) => {
 
 			let header = `<div class="modal-header"${this._config.title || this._config.alwaysShowClose ? '' : ' style="display:none"'}><button type="button" class="close" data-dismiss="modal" aria-label="${this._config.strings.close}"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">${this._config.title || "&nbsp;"}</h4></div>`;
 			let footer = `<div class="modal-footer"${this._config.footer ? '' : ' style="display:none"'}>${this._config.footer || "&nbsp;"}</div>`;
-			let body = '<div class="modal-body"><div class="ekko-lightbox-container"><div class="ekko-lightbox-item fade in"></div><div class="ekko-lightbox-item fade"></div></div></div>'
+			let body = '<div class="modal-body"><div class="ekko-lightbox-container"><div class="ekko-lightbox-item fade in show"></div><div class="ekko-lightbox-item fade"></div></div></div>'
 			let dialog = `<div class="modal-dialog" role="document"><div class="modal-content">${header}${body}${footer}</div></div>`
 			$(this._config.doc.body).append(`<div id="${this._modalId}" class="ekko-lightbox modal fade" tabindex="-1" tabindex="-1" role="dialog" aria-hidden="true">${dialog}</div>`)
 
@@ -230,7 +230,7 @@ const Lightbox = (($) => {
 				$current = this._$lightboxBodyTwo
 			}
 
-			$current.removeClass('in')
+			$current.removeClass('in show')
 			setTimeout(() => {
 				if(!this._$lightboxBodyTwo.hasClass('in'))
 					this._$lightboxBodyTwo.empty()
@@ -238,7 +238,7 @@ const Lightbox = (($) => {
 					this._$lightboxBodyOne.empty()
 			}, 500)
 
-			$toUse.addClass('in')
+			$toUse.addClass('in show')
 			return $toUse
 		}
 
@@ -298,12 +298,12 @@ const Lightbox = (($) => {
 			show = show || false
 			if(show) {
 				this._$modalDialog.css('display', 'none')
-				this._$modal.removeClass('in')
+				this._$modal.removeClass('in show')
 				$('.modal-backdrop').append(this._config.loadingMessage)
 			}
 			else {
 				this._$modalDialog.css('display', 'block')
-				this._$modal.addClass('in')
+				this._$modal.addClass('in show')
 				$('.modal-backdrop').find('.ekko-lightbox-loader').remove()
 			}
 			return this;
@@ -559,10 +559,10 @@ const Lightbox = (($) => {
 			this._$modalDialog.css('width', 'auto') .css('maxWidth', width);
 
 			try{
-				this._$modal.modal('_handleUpdate');
+				// v4 method is mistakenly protected
+				this._$modal.data('bs.modal')._handleUpdate();
 			}
 			catch(e){
-				// backward compatibility for bootstrap v3
 				this._$modal.data('bs.modal').handleUpdate();
 			}
 			return this;
