@@ -1,3 +1,11 @@
+/*!
+ * Lightbox for Bootstrap by @ashleydw
+ * https://github.com/ashleydw/lightbox
+ *
+ * License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
+ */
++function ($) {
+
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -82,7 +90,12 @@ var Lightbox = (function ($) {
 			this._modalId = 'ekkoLightbox-' + Math.floor(Math.random() * 1000 + 1);
 			this._$element = $element instanceof jQuery ? $element : $($element);
 
-			var header = '<div class="modal-header"' + (this._config.title || this._config.alwaysShowClose ? '' : ' style="display:none"') + '><button type="button" class="close" data-dismiss="modal" aria-label="' + this._config.strings.close + '"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">' + (this._config.title || "&nbsp;") + '</h4></div>';
+			this._isBootstrap3 = $.fn.modal.Constructor.VERSION[0] == 3;
+
+			var h4 = '<h4 class="modal-title">' + (this._config.title || "&nbsp;") + '</h4>';
+			var btn = '<button type="button" class="close" data-dismiss="modal" aria-label="' + this._config.strings.close + '"><span aria-hidden="true">&times;</span></button>';
+
+			var header = '<div class="modal-header"' + (this._config.title || this._config.alwaysShowClose ? '' : ' style="display:none"') + '>' + (this._isBootstrap3 ? btn + h4 : h4 + btn) + '</div>';
 			var footer = '<div class="modal-footer"' + (this._config.footer ? '' : ' style="display:none"') + '>' + (this._config.footer || "&nbsp;") + '</div>';
 			var body = '<div class="modal-body"><div class="ekko-lightbox-container"><div class="ekko-lightbox-item fade in show"></div><div class="ekko-lightbox-item fade"></div></div></div>';
 			var dialog = '<div class="modal-dialog" role="document"><div class="modal-content">' + header + body + footer + '</div></div>';
@@ -563,11 +576,13 @@ var Lightbox = (function ($) {
 				this._$lightboxContainer.css('height', maxHeight);
 				this._$modalDialog.css('width', 'auto').css('maxWidth', width);
 
-				try {
+				if (!this._isBootstrap3) {
 					// v4 method is mistakenly protected
-					this._$modal.data('bs.modal')._handleUpdate();
-				} catch (e) {
-					this._$modal.data('bs.modal').handleUpdate();
+					var modal = this._$modal.data('bs.modal');
+					if (modal) modal._handleUpdate();
+				} else {
+					var modal = this._$modal.data('bs.modal');
+					if (modal) modal.handleUpdate();
 				}
 				return this;
 			}
@@ -599,3 +614,5 @@ var Lightbox = (function ($) {
 	return Lightbox;
 })(jQuery);
 //# sourceMappingURL=ekko-lightbox.js.map
+
+}(jQuery);
