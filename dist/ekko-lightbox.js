@@ -386,7 +386,7 @@ var Lightbox = (function ($) {
 		}, {
 			key: '_showVimeoVideo',
 			value: function _showVimeoVideo(id, $containerForElement) {
-				var width = 500;
+				var width = this._$element.data('width') || 500;
 				var height = this._$element.data('height') || width / (560 / 315);
 				return this._showVideoIframe(id + '?autoplay=1', width, height, $containerForElement);
 			}

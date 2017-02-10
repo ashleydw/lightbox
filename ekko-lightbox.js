@@ -375,7 +375,7 @@ const Lightbox = (($) => {
 		}
 
 		_showVimeoVideo(id, $containerForElement) {
-			let width = 500
+			let width = this._$element.data('width') || 500
 			let height = this._$element.data('height') ||  width / ( 560/315 )
 			return this._showVideoIframe(id + '?autoplay=1', width, height, $containerForElement)
 		}
