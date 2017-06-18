@@ -1,5 +1,5 @@
 const Lightbox = (($) => {
-
+	
 	const NAME = 'ekkoLightbox'
 	const JQUERY_NO_CONFLICT = $.fn[NAME]
 
@@ -69,6 +69,9 @@ const Lightbox = (($) => {
 			this._footerIsShown = false
 			this._wantedWidth = 0
 			this._wantedHeight = 0
+			this._touchstartX = 0
+			this._touchendX = 0
+			
 			this._modalId = `ekkoLightbox-${Math.floor((Math.random() * 1000) + 1)}`;
 			this._$element = $element instanceof jQuery ? $element : $($element)
 
@@ -139,6 +142,15 @@ const Lightbox = (($) => {
 			$(window).on('resize.ekkoLightbox', () => {
 				this._resize(this._wantedWidth, this._wantedHeight)
 			})
+			this._$lightboxContainer
+			.on('touchstart', () => {
+				this._touchstartX = event.changedTouches[0].screenX;
+
+			})
+			.on('touchend', () => {
+				this._touchendX = event.changedTouches[0].screenX;
+			    this._swipeGesure();
+			})
 		}
 
 		element() {
@@ -162,6 +174,8 @@ const Lightbox = (($) => {
 
 		navigateLeft() {
 
+			if(!this._$galleryItems)
+				return;
 			if (this._$galleryItems.length === 1)
 				return
 
@@ -176,6 +190,8 @@ const Lightbox = (($) => {
 
 		navigateRight() {
 
+			if(!this._$galleryItems)
+				return;
 			if (this._$galleryItems.length === 1)
 				return
 
@@ -520,6 +536,15 @@ const Lightbox = (($) => {
 
 			img.src = src;
 			return img;
+		}
+
+		_swipeGesure() {
+		    if (this._touchendX < this._touchstartX) {
+		        return this.navigateRight();
+		    }
+		    if (this._touchendX > this._touchstartX) {
+		        return this.navigateLeft();
+		    }
 		}
 
 		_resize( width, height ) {
