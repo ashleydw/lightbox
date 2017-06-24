@@ -311,7 +311,7 @@
                         <li><a href="#force-type">Force type</a></li>
                         <li><a href="#hidden-elements">Hidden elements</a></li>
                         <li><a href="#remote-content">Remote content</a></li>
-                        <li><a href="#no-wrapping">Image Gallery without wrapping</a></li>
+                        <li><a href="#no-wrapping">Disable wrapping</a></li>
                     </ul>
 
                     <h3 id="single-image">Single Image</h3>
@@ -541,9 +541,9 @@ $(&#39;#open-youtube&#39;).click(function (e) {
                     <code data-code="example-10"></code>
 
 
-                    <h3 id="no-wrapping">Image Gallery without wrapping</h3>
-                    <p>Galleries are created by adding the <code>data-gallery</code> attribute.</p>
-                    <div data-code="example-11">
+                    <h3 id="no-wrapping">Disable wrapping</h3>
+                    <p>To disable wrapping, set `wrapping` to false when creating a gallery.</p>
+                    <div>
                         <div class="row">
                             <div class="offset-md-2 col-md-8">
                                 <div class="row">
@@ -571,7 +571,7 @@ $(&#39;#open-youtube&#39;).click(function (e) {
                             </div>
                         </div>
                     </div>
-                    <code class="html" data-code="example-11"></code>
+                    <code class="html" data-code>$(this).ekkoLightbox({ wrapping: false });</code>
 
                     <p class="footer"><span>Built by me, <a href="https://ashleyd.ws">ashleydw</a></span></p>
                 </div>
@@ -604,21 +604,11 @@ $(&#39;#open-youtube&#39;).click(function (e) {
                     });
                 });
 
-                // delegate calls to data-toggle="lightbox"
+                // disable wrapping
                 $(document).on('click', '[data-toggle="lightbox"][data-gallery="example-gallery-11"]', function(event) {
                     event.preventDefault();
                     return $(this).ekkoLightbox({
-                        wrapping: false,
-                        onShown: function() {
-                            if (window.console) {
-                                return console.log('Checking our the events huh?');
-                            }
-                        },
-						onNavigate: function(direction, itemIndex) {
-                            if (window.console) {
-                                return console.log('Navigating '+direction+'. Current item: '+itemIndex);
-                            }
-						}
+                        wrapping: false
                     });
                 });
 
