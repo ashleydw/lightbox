@@ -7,6 +7,7 @@ const Lightbox = (($) => {
 		title: '',
 		footer: '',
 		showArrows: true, //display the left / right arrows or not
+		wrapping: true, //if true, gallery loops infinitely
 		type: null, //force the lightbox into image / youtube mode. if null, or not image|youtube|vimeo; detect it
 		alwaysShowClose: false, //always show the close button, even if there is no title
 		loadingMessage: '<div class="ekko-lightbox-loader"><div><div></div><div></div></div></div>', // http://tobiasahlin.com/spinkit/
@@ -118,6 +119,7 @@ const Lightbox = (($) => {
 						event.preventDefault()
 						return this.navigateRight()
 					})
+					this.updateNavigation()
 				}
 			}
 
@@ -168,6 +170,8 @@ const Lightbox = (($) => {
 
 			this._galleryIndex = index
 
+			this.updateNavigation()
+
 			this._$element = $(this._$galleryItems.get(this._galleryIndex))
 			this._handle();
 		}
@@ -176,11 +180,16 @@ const Lightbox = (($) => {
 
 			if(!this._$galleryItems)
 				return;
+      
 			if (this._$galleryItems.length === 1)
 				return
 
-			if (this._galleryIndex === 0)
-				this._galleryIndex = this._$galleryItems.length - 1
+			if (this._galleryIndex === 0) {
+				if (this._config.wrapping)
+					this._galleryIndex = this._$galleryItems.length - 1
+				else
+					return
+			}
 			else //circular
 				this._galleryIndex--
 
@@ -192,16 +201,36 @@ const Lightbox = (($) => {
 
 			if(!this._$galleryItems)
 				return;
+      
 			if (this._$galleryItems.length === 1)
 				return
 
-			if (this._galleryIndex === this._$galleryItems.length - 1)
-				this._galleryIndex = 0
+			if (this._galleryIndex === this._$galleryItems.length - 1) {
+				if (this._config.wrapping)
+					this._galleryIndex = 0
+				else
+					return
+			}
 			else //circular
 				this._galleryIndex++
 
 			this._config.onNavigate.call(this, 'right', this._galleryIndex)
 			return this.navigateTo(this._galleryIndex)
+		}
+
+		updateNavigation() {
+			if (!this._config.wrapping) {
+				let $nav = this._$lightboxContainer.find('div.ekko-lightbox-nav-overlay')
+				if (this._galleryIndex === 0)
+					$nav.find('a:first-child').addClass('disabled')
+				else
+					$nav.find('a:first-child').removeClass('disabled')
+
+				if (this._galleryIndex === this._$galleryItems.length - 1)
+					$nav.find('a:last-child').addClass('disabled')
+				else
+					$nav.find('a:last-child').removeClass('disabled')
+			}
 		}
 
 		close() {

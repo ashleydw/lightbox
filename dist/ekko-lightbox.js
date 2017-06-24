@@ -21,6 +21,7 @@ var Lightbox = (function ($) {
 		title: '',
 		footer: '',
 		showArrows: true, //display the left / right arrows or not
+		wrapping: true, //if true, gallery loops infinitely
 		type: null, //force the lightbox into image / youtube mode. if null, or not image|youtube|vimeo; detect it
 		alwaysShowClose: false, //always show the close button, even if there is no title
 		loadingMessage: '<div class="ekko-lightbox-loader"><div><div></div><div></div></div></div>', // http://tobiasahlin.com/spinkit/
@@ -59,13 +60,13 @@ var Lightbox = (function ($) {
     _$lightboxContainerTwo: Container of the second lightbox element
     _$lightboxBody: First element in the container
     _$modalArrows: The overlayed arrows container
-   	 _$galleryItems: Other <a>'s available for this gallery
+   		 _$galleryItems: Other <a>'s available for this gallery
     _galleryName: Name of the current data('gallery') showing
     _galleryIndex: The current index of the _$galleryItems being shown
-   	 _config: {} the options for the modal
+   		 _config: {} the options for the modal
     _modalId: unique id for the current lightbox
     _padding / _border: CSS properties for the modal container; these are used to calculate the available space for the content
-   	 */
+   		 */
 
 			get: function get() {
 				return Default;
@@ -136,6 +137,7 @@ var Lightbox = (function ($) {
 						event.preventDefault();
 						return _this.navigateRight();
 					});
+					this.updateNavigation();
 				}
 			}
 
@@ -181,17 +183,21 @@ var Lightbox = (function ($) {
 
 				this._galleryIndex = index;
 
+				this.updateNavigation();
+
 				this._$element = $(this._$galleryItems.get(this._galleryIndex));
 				this._handle();
 			}
 		}, {
 			key: 'navigateLeft',
 			value: function navigateLeft() {
-
 				if (!this._$galleryItems) return;
+
 				if (this._$galleryItems.length === 1) return;
 
-				if (this._galleryIndex === 0) this._galleryIndex = this._$galleryItems.length - 1;else //circular
+				if (this._galleryIndex === 0) {
+					if (this._config.wrapping) this._galleryIndex = this._$galleryItems.length - 1;else return;
+				} else //circular
 					this._galleryIndex--;
 
 				this._config.onNavigate.call(this, 'left', this._galleryIndex);
@@ -200,15 +206,27 @@ var Lightbox = (function ($) {
 		}, {
 			key: 'navigateRight',
 			value: function navigateRight() {
-
 				if (!this._$galleryItems) return;
+
 				if (this._$galleryItems.length === 1) return;
 
-				if (this._galleryIndex === this._$galleryItems.length - 1) this._galleryIndex = 0;else //circular
+				if (this._galleryIndex === this._$galleryItems.length - 1) {
+					if (this._config.wrapping) this._galleryIndex = 0;else return;
+				} else //circular
 					this._galleryIndex++;
 
 				this._config.onNavigate.call(this, 'right', this._galleryIndex);
 				return this.navigateTo(this._galleryIndex);
+			}
+		}, {
+			key: 'updateNavigation',
+			value: function updateNavigation() {
+				if (!this._config.wrapping) {
+					var $nav = this._$lightboxContainer.find('div.ekko-lightbox-nav-overlay');
+					if (this._galleryIndex === 0) $nav.find('a:first-child').addClass('disabled');else $nav.find('a:first-child').removeClass('disabled');
+
+					if (this._galleryIndex === this._$galleryItems.length - 1) $nav.find('a:last-child').addClass('disabled');else $nav.find('a:last-child').removeClass('disabled');
+				}
 			}
 		}, {
 			key: 'close',

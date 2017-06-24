@@ -32,7 +32,7 @@
 
       opacity: 0;
       transition: opacity 0.5s;
-      color:#fff;
+      color: #fff;
       font-size:30px;
       z-index:100;
 
@@ -53,6 +53,10 @@
       }
       &:focus {
         outline: none;
+      }
+      &.disabled {
+        cursor: default;
+        visibility: hidden;
       }
     }
   }
