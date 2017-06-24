@@ -1,11 +1,3 @@
-/*!
- * Lightbox for Bootstrap by @ashleydw
- * https://github.com/ashleydw/lightbox
- *
- * License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
- */
-+function ($) {
-
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -617,13 +609,14 @@ var Lightbox = (function ($) {
 				this._$lightboxContainer.css('height', maxHeight);
 				this._$modalDialog.css('width', 'auto').css('maxWidth', width);
 
-				if (!this._isBootstrap3) {
+				var modal = this._$modal.data('bs.modal');
+				if (modal) {
 					// v4 method is mistakenly protected
-					var modal = this._$modal.data('bs.modal');
-					if (modal) modal._handleUpdate();
-				} else {
-					var modal = this._$modal.data('bs.modal');
-					if (modal) modal.handleUpdate();
+					try {
+						modal._handleUpdate();
+					} catch (Exception) {
+						modal.handleUpdate();
+					}
 				}
 				return this;
 			}
@@ -655,5 +648,3 @@ var Lightbox = (function ($) {
 	return Lightbox;
 })(jQuery);
 //# sourceMappingURL=ekko-lightbox.js.map
-
-}(jQuery);

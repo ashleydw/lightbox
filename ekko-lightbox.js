@@ -617,15 +617,14 @@ const Lightbox = (($) => {
 			this._$lightboxContainer.css('height', maxHeight)
 			this._$modalDialog.css('width', 'auto') .css('maxWidth', width);
 
-			if (!this._isBootstrap3) {
+			let modal = this._$modal.data('bs.modal');
+			if (modal) {
 				// v4 method is mistakenly protected
-				let modal = this._$modal.data('bs.modal');
-				if (modal)
+				try {
 					modal._handleUpdate();
-			} else {
-				let modal = this._$modal.data('bs.modal');
-				if (modal)
+				} catch(Exception) {
 					modal.handleUpdate();
+				}
 			}
 			return this;
 		}
