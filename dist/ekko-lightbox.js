@@ -60,13 +60,13 @@ var Lightbox = (function ($) {
     _$lightboxContainerTwo: Container of the second lightbox element
     _$lightboxBody: First element in the container
     _$modalArrows: The overlayed arrows container
-   		 _$galleryItems: Other <a>'s available for this gallery
+   	 _$galleryItems: Other <a>'s available for this gallery
     _galleryName: Name of the current data('gallery') showing
     _galleryIndex: The current index of the _$galleryItems being shown
-   		 _config: {} the options for the modal
+   	 _config: {} the options for the modal
     _modalId: unique id for the current lightbox
     _padding / _border: CSS properties for the modal container; these are used to calculate the available space for the content
-   		 */
+   	 */
 
 			get: function get() {
 				return Default;
@@ -99,8 +99,8 @@ var Lightbox = (function ($) {
 			var h4 = '<h4 class="modal-title">' + (this._config.title || "&nbsp;") + '</h4>';
 			var btn = '<button type="button" class="close" data-dismiss="modal" aria-label="' + this._config.strings.close + '"><span aria-hidden="true">&times;</span></button>';
 
-			var header = '<div class="modal-header"' + (this._config.title || this._config.alwaysShowClose ? '' : ' style="display:none"') + '>' + (this._isBootstrap3 ? btn + h4 : h4 + btn) + '</div>';
-			var footer = '<div class="modal-footer"' + (this._config.footer ? '' : ' style="display:none"') + '>' + (this._config.footer || "&nbsp;") + '</div>';
+			var header = '<div class="modal-header' + (this._config.title || this._config.alwaysShowClose ? '' : ' hide') + '">' + (this._isBootstrap3 ? btn + h4 : h4 + btn) + '</div>';
+			var footer = '<div class="modal-footer' + (this._config.footer ? '' : ' hide') + '">' + (this._config.footer || "&nbsp;") + '</div>';
 			var body = '<div class="modal-body"><div class="ekko-lightbox-container"><div class="ekko-lightbox-item fade in show"></div><div class="ekko-lightbox-item fade"></div></div></div>';
 			var dialog = '<div class="modal-dialog" role="document"><div class="modal-content">' + header + body + footer + '</div></div>';
 			$(this._config.doc.body).append('<div id="' + this._modalId + '" class="ekko-lightbox modal fade" tabindex="-1" tabindex="-1" role="dialog" aria-hidden="true">' + dialog + '</div>');
@@ -191,6 +191,7 @@ var Lightbox = (function ($) {
 		}, {
 			key: 'navigateLeft',
 			value: function navigateLeft() {
+
 				if (!this._$galleryItems) return;
 
 				if (this._$galleryItems.length === 1) return;
@@ -206,6 +207,7 @@ var Lightbox = (function ($) {
 		}, {
 			key: 'navigateRight',
 			value: function navigateRight() {
+
 				if (!this._$galleryItems) return;
 
 				if (this._$galleryItems.length === 1) return;
