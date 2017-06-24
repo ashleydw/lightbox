@@ -87,6 +87,9 @@ var Lightbox = (function ($) {
 			this._footerIsShown = false;
 			this._wantedWidth = 0;
 			this._wantedHeight = 0;
+			this._touchstartX = 0;
+			this._touchendX = 0;
+
 			this._modalId = 'ekkoLightbox-' + Math.floor(Math.random() * 1000 + 1);
 			this._$element = $element instanceof jQuery ? $element : $($element);
 
@@ -152,6 +155,12 @@ var Lightbox = (function ($) {
 			$(window).on('resize.ekkoLightbox', function () {
 				_this._resize(_this._wantedWidth, _this._wantedHeight);
 			});
+			this._$lightboxContainer.on('touchstart', function () {
+				_this._touchstartX = event.changedTouches[0].screenX;
+			}).on('touchend', function () {
+				_this._touchendX = event.changedTouches[0].screenX;
+				_this._swipeGesure();
+			});
 		}
 
 		_createClass(Lightbox, [{
@@ -179,6 +188,7 @@ var Lightbox = (function ($) {
 			key: 'navigateLeft',
 			value: function navigateLeft() {
 
+				if (!this._$galleryItems) return;
 				if (this._$galleryItems.length === 1) return;
 
 				if (this._galleryIndex === 0) this._galleryIndex = this._$galleryItems.length - 1;else //circular
@@ -191,6 +201,7 @@ var Lightbox = (function ($) {
 			key: 'navigateRight',
 			value: function navigateRight() {
 
+				if (!this._$galleryItems) return;
 				if (this._$galleryItems.length === 1) return;
 
 				if (this._galleryIndex === this._$galleryItems.length - 1) this._galleryIndex = 0;else //circular
@@ -535,6 +546,16 @@ var Lightbox = (function ($) {
 
 				img.src = src;
 				return img;
+			}
+		}, {
+			key: '_swipeGesure',
+			value: function _swipeGesure() {
+				if (this._touchendX < this._touchstartX) {
+					return this.navigateRight();
+				}
+				if (this._touchendX > this._touchstartX) {
+					return this.navigateLeft();
+				}
 			}
 		}, {
 			key: '_resize',
