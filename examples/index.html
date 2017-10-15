@@ -126,7 +126,7 @@
 
                         <div class="top-header">
                             <h1>Lightbox for Bootstrap</h1>
-                            <p class="lead">Utilizes Bootstraps modal plugin to implement a lightbox gallery - <a href="//github.com/ashleydw/lightbox">GitHub</a></p>
+                            <p class="lead">Utilizes Bootstraps modal plugin to implement a lightbox gallery - <a href="https://github.com/ashleydw/lightbox">GitHub</a></p>
                             <div class="text-center">
                                 <iframe src="http://ghbtns.com/github-btn.html?user=ashleydw&repo=lightbox&type=watch&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="100	" height="20"></iframe>
                                 <iframe src="http://ghbtns.com/github-btn.html?user=ashleydw&repo=lightbox&type=fork&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"></iframe>
@@ -199,6 +199,13 @@
                                     <td><code>data-(width|height)="[0-9]+"</code></td>
                                 </tr>
                                 <tr>
+                                    <td>maxWidth / maxHeight</td>
+                                    <td>integer</td>
+                                    <td>9999</td>
+                                    <td>Limit the container width / height</td>
+                                    <td><code>data-(max-width|max-height)="[0-9]+"</code></td>
+                                </tr>
+                                <tr>
                                     <td>alwaysShowClose</td>
                                     <td>boolean</td>
                                     <td><code>false</code></td>
@@ -263,7 +270,7 @@
                                 <td>disable-external-check</td>
                                 <td>Force the lightbox loading into an iframe.</td>
                                 <td><code>data-disable-external-check="(true|false)"</code></td>
-                            </tr>				    
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -303,6 +310,7 @@
                     <ul>
                         <li><a href="#single-image">Single Image</a></li>
                         <li><a href="#image-gallery">Image Gallery</a></li>
+                        <li><a href="#limit-size">Limit Image Size</a></li>
                         <li><a href="#videos">Videos</a></li>
                         <li><a href="#videos-gallery">Gallery of Videos</a></li>
                         <li><a href="#mixed-gallery">Mixed gallery</a></li>
@@ -356,37 +364,17 @@
                         </div>
                     </div>
                     <code class="html" data-code="example-2"></code>
-                    <h3 id="image-gallery">Image Gallery</h3>
-                    <p>Galleries are created by adding the <code>data-gallery</code> attribute.</p>
-                    <div data-code="example-2">
-                        <div class="row">
-                            <div class="offset-md-2 col-md-8">
-                                <div class="row">
-                                    <a href="https://unsplash.it/1200/768.jpg?image=251" data-toggle="lightbox" data-gallery="example-gallery" class="col-sm-4">
-                                        <img src="https://unsplash.it/600.jpg?image=251" class="img-fluid">
-                                    </a>
-                                    <a href="https://unsplash.it/1200/768.jpg?image=252" data-toggle="lightbox" data-gallery="example-gallery" class="col-sm-4">
-                                        <img src="https://unsplash.it/600.jpg?image=252" class="img-fluid">
-                                    </a>
-                                    <a href="https://unsplash.it/1200/768.jpg?image=253" data-toggle="lightbox" data-gallery="example-gallery" class="col-sm-4">
-                                        <img src="https://unsplash.it/600.jpg?image=253" class="img-fluid">
-                                    </a>
-                                </div>
-                                <div class="row">
-                                    <a href="https://unsplash.it/1200/768.jpg?image=254" data-toggle="lightbox" data-gallery="example-gallery" class="col-sm-4">
-                                        <img src="https://unsplash.it/600.jpg?image=254" class="img-fluid">
-                                    </a>
-                                    <a href="https://unsplash.it/1200/768.jpg?image=255" data-toggle="lightbox" data-gallery="example-gallery" class="col-sm-4">
-                                        <img src="https://unsplash.it/600.jpg?image=255" class="img-fluid">
-                                    </a>
-                                    <a href="https://unsplash.it/1200/768.jpg?image=256" data-toggle="lightbox" data-gallery="example-gallery" class="col-sm-4">
-                                        <img src="https://unsplash.it/600.jpg?image=256" class="img-fluid">
-                                    </a>
-                                </div>
-                            </div>
+
+                    <h3 id="single-image">Limit Image Size</h3>
+                    <p>Note: uses modal plugin limiting via <code>data-max-width</code> (or <code>data-max-height</code>)</p>
+                    <div class="row">
+                        <div class="offset-sm-4 col-sm-3" data-code="example-10">
+                            <a href="https://unsplash.it/1200/768.jpg?image=250" data-toggle="lightbox" data-max-width="600">
+                                <img src="https://unsplash.it/600.jpg?image=250" class="img-fluid">
+                            </a>
                         </div>
                     </div>
-                    <code class="html" data-code="example-2"></code>
+                    <code class="html" data-code="example-10"></code>
 
                     <h3 id="videos">Videos</h3>
                     <h4>YouTube</h4>
@@ -427,13 +415,13 @@
                         <div class="offset-md-1 col-md-10">
                             <div class="row" data-code="example-4">
                                 <a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox" data-gallery="youtubevideos" class="col-sm-4">
-                                    <img src="//i1.ytimg.com/vi/yP11r5n5RNg/mqdefault.jpg" class="img-fluid">
+                                    <img src="http://i1.ytimg.com/vi/yP11r5n5RNg/mqdefault.jpg" class="img-fluid">
                                 </a>
                                 <a href="http://youtu.be/iQ4D273C7Ac" data-toggle="lightbox" data-gallery="youtubevideos" class="col-sm-4">
-                                    <img src="//i1.ytimg.com/vi/iQ4D273C7Ac/mqdefault.jpg" class="img-fluid">
+                                    <img src="http://i1.ytimg.com/vi/iQ4D273C7Ac/mqdefault.jpg" class="img-fluid">
                                 </a>
                                 <a href="//www.youtube.com/embed/b0jqPvpn3sY" data-toggle="lightbox" data-gallery="youtubevideos" class="col-sm-4">
-                                    <img src="//i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" class="img-fluid">
+                                    <img src="http://i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" class="img-fluid">
                                 </a>
                             </div>
                         </div>
@@ -445,13 +433,13 @@
                         <div class="offset-md-1 col-md-10">
                             <div class="row flex-items-xs-center" data-code="example-5">
                                 <a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox" data-gallery="mixedgallery" class="col-sm-4">
-                                    <img src="//i1.ytimg.com/vi/yP11r5n5RNg/mqdefault.jpg" class="img-fluid">
+                                    <img src="http://i1.ytimg.com/vi/yP11r5n5RNg/mqdefault.jpg" class="img-fluid">
                                 </a>
                                 <a href="https://unsplash.it/1200/768.jpg?image=257" data-toggle="lightbox" data-gallery="mixedgallery" class="col-sm-4">
                                     <img src="https://unsplash.it/600.jpg?image=257" class="img-fluid">
                                 </a>
                                 <a href="http://vimeo.com/80629469" data-remote="http://player.vimeo.com/video/80629469" data-toggle="lightbox" data-gallery="mixedgallery" class="col-sm-4">
-                                    <img src="//b.vimeocdn.com/ts/458/070/458070637_200.jpg" class="img-fluid">
+                                    <img src="http://b.vimeocdn.com/ts/458/070/458070637_200.jpg" class="img-fluid">
                                 </a>
                             </div>
                         </div>
@@ -467,7 +455,7 @@
                                     <img src="https://unsplash.it/600.jpg?image=258" class="img-fluid">
                                 </a>
                                 <a href="http://youtu.be/iQ4D273C7Ac" id="open-youtube" class="col-sm-4">
-                                    <img src="//i1.ytimg.com/vi/iQ4D273C7Ac/mqdefault.jpg" class="img-fluid">
+                                    <img src="http://i1.ytimg.com/vi/iQ4D273C7Ac/mqdefault.jpg" class="img-fluid">
                                 </a>
                             </div>
                         </div>
@@ -488,7 +476,7 @@ $(&#39;#open-youtube&#39;).click(function (e) {
                         <div class="offset-md-1 col-md-10">
                             <div class="row" data-code="example-7" style="height:200px">
                                 <img src="https://unsplash.it/600.jpg?image=259" data-toggle="lightbox" data-remote="https://unsplash.it/1200/768.jpg?image=259" class="img-fluid col-sm-4">
-                                <img src="//i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" data-toggle="lightbox" data-remote="//www.youtube.com/embed/b0jqPvpn3sY" class="img-fluid col-sm-4">
+                                <img src="http://i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" data-toggle="lightbox" data-remote="https://www.youtube.com/embed/b0jqPvpn3sY" class="img-fluid col-sm-4">
                             </div>
                         </div>
                     </div>
@@ -520,7 +508,7 @@ $(&#39;#open-youtube&#39;).click(function (e) {
                                 </a>
                                 <!-- elements not showing, use data-remote -->
                                 <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="https://unsplash.it/1200/768.jpg?image=264" data-title="Hidden item 1"></div>
-                                <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="//www.youtube.com/embed/b0jqPvpn3sY" data-title="Hidden item 2"></div>
+                                <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="https://www.youtube.com/embed/b0jqPvpn3sY" data-title="Hidden item 2"></div>
                                 <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="https://unsplash.it/1200/768.jpg?image=265" data-title="Hidden item 3"></div>
                                 <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="https://unsplash.it/1200/768.jpg?image=266" data-title="Hidden item 4"></div>
                                 <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="https://unsplash.it/1200/768.jpg?image=267" data-title="Hidden item 5"></div>
@@ -578,13 +566,13 @@ $(&#39;#open-youtube&#39;).click(function (e) {
             </div>
         </div>
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
         <script src="../dist/ekko-lightbox.js"></script>
 
         <!-- for documentation only -->
-        <script src="//cdnjs.cloudflare.com/ajax/libs/anchor-js/3.2.1/anchor.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.2.1/anchor.min.js"></script>
         <script type="text/javascript">
             $(document).ready(function ($) {
                 // delegate calls to data-toggle="lightbox"

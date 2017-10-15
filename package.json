@@ -1,7 +1,7 @@
 {
   "name": "ekko-lightbox",
   "description": "A lightbox gallery plugin for Bootstrap based on the modal plugin",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "keywords": [
     "lightbox",
     "gallery",

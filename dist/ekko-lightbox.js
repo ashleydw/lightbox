@@ -20,6 +20,8 @@ var Lightbox = (function ($) {
 	var Default = {
 		title: '',
 		footer: '',
+		maxWidth: 9999,
+		maxHeight: 9999,
 		showArrows: true, //display the left / right arrows or not
 		wrapping: true, //if true, gallery loops infinitely
 		type: null, //force the lightbox into image / youtube mode. if null, or not image|youtube|vimeo; detect it
@@ -46,10 +48,8 @@ var Lightbox = (function ($) {
 			key: 'Default',
 
 			/**
-    
-      Class properties:
-    
-    _$element: null -> the <a> element currently being displayed
+       Class properties:
+   	 _$element: null -> the <a> element currently being displayed
     _$modal: The bootstrap modal generated
        _$modalDialog: The .modal-dialog
        _$modalContent: The .modal-content
@@ -585,11 +585,19 @@ var Lightbox = (function ($) {
 				this._wantedWidth = width;
 				this._wantedHeight = height;
 
+				var imageAspecRatio = width / height;
+
 				// if width > the available space, scale down the expected width and height
 				var widthBorderAndPadding = this._padding.left + this._padding.right + this._border.left + this._border.right;
-				var maxWidth = Math.min(width + widthBorderAndPadding, this._config.doc.body.clientWidth);
+
+				// force 10px margin if window size > 575px
+				var addMargin = this._config.doc.body.clientWidth > 575 ? 20 : 0;
+				var discountMargin = this._config.doc.body.clientWidth > 575 ? 0 : 20;
+
+				var maxWidth = Math.min(width + widthBorderAndPadding, this._config.doc.body.clientWidth - addMargin, this._config.maxWidth);
+
 				if (width + widthBorderAndPadding > maxWidth) {
-					height = (maxWidth - widthBorderAndPadding) / width * height;
+					height = (maxWidth - widthBorderAndPadding - discountMargin) / imageAspecRatio;
 					width = maxWidth;
 				} else width = width + widthBorderAndPadding;
 
@@ -607,15 +615,15 @@ var Lightbox = (function ($) {
 				//calculated each time as resizing the window can cause them to change due to Bootstraps fluid margins
 				var margins = parseFloat(this._$modalDialog.css('margin-top')) + parseFloat(this._$modalDialog.css('margin-bottom'));
 
-				var maxHeight = Math.min(height, $(window).height() - borderPadding - margins - headerHeight - footerHeight);
+				var maxHeight = Math.min(height, $(window).height() - borderPadding - margins - headerHeight - footerHeight, this._config.maxHeight - borderPadding - headerHeight - footerHeight);
+
 				if (height > maxHeight) {
 					// if height > the available height, scale down the width
-					var factor = Math.min(maxHeight / height, 1);
-					width = Math.ceil(factor * width);
+					width = Math.ceil(maxHeight * imageAspecRatio) + widthBorderAndPadding;
 				}
 
 				this._$lightboxContainer.css('height', maxHeight);
-				this._$modalDialog.css('width', 'auto').css('maxWidth', width);
+				this._$modalDialog.css('flex', 1).css('maxWidth', width);
 
 				var modal = this._$modal.data('bs.modal');
 				if (modal) {

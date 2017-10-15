@@ -1,11 +1,13 @@
 const Lightbox = (($) => {
-	
+
 	const NAME = 'ekkoLightbox'
 	const JQUERY_NO_CONFLICT = $.fn[NAME]
 
 	const Default = {
 		title: '',
 		footer: '',
+		maxWidth: 9999,
+		maxHeight: 9999,
 		showArrows: true, //display the left / right arrows or not
 		wrapping: true, //if true, gallery loops infinitely
 		type: null, //force the lightbox into image / youtube mode. if null, or not image|youtube|vimeo; detect it
@@ -30,9 +32,9 @@ const Lightbox = (($) => {
 	class Lightbox {
 
 		/**
-		 
+
 	    Class properties:
-		 
+
 		 _$element: null -> the <a> element currently being displayed
 		 _$modal: The bootstrap modal generated
 		    _$modalDialog: The .modal-dialog
@@ -72,7 +74,7 @@ const Lightbox = (($) => {
 			this._wantedHeight = 0
 			this._touchstartX = 0
 			this._touchendX = 0
-			
+
 			this._modalId = `ekkoLightbox-${Math.floor((Math.random() * 1000) + 1)}`;
 			this._$element = $element instanceof jQuery ? $element : $($element)
 
@@ -180,7 +182,7 @@ const Lightbox = (($) => {
 
 			if(!this._$galleryItems)
 				return;
-      
+
 			if (this._$galleryItems.length === 1)
 				return
 
@@ -201,7 +203,7 @@ const Lightbox = (($) => {
 
 			if(!this._$galleryItems)
 				return;
-      
+
 			if (this._$galleryItems.length === 1)
 				return
 
@@ -367,7 +369,7 @@ const Lightbox = (($) => {
 				left: this._totalCssByAttribute('border-left-width'),
 			}
 		}
-		
+
 		_calculatePadding() {
 			return {
 				top: this._totalCssByAttribute('padding-top'),
@@ -582,17 +584,25 @@ const Lightbox = (($) => {
 			this._wantedWidth = width
 			this._wantedHeight = height
 
+			let imageAspecRatio = width / height;
+
 			// if width > the available space, scale down the expected width and height
 			let widthBorderAndPadding = this._padding.left + this._padding.right + this._border.left + this._border.right
-			let maxWidth = Math.min(width + widthBorderAndPadding, this._config.doc.body.clientWidth)
+
+			// force 10px margin if window size > 575px
+			let addMargin = this._config.doc.body.clientWidth > 575 ? 20 : 0
+			let discountMargin = this._config.doc.body.clientWidth > 575 ? 0 : 20
+
+			let maxWidth = Math.min(width + widthBorderAndPadding, this._config.doc.body.clientWidth - addMargin, this._config.maxWidth)
+
 			if((width + widthBorderAndPadding) > maxWidth) {
-				height = ((maxWidth - widthBorderAndPadding) /  width) * height
+				height = (maxWidth - widthBorderAndPadding - discountMargin) / imageAspecRatio;
 				width = maxWidth
 			} else
 				width = (width + widthBorderAndPadding)
 
 			let headerHeight = 0,
-				footerHeight = 0
+			    footerHeight = 0
 
 			// as the resize is performed the modal is show, the calculate might fail
 			// if so, default to the default sizes
@@ -607,15 +617,15 @@ const Lightbox = (($) => {
 			//calculated each time as resizing the window can cause them to change due to Bootstraps fluid margins
 			let margins = parseFloat(this._$modalDialog.css('margin-top')) + parseFloat(this._$modalDialog.css('margin-bottom'));
 
-			let maxHeight = Math.min(height, $(window).height() - borderPadding - margins - headerHeight - footerHeight);
+			let maxHeight = Math.min(height, $(window).height() - borderPadding - margins - headerHeight - footerHeight, this._config.maxHeight - borderPadding - headerHeight - footerHeight);
+
 			if(height > maxHeight) {
 				// if height > the available height, scale down the width
-				let factor = Math.min(maxHeight / height, 1);
-				width = Math.ceil(factor * width);
+				width = Math.ceil(maxHeight * imageAspecRatio) + widthBorderAndPadding;
 			}
 
 			this._$lightboxContainer.css('height', maxHeight)
-			this._$modalDialog.css('width', 'auto') .css('maxWidth', width);
+			this._$modalDialog.css('flex', 1).css('maxWidth', width);
 
 			let modal = this._$modal.data('bs.modal');
 			if (modal) {
