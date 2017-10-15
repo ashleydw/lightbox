@@ -119,473 +119,545 @@
     <body>
 
         <div class="top-container">
-
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-10 offset-md-1">
-
-                        <div class="top-header">
-                            <h1>Lightbox for Bootstrap</h1>
-                            <p class="lead">Utilizes Bootstraps modal plugin to implement a lightbox gallery - <a href="//github.com/ashleydw/lightbox">GitHub</a></p>
-                            <div class="text-center">
-                                <iframe src="http://ghbtns.com/github-btn.html?user=ashleydw&repo=lightbox&type=watch&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="100	" height="20"></iframe>
-                                <iframe src="http://ghbtns.com/github-btn.html?user=ashleydw&repo=lightbox&type=fork&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"></iframe>
-                                <iframe src="http://ghbtns.com/github-btn.html?user=ashleydw&repo=lightbox&type=follow&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="160" height="20"></iframe>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="row">
-                <div class="col-md-10 offset-md-1">
-
-                    <h2>Install</h2>
-                    <p>Grab the latest CSS / JS files from the CDN: <a href="https://cdnjs.com/libraries/ekko-lightbox">https://cdnjs.com/libraries/ekko-lightbox</a>.</p>
-                    <p>Or, with bower: <code>bower install ekko-lightbox --save</code></p>
-                    <p>Or, download the files directly: <a href="https://github.com/ashleydw/lightbox/tree/master/dist">https://github.com/ashleydw/lightbox/tree/master/dist</a></p>
-                    <br /><br />
-                    <p>Place this near on your page, probably near the end of the body section:</p>
-<code class="block-code">$(document).on('click', '[data-toggle="lightbox"]', function(event) {
-    event.preventDefault();
-    $(this).ekkoLightbox();
-});</code>
-                    <br /><br />
-                    <p>Then simply add <code>data-toggle</code> to your anchor tags.</p>
-<code class="block-code">&lt;a href=&quot;https://unsplash.it/1200/768.jpg?image=251&quot; data-toggle=&quot;lightbox&quot;&gt;
-    &lt;img src=&quot;https://unsplash.it/600.jpg?image=251&quot; class=&quot;img-fluid&quot;&gt;
-&lt;/a&gt;
-</code>
-                    <br /><br />
-                    <p>Obviously, you need Bootstrap. Made for Bootstrap v4 but *should* work with v3.</p>
-
-                    <h2>Options</h2>
-                    <p>Options are passed down to the modal object so you can also use any of the <a href="http://getbootstrap.com/javascript/#modals-usage">original modal options</a>.</p>
-                    <p>Pass the options to the calling function as an object, or set defaults using <code>$.fn.ekkoLightbox.defaults</code> (excluding modal default options, notable: title, footer, remote)</p>
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>type</th>
-                                <th>default</th>
-                                <th>description</th>
-                                <th>data-*</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>leftArrow / rightArrow</td>
-                                    <td>html</td>
-                                    <td><code>&#10094;</code> / <code>&#10095;</code></td>
-                                    <td>HTML for the arrows</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>width / height</td>
-                                    <td>integer</td>
-                                    <td></td>
-                                    <td>Force the width / height</td>
-                                    <td><code>data-(width|height)="[0-9]+"</code></td>
-                                </tr>
-                                <tr>
-                                    <td>alwaysShowClose</td>
-                                    <td>boolean</td>
-                                    <td><code>false</code></td>
-                                    <td>Always show the close button, even if no title is present</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>loadingMessage</td>
-                                    <td>html</td>
-                                    <td>A fancy loader</td>
-                                    <td>HTML injected for loading</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>showArrows</td>
-                                    <td>bool</td>
-                                    <td>true</td>
-                                    <td>Disable the navigation overlay</td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <code class="block-code">$(this).ekkoLightbox({
-    alwaysShowClose: true,
-    onShown: function() {
-        console.log('Checking our the events huh?');
-    },
-    onNavigate: function(direction, itemIndex) {
-        console.log('Navigating '+direction+'. Current item: '+itemIndex);
-    }
-    ...
-});</code>
-                    <br /><br />
-                    <p>The following options are specified per element.</p>
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Example</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>remote</td>
-                                <td>If you can't/don't want to set the href property of an element</td>
-                                <td><code>data-remote="http://www...."</code></td>
-                            </tr>
-                            <tr>
-                                <td>gallery</td>
-                                <td>For grouping elements</td>
-                                <td><code>data-gallery="gallery-name"</code></td>
-                            </tr>
-                            <tr>
-                                <td>type</td>
-                                <td>Force the lightbox into image/YouTube mode.</td>
-                                <td><code>data-type="(image|youtube|vimeo)"</code></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <code class="block-code">&lt;a href=&quot;https://unsplash.it/1200/768.jpg?image=251&quot; data-toggle=&quot;lightbox&quot; data-gallery=&quot;example-gallery&quot; data-type=&quot;image&quot;&gt;
-    &lt;img src=&quot;https://unsplash.it/600.jpg?image=251&quot; class=&quot;img-fluid&quot;&gt;
-&lt;/a&gt;</code>
-
-                    <h2>Events</h2>
-                    <p>Events can be hooked into, set the the same as options above.</p>
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Description</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>onContentLoaded</td>
-                                <td>Fired when content (image/video/remote page etc) has been fully loaded.</td>
-                            </tr>
-                            <tr>
-                                <td>onNavigate</td>
-                                <td>Fired before navigating a gallery.</td>
-                            </tr>
-                            <tr>
-                                <td>onShow/onShown/onHide/onHidden</td>
-                                <td>Inherited from the bootstrap modal.</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <h2>Examples</h2>
-                    <p>Thanks to <a href="https://unsplash.it/">https://unsplash.it/</a> for the images.</p>
-                    <ul>
-                        <li><a href="#single-image">Single Image</a></li>
-                        <li><a href="#image-gallery">Image Gallery</a></li>
-                        <li><a href="#videos">Videos</a></li>
-                        <li><a href="#videos-gallery">Gallery of Videos</a></li>
-                        <li><a href="#mixed-gallery">Mixed gallery</a></li>
-                        <li><a href="#programatically-call">Programmatically call</a></li>
-                        <li><a href="#data-remote">Via <code>data-remote</code></a></li>
-                        <li><a href="#force-type">Force type</a></li>
-                        <li><a href="#hidden-elements">Hidden elements</a></li>
-                        <li><a href="#remote-content">Remote content</a></li>
-                    </ul>
-
-                    <h3 id="single-image">Single Image</h3>
-                    <p>Note: uses modal plugin title option via <code>data-title</code>, and the custom footer tag using <code>data-footer</code></p>
-                    <div class="row">
-                        <div class="offset-sm-4 col-sm-3" data-code="example-1">
-                            <a href="https://unsplash.it/1200/768.jpg?image=250" data-toggle="lightbox" data-title="A random title" data-footer="A custom footer text">
-                                <img src="https://unsplash.it/600.jpg?image=250" class="img-fluid">
-                            </a>
-                        </div>
-                    </div>
-                    <code class="html" data-code="example-1"></code>
-
-                    <h3 id="image-gallery">Image Gallery</h3>
-                    <p>Galleries are created by adding the <code>data-gallery</code> attribute.</p>
-                    <div data-code="example-2">
-                        <div class="row">
-                            <div class="offset-md-2 col-md-8">
-                                <div class="row">
-                                    <a href="https://unsplash.it/1200/768.jpg?image=251" data-toggle="lightbox" data-gallery="example-gallery" class="col-sm-4">
-                                        <img src="https://unsplash.it/600.jpg?image=251" class="img-fluid">
-                                    </a>
-                                    <a href="https://unsplash.it/1200/768.jpg?image=252" data-toggle="lightbox" data-gallery="example-gallery" class="col-sm-4">
-                                        <img src="https://unsplash.it/600.jpg?image=252" class="img-fluid">
-                                    </a>
-                                    <a href="https://unsplash.it/1200/768.jpg?image=253" data-toggle="lightbox" data-gallery="example-gallery" class="col-sm-4">
-                                        <img src="https://unsplash.it/600.jpg?image=253" class="img-fluid">
-                                    </a>
-                                </div>
-                                <div class="row">
-                                    <a href="https://unsplash.it/1200/768.jpg?image=254" data-toggle="lightbox" data-gallery="example-gallery" class="col-sm-4">
-                                        <img src="https://unsplash.it/600.jpg?image=254" class="img-fluid">
-                                    </a>
-                                    <a href="https://unsplash.it/1200/768.jpg?image=255" data-toggle="lightbox" data-gallery="example-gallery" class="col-sm-4">
-                                        <img src="https://unsplash.it/600.jpg?image=255" class="img-fluid">
-                                    </a>
-                                    <a href="https://unsplash.it/1200/768.jpg?image=256" data-toggle="lightbox" data-gallery="example-gallery" class="col-sm-4">
-                                        <img src="https://unsplash.it/600.jpg?image=256" class="img-fluid">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <code class="html" data-code="example-2"></code>
-
-                    <h3 id="videos">Videos</h3>
-                    <h4>YouTube</h4>
-                    <p>You can use various YouTube URL formats, the regex used is: <code>/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/</code></p>
-                    <div data-code="example-3">
-                        <p><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" data-toggle="lightbox">Justin Bieber - Love Yourself</a></p>
-                        <p><a href="http://youtu.be/b0jqPvpn3sY" data-toggle="lightbox">Tame Impala - Elephant (using youtu.be link)</a></p>
-                        <p><a href="https://www.youtube.com/watch?v=oyEuk8j8imI&rel=0" data-toggle="lightbox">Justin Bieber - Love Yourself</a> (suppress related videos with <code>&rel=0</code>)</p>
-                    </div>
-                    <code data-code="example-3" data-trim="all"></code>
-                    <h4>Vimeo</h4>
-                    <p>You cannot embed Vimeo videos using the standard url (ie http://vimeo.com/80629469); you must link to the embed source (ie player.vimeo.com/video/80629469). This will mean your link url - if the JavaScript fails, will open the full screen player (try opening the first link below in a new tab); the solution to this is to set the lightbox source directly - the second link below does this.</p>
-                    <div data-code="example-3-b">
-                        <p><a href="http://player.vimeo.com/video/80629469" data-toggle="lightbox">City Lights - from Colin Rich (using embed link)</a></p>
-                        <p><a href="http://vimeo.com/80629469" data-remote="http://player.vimeo.com/video/80629469" data-toggle="lightbox">City Lights - from Colin Rich</a> (with reccommended <code>data-remote</code> setting)</p>
-                    </div>
-                    <code data-code="example-3-b" data-trim="all"></code>
-                    <h4>Instagram</h4>
-                    <p></p>
-                    <div data-code="example-3-c">
-                        <p><a href="http://instagram.com/p/BRCYe_wD9pV/" data-toggle="lightbox" data-title="Plug for our new service">Instagram</a></p>
-                        <p>This also works with photos: <a href="//instagram.com/p/BRCdyxnjBsA/" data-toggle="lightbox">Instagram</a></p>
-                    </div>
-                    <code data-code="example-3-c" data-trim="all"></code>
-                    <h4>Forcing width</h4>
-                    <p>Set the width of the video</p>
-                    <div data-code="example-3-d">
-                        <p><a href="https://www.youtube.com/watch?v=e-ORhEE9VVg" data-toggle="lightbox">Taylor Swift - Blank Space (standard)</a></p>
-                        <p><a href="https://www.youtube.com/watch?v=e-ORhEE9VVg" data-toggle="lightbox" data-width="640">Taylor Swift - Blank Space (640 x 360)</a></p>
-                        <p><a href="https://www.youtube.com/watch?v=e-ORhEE9VVg" data-toggle="lightbox" data-width="1280">Taylor Swift - Blank Space (1280 x 780)</a></p>
-                    </div>
-                    <code data-code="example-3-d" data-trim="all"></code>
-
-                    <!-- i hope your coworkers think you're listening to some justin and taylor -->
-
-                    <h3 id="videos-gallery">Gallery of Videos</h3>
-                    <div class="row">
-                        <div class="offset-md-1 col-md-10">
-                            <div class="row" data-code="example-4">
-                                <a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox" data-gallery="youtubevideos" class="col-sm-4">
-                                    <img src="//i1.ytimg.com/vi/yP11r5n5RNg/mqdefault.jpg" class="img-fluid">
-                                </a>
-                                <a href="http://youtu.be/iQ4D273C7Ac" data-toggle="lightbox" data-gallery="youtubevideos" class="col-sm-4">
-                                    <img src="//i1.ytimg.com/vi/iQ4D273C7Ac/mqdefault.jpg" class="img-fluid">
-                                </a>
-                                <a href="//www.youtube.com/embed/b0jqPvpn3sY" data-toggle="lightbox" data-gallery="youtubevideos" class="col-sm-4">
-                                    <img src="//i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" class="img-fluid">
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <code data-code="example-4"></code>
-
-                    <h3 id="mixed-gallery">Mixed gallery</h3>
-                    <div class="row">
-                        <div class="offset-md-1 col-md-10">
-                            <div class="row flex-items-xs-center" data-code="example-5">
-                                <a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox" data-gallery="mixedgallery" class="col-sm-4">
-                                    <img src="//i1.ytimg.com/vi/yP11r5n5RNg/mqdefault.jpg" class="img-fluid">
-                                </a>
-                                <a href="https://unsplash.it/1200/768.jpg?image=257" data-toggle="lightbox" data-gallery="mixedgallery" class="col-sm-4">
-                                    <img src="https://unsplash.it/600.jpg?image=257" class="img-fluid">
-                                </a>
-                                <a href="http://vimeo.com/80629469" data-remote="http://player.vimeo.com/video/80629469" data-toggle="lightbox" data-gallery="mixedgallery" class="col-sm-4">
-                                    <img src="//b.vimeocdn.com/ts/458/070/458070637_200.jpg" class="img-fluid">
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <code data-code="example-5"></code>
-
-                    <h3 id="programatically-call">Programmatically call</h3>
-                    <p>These two examples are opened via the JavaScript at the bottom of the source.</p>
-                    <div class="row">
-                        <div class="offset-md-1 col-md-10">
-                            <div class="row" data-code="example-6">
-                                <a href="https://unsplash.it/1200/768.jpg?image=258" id="open-image" class="col-sm-4">
-                                    <img src="https://unsplash.it/600.jpg?image=258" class="img-fluid">
-                                </a>
-                                <a href="http://youtu.be/iQ4D273C7Ac" id="open-youtube" class="col-sm-4">
-                                    <img src="//i1.ytimg.com/vi/iQ4D273C7Ac/mqdefault.jpg" class="img-fluid">
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <code data-code="example-6"></code>
-                    <code class="block-code">$(&#39;#open-image&#39;).click(function (e) {
-    e.preventDefault();
-    $(this).ekkoLightbox();
-});
-$(&#39;#open-youtube&#39;).click(function (e) {
-    e.preventDefault();
-    $(this).ekkoLightbox();
-});</code>
-
-                    <h3 id="data-remote">Via <code>data-remote</code></h3>
-                    <p>Neither of these are <code>&lt;a /&gt;</code> tags, so both rely on the <code>data-remote</code> attribute.</p>
-                    <div class="row">
-                        <div class="offset-md-1 col-md-10">
-                            <div class="row" data-code="example-7" style="height:200px">
-                                <img src="https://unsplash.it/600.jpg?image=259" data-toggle="lightbox" data-remote="https://unsplash.it/1200/768.jpg?image=259" class="img-fluid col-sm-4">
-                                <img src="//i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" data-toggle="lightbox" data-remote="//www.youtube.com/embed/b0jqPvpn3sY" class="img-fluid col-sm-4">
-                            </div>
-                        </div>
-                    </div>
-                    <code data-code="example-7"></code>
-
-                    <h3 id="force-type">Force type</h3>
-                    <p>If the images you are linking to have no extension, the lightbox cannot detect that is an image; therefore you need to tell the lightbox what <code>data-type</code> it is.</p>
-                    <p>Current allowed types are: <code>['image', 'youtube', 'vimeo', 'instagram', 'video', 'url']</code></p>
-                    <div data-code="example-8">
-                        <p><a href="https://unsplash.it/1200/768?image=260" data-title="Force image display" data-footer="The remote of this modal has no extension (https://unsplash.it/1200/768?image=260) but works because the type is forced." data-toggle="lightbox" data-type="image">Click here for an image, but with no extension.</a></p>
-                        <p><a href="https://unsplash.it/1200/768?image=261" data-footer="Without the type forced, the lightbox will remote load the content" data-toggle="lightbox">This link is missing the type attribute, and will iframe the image.</a></p>
-                        <p><a href="http://www.youtube.com/watch?v=b0jqPvpn3sY" data-toggle="lightbox" data-type="image">This link is linking to a YouTube video, but forcing an image.</a></p>
-                    </div>
-                    <code data-code="example-8"></code>
-
-                    <h3 id="hidden-elements">Hidden elements</h3>
-                    <p>Facebook style, only show a few images but have a large gallery</p>
-					<div class="row">
-                        <div class="offset-md-2 col-md-8">
-                            <div class="row" data-code="example-9">
-                                <a href="https://unsplash.it/1200/768.jpg?image=263" data-toggle="lightbox" data-gallery="hidden-images" class="col-sm-4">
-                                    <img src="https://unsplash.it/600.jpg?image=263" class="img-fluid">
-                                </a>
-                                <a href="https://unsplash.it/1200/768.jpg?image=264" data-toggle="lightbox" data-gallery="hidden-images" class="col-sm-4">
-                                    <img src="https://unsplash.it/600.jpg?image=264" class="img-fluid">
-                                </a>
-                                <a href="https://unsplash.it/1200/768.jpg?image=265" data-toggle="lightbox" data-gallery="hidden-images" class="col-sm-4">
-                                    <img src="https://unsplash.it/600.jpg?image=265" class="img-fluid">
-                                </a>
-                                <!-- elements not showing, use data-remote -->
-                                <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="https://unsplash.it/1200/768.jpg?image=264" data-title="Hidden item 1"></div>
-                                <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="//www.youtube.com/embed/b0jqPvpn3sY" data-title="Hidden item 2"></div>
-                                <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="https://unsplash.it/1200/768.jpg?image=265" data-title="Hidden item 3"></div>
-                                <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="https://unsplash.it/1200/768.jpg?image=266" data-title="Hidden item 4"></div>
-                                <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="https://unsplash.it/1200/768.jpg?image=267" data-title="Hidden item 5"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <code data-code="example-9"></code>
-
-                    <h3 id="remote-content">Remote content</h3>
-					<p>Given a URL, that is not an image or video (including unforced types), load the content using an iFrame.</p>
-					<div class="row">
-                        <div class="offset-md-1 col-md-10" data-code="example-10">
+            
+                        <div class="container">
                             <div class="row">
-                                <p class="col-sm-3"><a href="http://getbootstrap.com" data-title="Bootstrap" data-width="1200" data-toggle="lightbox" data-gallery="remoteload">Bootstrap Docs</a></p>
+                                <div class="col-md-10 offset-md-1">
+            
+                                    <div class="top-header">
+                                        <h1>Lightbox for Bootstrap</h1>
+                                        <p class="lead">Utilizes Bootstraps modal plugin to implement a lightbox gallery - <a href="https://github.com/ashleydw/lightbox">GitHub</a></p>
+                                        <div class="text-center">
+                                            <iframe src="http://ghbtns.com/github-btn.html?user=ashleydw&repo=lightbox&type=watch&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="100	" height="20"></iframe>
+                                            <iframe src="http://ghbtns.com/github-btn.html?user=ashleydw&repo=lightbox&type=fork&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"></iframe>
+                                            <iframe src="http://ghbtns.com/github-btn.html?user=ashleydw&repo=lightbox&type=follow&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="160" height="20"></iframe>
+                                        </div>
+                                    </div>
+            
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <code data-code="example-10"></code>
-
-                    <p class="footer"><span>Built by me, <a href="https://ashleyd.ws">ashleydw</a></span></p>
-                </div>
-            </div>
-        </div>
-
-
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.2.0/ekko-lightbox.min.js"></script>
-
-        <!-- for documentation only -->
-        <script src="//cdnjs.cloudflare.com/ajax/libs/anchor-js/3.2.1/anchor.min.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function ($) {
-                // delegate calls to data-toggle="lightbox"
-                $(document).on('click', '[data-toggle="lightbox"]:not([data-gallery="navigateTo"])', function(event) {
-                    event.preventDefault();
-                    return $(this).ekkoLightbox({
-                        onShown: function() {
-                            if (window.console) {
-                                return console.log('Checking our the events huh?');
-                            }
-                        },
-						onNavigate: function(direction, itemIndex) {
-                            if (window.console) {
-                                return console.log('Navigating '+direction+'. Current item: '+itemIndex);
-                            }
-						}
-                    });
-                });
-
-                //Programmatically call
-                $('#open-image').click(function (e) {
-                    e.preventDefault();
-                    $(this).ekkoLightbox();
-                });
-                $('#open-youtube').click(function (e) {
-                    e.preventDefault();
-                    $(this).ekkoLightbox();
-                });
-
-				// navigateTo
-                $(document).on('click', '[data-toggle="lightbox"][data-gallery="navigateTo"]', function(event) {
-                    event.preventDefault();
-
-                    return $(this).ekkoLightbox({
-                        onShown: function() {
-
-							this.modal().on('click', '.modal-footer a', function(e) {
-
-								e.preventDefault();
-								this.navigateTo(2);
-
-                            }.bind(this));
-
-                        }
-                    });
-                });
-
-
-                /**
-                 * Documentation specific - ignore this
-                 */
-                anchors.options.placement = 'left';
-                anchors.add('h3');
-                $('code[data-code]').each(function() {
-
-                    var $code = $(this),
-                        $pair = $('div[data-code="'+$code.data('code')+'"]');
-
-                    $code.hide();
-                    var text = $code.text($pair.html()).html().trim().split("\n");
-                    var indentLength = text[text.length - 1].match(/^\s+/)
-                    indentLength = indentLength ? indentLength[0].length : 24;
-                    var indent = '';
-                    for(var i = 0; i < indentLength; i++)
-                        indent += ' ';
-                    if($code.data('trim') == 'all') {
-                        for (var i = 0; i < text.length; i++)
-                            text[i] = text[i].trim();
-                    } else  {
-                        for (var i = 0; i < text.length; i++)
-                            text[i] = text[i].replace(indent, '    ').replace('    ', '');
-                    }
-                    text = text.join("\n");
-                    $code.html(text).show();
-
-                });
+            
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-10 offset-md-1">
+            
+                                <h2>Install</h2>
+                                <p>Grab the latest CSS / JS files from the CDN: <a href="https://cdnjs.com/libraries/ekko-lightbox">https://cdnjs.com/libraries/ekko-lightbox</a>.</p>
+                                <p>Or, with bower: <code>bower install ekko-lightbox --save</code></p>
+                                <p>Or, download the files directly: <a href="https://github.com/ashleydw/lightbox/tree/master/dist">https://github.com/ashleydw/lightbox/tree/master/dist</a></p>
+                                <br /><br />
+                                <p>Place this near on your page, probably near the end of the body section:</p>
+            <code class="block-code">$(document).on('click', '[data-toggle="lightbox"]', function(event) {
+                event.preventDefault();
+                $(this).ekkoLightbox();
+            });</code>
+                                <br /><br />
+                                <p>Then simply add <code>data-toggle</code> to your anchor tags.</p>
+            <code class="block-code">&lt;a href=&quot;https://unsplash.it/1200/768.jpg?image=251&quot; data-toggle=&quot;lightbox&quot;&gt;
+                &lt;img src=&quot;https://unsplash.it/600.jpg?image=251&quot; class=&quot;img-fluid&quot;&gt;
+            &lt;/a&gt;
+            </code>
+                                <br /><br />
+                                <p>Obviously, you need Bootstrap. Made for Bootstrap v4 but *should* work with v3.</p>
+            
+                                <h2>Options</h2>
+                                <p>Options are passed down to the modal object so you can also use any of the <a href="http://getbootstrap.com/javascript/#modals-usage">original modal options</a>.</p>
+                                <p>Pass the options to the calling function as an object, or set defaults using <code>$.fn.ekkoLightbox.defaults</code> (excluding modal default options, notable: title, footer, remote)</p>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>type</th>
+                                            <th>default</th>
+                                            <th>description</th>
+                                            <th>data-*</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>leftArrow / rightArrow</td>
+                                                <td>html</td>
+                                                <td><code>&#10094;</code> / <code>&#10095;</code></td>
+                                                <td>HTML for the arrows</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>wrapping</td>
+                                                <td>boolean</td>
+                                                <td><code>true</code></td>
+                                                <td>Whether the gallery should loop or not</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>width / height</td>
+                                                <td>integer</td>
+                                                <td></td>
+                                                <td>Force the width / height</td>
+                                                <td><code>data-(width|height)="[0-9]+"</code></td>
+                                            </tr>
+                                            <tr>
+                                                <td>maxWidth / maxHeight</td>
+                                                <td>integer</td>
+                                                <td>9999</td>
+                                                <td>Limit the container width / height</td>
+                                                <td><code>data-(max-width|max-height)="[0-9]+"</code></td>
+                                            </tr>
+                                            <tr>
+                                                <td>alwaysShowClose</td>
+                                                <td>boolean</td>
+                                                <td><code>false</code></td>
+                                                <td>Always show the close button, even if no title is present</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>loadingMessage</td>
+                                                <td>html</td>
+                                                <td>A fancy loader</td>
+                                                <td>HTML injected for loading</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>showArrows</td>
+                                                <td>bool</td>
+                                                <td>true</td>
+                                                <td>Disable the navigation overlay</td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <code class="block-code">$(this).ekkoLightbox({
+                alwaysShowClose: true,
+                onShown: function() {
+                    console.log('Checking our the events huh?');
+                },
+                onNavigate: function(direction, itemIndex)
+                    console.log('Navigating '+direction+'. Current item: '+itemIndex);
+                }
+                ...
+            });</code>
+                                <br /><br />
+                                <p>The following options are specified per element.</p>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Description</th>
+                                            <th>Example</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>remote</td>
+                                            <td>If you can't/don't want to set the href property of an element</td>
+                                            <td><code>data-remote="http://www...."</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td>gallery</td>
+                                            <td>For grouping elements</td>
+                                            <td><code>data-gallery="gallery-name"</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td>type</td>
+                                            <td>Force the lightbox into image/YouTube mode.</td>
+                                            <td><code>data-type="(image|youtube|vimeo)"</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td>disable-external-check</td>
+                                            <td>Force the lightbox loading into an iframe.</td>
+                                            <td><code>data-disable-external-check="(true|false)"</code></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <code class="block-code">&lt;a href=&quot;https://unsplash.it/1200/768.jpg?image=251&quot; data-toggle=&quot;lightbox&quot; data-gallery=&quot;example-gallery&quot; data-type=&quot;image&quot;&gt;
+                &lt;img src=&quot;https://unsplash.it/600.jpg?image=251&quot; class=&quot;img-fluid&quot;&gt;
+            &lt;/a&gt;</code>
+            
+                                <h2>Events</h2>
+                                <p>Events can be hooked into, set the the same as options above.</p>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Description</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>onContentLoaded</td>
+                                            <td>Fired when content (image/video/remote page etc) has been fully loaded.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>onNavigate</td>
+                                            <td>Fired before navigating a gallery.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>onShow/onShown/onHide/onHidden</td>
+                                            <td>Inherited from the bootstrap modal.</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+            
+                                <h2>Examples</h2>
+                                <p>Thanks to <a href="https://unsplash.it/">https://unsplash.it/</a> for the images.</p>
+                                <ul>
+                                    <li><a href="#single-image">Single Image</a></li>
+                                    <li><a href="#image-gallery">Image Gallery</a></li>
+                                    <li><a href="#limit-size">Limit Image Size</a></li>
+                                    <li><a href="#videos">Videos</a></li>
+                                    <li><a href="#videos-gallery">Gallery of Videos</a></li>
+                                    <li><a href="#mixed-gallery">Mixed gallery</a></li>
+                                    <li><a href="#programatically-call">Programmatically call</a></li>
+                                    <li><a href="#data-remote">Via <code>data-remote</code></a></li>
+                                    <li><a href="#force-type">Force type</a></li>
+                                    <li><a href="#hidden-elements">Hidden elements</a></li>
+                                    <li><a href="#remote-content">Remote content</a></li>
+                                    <li><a href="#no-wrapping">Disable wrapping</a></li>
+                                </ul>
+            
+                                <h3 id="single-image">Single Image</h3>
+                                <p>Note: uses modal plugin title option via <code>data-title</code>, and the custom footer tag using <code>data-footer</code></p>
+                                <div class="row">
+                                    <div class="offset-sm-4 col-sm-3" data-code="example-1">
+                                        <a href="https://unsplash.it/1200/768.jpg?image=250" data-toggle="lightbox" data-title="A random title" data-footer="A custom footer text">
+                                            <img src="https://unsplash.it/600.jpg?image=250" class="img-fluid">
+                                        </a>
+                                    </div>
+                                </div>
+                                <code class="html" data-code="example-1"></code>
+            
+                                <h3 id="image-gallery">Image Gallery</h3>
+                                <p>Galleries are created by adding the <code>data-gallery</code> attribute.</p>
+                                <div data-code="example-2">
+                                    <div class="row">
+                                        <div class="offset-md-2 col-md-8">
+                                            <div class="row">
+                                                <a href="https://unsplash.it/1200/768.jpg?image=251" data-toggle="lightbox" data-gallery="example-gallery" class="col-sm-4">
+                                                    <img src="https://unsplash.it/600.jpg?image=251" class="img-fluid">
+                                                </a>
+                                                <a href="https://unsplash.it/1200/768.jpg?image=252" data-toggle="lightbox" data-gallery="example-gallery" class="col-sm-4">
+                                                    <img src="https://unsplash.it/600.jpg?image=252" class="img-fluid">
+                                                </a>
+                                                <a href="https://unsplash.it/1200/768.jpg?image=253" data-toggle="lightbox" data-gallery="example-gallery" class="col-sm-4">
+                                                    <img src="https://unsplash.it/600.jpg?image=253" class="img-fluid">
+                                                </a>
+                                            </div>
+                                            <div class="row">
+                                                <a href="https://unsplash.it/1200/768.jpg?image=254" data-toggle="lightbox" data-gallery="example-gallery" class="col-sm-4">
+                                                    <img src="https://unsplash.it/600.jpg?image=254" class="img-fluid">
+                                                </a>
+                                                <a href="https://unsplash.it/1200/768.jpg?image=255" data-toggle="lightbox" data-gallery="example-gallery" class="col-sm-4">
+                                                    <img src="https://unsplash.it/600.jpg?image=255" class="img-fluid">
+                                                </a>
+                                                <a href="https://unsplash.it/1200/768.jpg?image=256" data-toggle="lightbox" data-gallery="example-gallery" class="col-sm-4">
+                                                    <img src="https://unsplash.it/600.jpg?image=256" class="img-fluid">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <code class="html" data-code="example-2"></code>
+            
+                                <h3 id="limit-size">Limit Image Size</h3>
+                                <p>Note: uses modal plugin limiting via <code>data-max-width</code> (or <code>data-max-height</code>)</p>
+                                <div class="row">
+                                    <div class="offset-sm-4 col-sm-3" data-code="example-10">
+                                        <a href="https://unsplash.it/1200/768.jpg?image=250" data-toggle="lightbox" data-max-width="600">
+                                            <img src="https://unsplash.it/600.jpg?image=250" class="img-fluid">
+                                        </a>
+                                    </div>
+                                </div>
+                                <code class="html" data-code="example-10"></code>
+            
+                                <h3 id="videos">Videos</h3>
+                                <h4>YouTube</h4>
+                                <p>You can use various YouTube URL formats, the regex used is: <code>/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/</code></p>
+                                <div data-code="example-3">
+                                    <p><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" data-toggle="lightbox">Justin Bieber - Love Yourself</a></p>
+                                    <p><a href="http://youtu.be/b0jqPvpn3sY" data-toggle="lightbox">Tame Impala - Elephant (using youtu.be link)</a></p>
+                                    <p><a href="https://www.youtube.com/watch?v=oyEuk8j8imI&rel=0" data-toggle="lightbox">Justin Bieber - Love Yourself</a> (suppress related videos with <code>&rel=0</code>)</p>
+                                </div>
+                                <code data-code="example-3" data-trim="all"></code>
+                                <h4>Vimeo</h4>
+                                <p>You cannot embed Vimeo videos using the standard url (ie http://vimeo.com/80629469); you must link to the embed source (ie player.vimeo.com/video/80629469). This will mean your link url - if the JavaScript fails, will open the full screen player (try opening the first link below in a new tab); the solution to this is to set the lightbox source directly - the second link below does this.</p>
+                                <div data-code="example-3-b">
+                                    <p><a href="http://player.vimeo.com/video/80629469" data-toggle="lightbox">City Lights - from Colin Rich (using embed link)</a></p>
+                                    <p><a href="http://vimeo.com/80629469" data-remote="http://player.vimeo.com/video/80629469" data-toggle="lightbox">City Lights - from Colin Rich</a> (with reccommended <code>data-remote</code> setting)</p>
+                                </div>
+                                <code data-code="example-3-b" data-trim="all"></code>
+                                <h4>Instagram</h4>
+                                <p></p>
+                                <div data-code="example-3-c">
+                                    <p><a href="http://instagram.com/p/BRCYe_wD9pV/" data-toggle="lightbox" data-title="Plug for our new service">Instagram</a></p>
+                                    <p>This also works with photos: <a href="//instagram.com/p/BRCdyxnjBsA/" data-toggle="lightbox">Instagram</a></p>
+                                </div>
+                                <code data-code="example-3-c" data-trim="all"></code>
+                                <h4>Forcing width</h4>
+                                <p>Set the width of the video</p>
+                                <div data-code="example-3-d">
+                                    <p><a href="https://www.youtube.com/watch?v=e-ORhEE9VVg" data-toggle="lightbox">Taylor Swift - Blank Space (standard)</a></p>
+                                    <p><a href="https://www.youtube.com/watch?v=e-ORhEE9VVg" data-toggle="lightbox" data-width="640">Taylor Swift - Blank Space (640 x 360)</a></p>
+                                    <p><a href="https://www.youtube.com/watch?v=e-ORhEE9VVg" data-toggle="lightbox" data-width="1280">Taylor Swift - Blank Space (1280 x 780)</a></p>
+                                </div>
+                                <code data-code="example-3-d" data-trim="all"></code>
+            
+                                <!-- i hope your coworkers think you're listening to some justin and taylor -->
+            
+                                <h3 id="videos-gallery">Gallery of Videos</h3>
+                                <div class="row">
+                                    <div class="offset-md-1 col-md-10">
+                                        <div class="row" data-code="example-4">
+                                            <a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox" data-gallery="youtubevideos" class="col-sm-4">
+                                                <img src="http://i1.ytimg.com/vi/yP11r5n5RNg/mqdefault.jpg" class="img-fluid">
+                                            </a>
+                                            <a href="http://youtu.be/iQ4D273C7Ac" data-toggle="lightbox" data-gallery="youtubevideos" class="col-sm-4">
+                                                <img src="http://i1.ytimg.com/vi/iQ4D273C7Ac/mqdefault.jpg" class="img-fluid">
+                                            </a>
+                                            <a href="//www.youtube.com/embed/b0jqPvpn3sY" data-toggle="lightbox" data-gallery="youtubevideos" class="col-sm-4">
+                                                <img src="http://i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" class="img-fluid">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <code data-code="example-4"></code>
+            
+                                <h3 id="mixed-gallery">Mixed gallery</h3>
+                                <div class="row">
+                                    <div class="offset-md-1 col-md-10">
+                                        <div class="row flex-items-xs-center" data-code="example-5">
+                                            <a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox" data-gallery="mixedgallery" class="col-sm-4">
+                                                <img src="http://i1.ytimg.com/vi/yP11r5n5RNg/mqdefault.jpg" class="img-fluid">
+                                            </a>
+                                            <a href="https://unsplash.it/1200/768.jpg?image=257" data-toggle="lightbox" data-gallery="mixedgallery" class="col-sm-4">
+                                                <img src="https://unsplash.it/600.jpg?image=257" class="img-fluid">
+                                            </a>
+                                            <a href="http://vimeo.com/80629469" data-remote="http://player.vimeo.com/video/80629469" data-toggle="lightbox" data-gallery="mixedgallery" class="col-sm-4">
+                                                <img src="http://b.vimeocdn.com/ts/458/070/458070637_200.jpg" class="img-fluid">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <code data-code="example-5"></code>
+            
+                                <h3 id="programatically-call">Programmatically call</h3>
+                                <p>These two examples are opened via the JavaScript at the bottom of the source.</p>
+                                <div class="row">
+                                    <div class="offset-md-1 col-md-10">
+                                        <div class="row" data-code="example-6">
+                                            <a href="https://unsplash.it/1200/768.jpg?image=258" id="open-image" class="col-sm-4">
+                                                <img src="https://unsplash.it/600.jpg?image=258" class="img-fluid">
+                                            </a>
+                                            <a href="http://youtu.be/iQ4D273C7Ac" id="open-youtube" class="col-sm-4">
+                                                <img src="http://i1.ytimg.com/vi/iQ4D273C7Ac/mqdefault.jpg" class="img-fluid">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <code data-code="example-6"></code>
+                                <code class="block-code">$(&#39;#open-image&#39;).click(function (e) {
+                e.preventDefault();
+                $(this).ekkoLightbox();
             });
-        </script>
+            $(&#39;#open-youtube&#39;).click(function (e) {
+                e.preventDefault();
+                $(this).ekkoLightbox();
+            });</code>
+            
+                                <h3 id="data-remote">Via <code>data-remote</code></h3>
+                                <p>Neither of these are <code>&lt;a /&gt;</code> tags, so both rely on the <code>data-remote</code> attribute.</p>
+                                <div class="row">
+                                    <div class="offset-md-1 col-md-10">
+                                        <div class="row" data-code="example-7" style="height:200px">
+                                            <img src="https://unsplash.it/600.jpg?image=259" data-toggle="lightbox" data-remote="https://unsplash.it/1200/768.jpg?image=259" class="img-fluid col-sm-4">
+                                            <img src="http://i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" data-toggle="lightbox" data-remote="https://www.youtube.com/embed/b0jqPvpn3sY" class="img-fluid col-sm-4">
+                                        </div>
+                                    </div>
+                                </div>
+                                <code data-code="example-7"></code>
+            
+                                <h3 id="force-type">Force type</h3>
+                                <p>If the images you are linking to have no extension, the lightbox cannot detect that is an image; therefore you need to tell the lightbox what <code>data-type</code> it is.</p>
+                                <p>Current allowed types are: <code>['image', 'youtube', 'vimeo', 'instagram', 'video', 'url']</code></p>
+                                <div data-code="example-8">
+                                    <p><a href="https://unsplash.it/1200/768?image=260" data-title="Force image display" data-footer="The remote of this modal has no extension (https://unsplash.it/1200/768?image=260) but works because the type is forced." data-toggle="lightbox" data-type="image">Click here for an image, but with no extension.</a></p>
+                                    <p><a href="https://unsplash.it/1200/768?image=261" data-footer="Without the type forced, the lightbox will remote load the content" data-toggle="lightbox">This link is missing the type attribute, and will iframe the image.</a></p>
+                                    <p><a href="http://www.youtube.com/watch?v=b0jqPvpn3sY" data-toggle="lightbox" data-type="image">This link is linking to a YouTube video, but forcing an image.</a></p>
+                                </div>
+                                <code data-code="example-8"></code>
+            
+                                <h3 id="hidden-elements">Hidden elements</h3>
+                                <p>Facebook style, only show a few images but have a large gallery</p>
+                                <div class="row">
+                                    <div class="offset-md-2 col-md-8">
+                                        <div class="row" data-code="example-9">
+                                            <a href="https://unsplash.it/1200/768.jpg?image=263" data-toggle="lightbox" data-gallery="hidden-images" class="col-sm-4">
+                                                <img src="https://unsplash.it/600.jpg?image=263" class="img-fluid">
+                                            </a>
+                                            <a href="https://unsplash.it/1200/768.jpg?image=264" data-toggle="lightbox" data-gallery="hidden-images" class="col-sm-4">
+                                                <img src="https://unsplash.it/600.jpg?image=264" class="img-fluid">
+                                            </a>
+                                            <a href="https://unsplash.it/1200/768.jpg?image=265" data-toggle="lightbox" data-gallery="hidden-images" class="col-sm-4">
+                                                <img src="https://unsplash.it/600.jpg?image=265" class="img-fluid">
+                                            </a>
+                                            <!-- elements not showing, use data-remote -->
+                                            <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="https://unsplash.it/1200/768.jpg?image=264" data-title="Hidden item 1"></div>
+                                            <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="https://www.youtube.com/embed/b0jqPvpn3sY" data-title="Hidden item 2"></div>
+                                            <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="https://unsplash.it/1200/768.jpg?image=265" data-title="Hidden item 3"></div>
+                                            <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="https://unsplash.it/1200/768.jpg?image=266" data-title="Hidden item 4"></div>
+                                            <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="https://unsplash.it/1200/768.jpg?image=267" data-title="Hidden item 5"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <code data-code="example-9"></code>
+            
+                                <h3 id="remote-content">Remote content</h3>
+                                <p>Given a URL, that is not an image or video (including unforced types), load the content using an iFrame.</p>
+                                <div class="row">
+                                    <div class="offset-md-1 col-md-10" data-code="example-10">
+                                        <div class="row">
+                                            <p class="col-sm-3"><a href="http://getbootstrap.com" data-title="Bootstrap" data-width="1200" data-toggle="lightbox" data-gallery="remoteload">Bootstrap Docs</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <code data-code="example-10"></code>
+            
+            
+                                <h3 id="no-wrapping">Disable wrapping</h3>
+                                <p>To disable wrapping, set `wrapping` to false when creating a gallery.</p>
+                                <div>
+                                    <div class="row">
+                                        <div class="offset-md-2 col-md-8">
+                                            <div class="row">
+                                                <a href="https://unsplash.it/1200/768.jpg?image=251" data-toggle="lightbox" data-gallery="example-gallery-11" class="col-sm-4">
+                                                    <img src="https://unsplash.it/600.jpg?image=251" class="img-fluid">
+                                                </a>
+                                                <a href="https://unsplash.it/1200/768.jpg?image=252" data-toggle="lightbox" data-gallery="example-gallery-11" class="col-sm-4">
+                                                    <img src="https://unsplash.it/600.jpg?image=252" class="img-fluid">
+                                                </a>
+                                                <a href="https://unsplash.it/1200/768.jpg?image=253" data-toggle="lightbox" data-gallery="example-gallery-11" class="col-sm-4">
+                                                    <img src="https://unsplash.it/600.jpg?image=253" class="img-fluid">
+                                                </a>
+                                            </div>
+                                            <div class="row">
+                                                <a href="https://unsplash.it/1200/768.jpg?image=254" data-toggle="lightbox" data-gallery="example-gallery-11" class="col-sm-4">
+                                                    <img src="https://unsplash.it/600.jpg?image=254" class="img-fluid">
+                                                </a>
+                                                <a href="https://unsplash.it/1200/768.jpg?image=255" data-toggle="lightbox" data-gallery="example-gallery-11" class="col-sm-4">
+                                                    <img src="https://unsplash.it/600.jpg?image=255" class="img-fluid">
+                                                </a>
+                                                <a href="https://unsplash.it/1200/768.jpg?image=256" data-toggle="lightbox" data-gallery="example-gallery-11" class="col-sm-4">
+                                                    <img src="https://unsplash.it/600.jpg?image=256" class="img-fluid">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <code class="html" data-code>$(this).ekkoLightbox({ wrapping: false });</code>
+            
+                                <p class="footer"><span>Built by me, <a href="https://ashleyd.ws">ashleydw</a></span></p>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"></script>
+                    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.2.0/ekko-lightbox.min.js"></script>
+            
+                    <!-- for documentation only -->
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.2.1/anchor.min.js"></script>
+                    <script type="text/javascript">
+                        $(document).ready(function ($) {
+                            // delegate calls to data-toggle="lightbox"
+                            $(document).on('click', '[data-toggle="lightbox"]:not([data-gallery="navigateTo"]):not([data-gallery="example-gallery-11"])', function(event) {
+                                event.preventDefault();
+                                return $(this).ekkoLightbox({
+                                    onShown: function() {
+                                        if (window.console) {
+                                            return console.log('Checking our the events huh?');
+                                        }
+                                    },
+                                    onNavigate: function(direction, itemIndex) {
+                                        if (window.console) {
+                                            return console.log('Navigating '+direction+'. Current item: '+itemIndex);
+                                        }
+                                    }
+                                });
+                            });
+            
+                            // disable wrapping
+                            $(document).on('click', '[data-toggle="lightbox"][data-gallery="example-gallery-11"]', function(event) {
+                                event.preventDefault();
+                                return $(this).ekkoLightbox({
+                                    wrapping: false
+                                });
+                            });
+            
+                            //Programmatically call
+                            $('#open-image').click(function (e) {
+                                e.preventDefault();
+                                $(this).ekkoLightbox();
+                            });
+                            $('#open-youtube').click(function (e) {
+                                e.preventDefault();
+                                $(this).ekkoLightbox();
+                            });
+            
+                            // navigateTo
+                            $(document).on('click', '[data-toggle="lightbox"][data-gallery="navigateTo"]', function(event) {
+                                event.preventDefault();
+            
+                                return $(this).ekkoLightbox({
+                                    onShown: function() {
+            
+                                        this.modal().on('click', '.modal-footer a', function(e) {
+            
+                                            e.preventDefault();
+                                            this.navigateTo(2);
+            
+                                        }.bind(this));
+            
+                                    }
+                                });
+                            });
+            
+            
+                            /**
+                             * Documentation specific - ignore this
+                             */
+                            anchors.options.placement = 'left';
+                            anchors.add('h3');
+                            $('code[data-code]').each(function() {
+            
+                                var $code = $(this),
+                                    $pair = $('div[data-code="'+$code.data('code')+'"]');
+            
+                                $code.hide();
+                                var text = $code.text($pair.html()).html().trim().split("\n");
+                                var indentLength = text[text.length - 1].match(/^\s+/)
+                                indentLength = indentLength ? indentLength[0].length : 24;
+                                var indent = '';
+                                for(var i = 0; i < indentLength; i++)
+                                    indent += ' ';
+                                if($code.data('trim') == 'all') {
+                                    for (var i = 0; i < text.length; i++)
+                                        text[i] = text[i].trim();
+                                } else  {
+                                    for (var i = 0; i < text.length; i++)
+                                        text[i] = text[i].replace(indent, '    ').replace('    ', '');
+                                }
+                                text = text.join("\n");
+                                $code.html(text).show();
+            
+                            });
+                        });
+                    </script>
     </body>
 </html>
