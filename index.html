@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css" rel="stylesheet">
 
         <!-- for documentation only -->
         <style type="text/css">
@@ -121,8 +121,8 @@
         <div class="top-container">
             
                         <div class="container">
-                            <div class="row">
-                                <div class="col-md-10 offset-md-1">
+                            <div class="row justify-content-center">
+                                <div class="col-md-10">
             
                                     <div class="top-header">
                                         <h1>Lightbox for Bootstrap</h1>
@@ -140,8 +140,8 @@
                     </div>
             
                     <div class="container">
-                        <div class="row">
-                            <div class="col-md-10 offset-md-1">
+                        <div class="row justify-content-center">
+                            <div class="col-md-10">
             
                                 <h2>Install</h2>
                                 <p>Grab the latest CSS / JS files from the CDN: <a href="https://cdnjs.com/libraries/ekko-lightbox">https://cdnjs.com/libraries/ekko-lightbox</a>.</p>
@@ -324,8 +324,8 @@
             
                                 <h3 id="single-image">Single Image</h3>
                                 <p>Note: uses modal plugin title option via <code>data-title</code>, and the custom footer tag using <code>data-footer</code></p>
-                                <div class="row">
-                                    <div class="offset-sm-4 col-sm-3" data-code="example-1">
+                                <div class="row justify-content-center">
+                                    <div class="col-sm-3" data-code="example-1">
                                         <a href="https://unsplash.it/1200/768.jpg?image=250" data-toggle="lightbox" data-title="A random title" data-footer="A custom footer text">
                                             <img src="https://unsplash.it/600.jpg?image=250" class="img-fluid">
                                         </a>
@@ -336,8 +336,8 @@
                                 <h3 id="image-gallery">Image Gallery</h3>
                                 <p>Galleries are created by adding the <code>data-gallery</code> attribute.</p>
                                 <div data-code="example-2">
-                                    <div class="row">
-                                        <div class="offset-md-2 col-md-8">
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-8">
                                             <div class="row">
                                                 <a href="https://unsplash.it/1200/768.jpg?image=251" data-toggle="lightbox" data-gallery="example-gallery" class="col-sm-4">
                                                     <img src="https://unsplash.it/600.jpg?image=251" class="img-fluid">
@@ -367,8 +367,8 @@
             
                                 <h3 id="limit-size">Limit Image Size</h3>
                                 <p>Note: uses modal plugin limiting via <code>data-max-width</code> (or <code>data-max-height</code>)</p>
-                                <div class="row">
-                                    <div class="offset-sm-4 col-sm-3" data-code="example-10">
+                                <div class="row justify-content-center">
+                                    <div class="col-sm-3" data-code="example-10">
                                         <a href="https://unsplash.it/1200/768.jpg?image=250" data-toggle="lightbox" data-max-width="600">
                                             <img src="https://unsplash.it/600.jpg?image=250" class="img-fluid">
                                         </a>
@@ -411,8 +411,8 @@
                                 <!-- i hope your coworkers think you're listening to some justin and taylor -->
             
                                 <h3 id="videos-gallery">Gallery of Videos</h3>
-                                <div class="row">
-                                    <div class="offset-md-1 col-md-10">
+                                <div class="row justify-content-center">
+                                    <div class="col-md-10">
                                         <div class="row" data-code="example-4">
                                             <a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox" data-gallery="youtubevideos" class="col-sm-4">
                                                 <img src="http://i1.ytimg.com/vi/yP11r5n5RNg/mqdefault.jpg" class="img-fluid">
@@ -429,8 +429,8 @@
                                 <code data-code="example-4"></code>
             
                                 <h3 id="mixed-gallery">Mixed gallery</h3>
-                                <div class="row">
-                                    <div class="offset-md-1 col-md-10">
+                                <div class="row justify-content-center">
+                                    <div class="col-md-10">
                                         <div class="row flex-items-xs-center" data-code="example-5">
                                             <a href="http://www.youtube.com/watch?v=k6mFF3VmVAs" data-toggle="lightbox" data-gallery="mixedgallery" class="col-sm-4">
                                                 <img src="http://i1.ytimg.com/vi/yP11r5n5RNg/mqdefault.jpg" class="img-fluid">
@@ -448,13 +448,13 @@
             
                                 <h3 id="programatically-call">Programmatically call</h3>
                                 <p>These two examples are opened via the JavaScript at the bottom of the source.</p>
-                                <div class="row">
-                                    <div class="offset-md-1 col-md-10">
+                                <div class="row justify-content-center">
+                                    <div class="col-md-10">
                                         <div class="row" data-code="example-6">
-                                            <a href="https://unsplash.it/1200/768.jpg?image=258" id="open-image" class="col-sm-4">
+                                            <a href="https://unsplash.it/1200/768.jpg?image=258" id="open-image" class="col-6">
                                                 <img src="https://unsplash.it/600.jpg?image=258" class="img-fluid">
                                             </a>
-                                            <a href="http://youtu.be/iQ4D273C7Ac" id="open-youtube" class="col-sm-4">
+                                            <a href="http://youtu.be/iQ4D273C7Ac" id="open-youtube" class="col-6">
                                                 <img src="http://i1.ytimg.com/vi/iQ4D273C7Ac/mqdefault.jpg" class="img-fluid">
                                             </a>
                                         </div>
@@ -472,11 +472,11 @@
             
                                 <h3 id="data-remote">Via <code>data-remote</code></h3>
                                 <p>Neither of these are <code>&lt;a /&gt;</code> tags, so both rely on the <code>data-remote</code> attribute.</p>
-                                <div class="row">
-                                    <div class="offset-md-1 col-md-10">
-                                        <div class="row" data-code="example-7" style="height:200px">
-                                            <img src="https://unsplash.it/600.jpg?image=259" data-toggle="lightbox" data-remote="https://unsplash.it/1200/768.jpg?image=259" class="img-fluid col-sm-4">
-                                            <img src="http://i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" data-toggle="lightbox" data-remote="https://www.youtube.com/embed/b0jqPvpn3sY" class="img-fluid col-sm-4">
+                                <div class="row justify-content-center">
+                                    <div class="col-md-10">
+                                        <div class="row" data-code="example-7" style="height:240px">
+                                            <img src="https://unsplash.it/600.jpg?image=259" data-toggle="lightbox" data-remote="https://unsplash.it/1200/768.jpg?image=259" class="img-fluid col-6">
+                                            <img src="http://i1.ytimg.com/vi/b0jqPvpn3sY/mqdefault.jpg" data-toggle="lightbox" data-remote="https://www.youtube.com/embed/b0jqPvpn3sY" class="img-fluid col-6">
                                         </div>
                                     </div>
                                 </div>
@@ -494,33 +494,29 @@
             
                                 <h3 id="hidden-elements">Hidden elements</h3>
                                 <p>Facebook style, only show a few images but have a large gallery</p>
-                                <div class="row">
-                                    <div class="offset-md-2 col-md-8">
-                                        <div class="row" data-code="example-9">
-                                            <a href="https://unsplash.it/1200/768.jpg?image=263" data-toggle="lightbox" data-gallery="hidden-images" class="col-sm-4">
-                                                <img src="https://unsplash.it/600.jpg?image=263" class="img-fluid">
-                                            </a>
-                                            <a href="https://unsplash.it/1200/768.jpg?image=264" data-toggle="lightbox" data-gallery="hidden-images" class="col-sm-4">
-                                                <img src="https://unsplash.it/600.jpg?image=264" class="img-fluid">
-                                            </a>
-                                            <a href="https://unsplash.it/1200/768.jpg?image=265" data-toggle="lightbox" data-gallery="hidden-images" class="col-sm-4">
-                                                <img src="https://unsplash.it/600.jpg?image=265" class="img-fluid">
-                                            </a>
-                                            <!-- elements not showing, use data-remote -->
-                                            <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="https://unsplash.it/1200/768.jpg?image=264" data-title="Hidden item 1"></div>
-                                            <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="https://www.youtube.com/embed/b0jqPvpn3sY" data-title="Hidden item 2"></div>
-                                            <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="https://unsplash.it/1200/768.jpg?image=265" data-title="Hidden item 3"></div>
-                                            <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="https://unsplash.it/1200/768.jpg?image=266" data-title="Hidden item 4"></div>
-                                            <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="https://unsplash.it/1200/768.jpg?image=267" data-title="Hidden item 5"></div>
-                                        </div>
-                                    </div>
+                                <div class="row justify-content-center" data-code="example-9">
+                                    <a href="https://unsplash.it/1200/768.jpg?image=263" data-toggle="lightbox" data-gallery="hidden-images" class="col-4">
+                                        <img src="https://unsplash.it/600.jpg?image=263" class="img-fluid">
+                                    </a>
+                                    <a href="https://unsplash.it/1200/768.jpg?image=264" data-toggle="lightbox" data-gallery="hidden-images" class="col-4">
+                                        <img src="https://unsplash.it/600.jpg?image=264" class="img-fluid">
+                                    </a>
+                                    <a href="https://unsplash.it/1200/768.jpg?image=265" data-toggle="lightbox" data-gallery="hidden-images" class="col-4">
+                                        <img src="https://unsplash.it/600.jpg?image=265" class="img-fluid">
+                                    </a>
+                                    <!-- elements not showing, use data-remote -->
+                                    <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="https://unsplash.it/1200/768.jpg?image=264" data-title="Hidden item 1"></div>
+                                    <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="https://www.youtube.com/embed/b0jqPvpn3sY" data-title="Hidden item 2"></div>
+                                    <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="https://unsplash.it/1200/768.jpg?image=265" data-title="Hidden item 3"></div>
+                                    <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="https://unsplash.it/1200/768.jpg?image=266" data-title="Hidden item 4"></div>
+                                    <div data-toggle="lightbox" data-gallery="hidden-images" data-remote="https://unsplash.it/1200/768.jpg?image=267" data-title="Hidden item 5"></div>
                                 </div>
                                 <code data-code="example-9"></code>
             
                                 <h3 id="remote-content">Remote content</h3>
                                 <p>Given a URL, that is not an image or video (including unforced types), load the content using an iFrame.</p>
-                                <div class="row">
-                                    <div class="offset-md-1 col-md-10" data-code="example-10">
+                                <div class="row justify-content-center">
+                                    <div class="col-md-10" data-code="example-10">
                                         <div class="row">
                                             <p class="col-sm-3"><a href="http://getbootstrap.com" data-title="Bootstrap" data-width="1200" data-toggle="lightbox" data-gallery="remoteload">Bootstrap Docs</a></p>
                                         </div>
@@ -532,8 +528,8 @@
                                 <h3 id="no-wrapping">Disable wrapping</h3>
                                 <p>To disable wrapping, set `wrapping` to false when creating a gallery.</p>
                                 <div>
-                                    <div class="row">
-                                        <div class="offset-md-2 col-md-8">
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-8">
                                             <div class="row">
                                                 <a href="https://unsplash.it/1200/768.jpg?image=251" data-toggle="lightbox" data-gallery="example-gallery-11" class="col-sm-4">
                                                     <img src="https://unsplash.it/600.jpg?image=251" class="img-fluid">
