@@ -256,8 +256,9 @@ var Lightbox = (function ($) {
 				if (!type && this._getYoutubeId(src)) type = 'youtube';
 				if (!type && this._getVimeoId(src)) type = 'vimeo';
 				if (!type && this._getInstagramId(src)) type = 'instagram';
-
-				if (!type || ['image', 'youtube', 'vimeo', 'instagram', 'video', 'url'].indexOf(type) < 0) type = 'url';
+				if (!type && this._isAudio(src)) type = 'audio';
+				if (!type && this._isVideo(src)) type = 'video';
+				if (!type || ['image', 'youtube', 'vimeo', 'instagram', 'video', 'url', 'audio'].indexOf(type) < 0) type = 'url';
 
 				return type;
 			}
@@ -265,6 +266,16 @@ var Lightbox = (function ($) {
 			key: '_isImage',
 			value: function _isImage(string) {
 				return string && string.match(/(^data:image\/.*,)|(\.(jp(e|g|eg)|gif|png|bmp|webp|svg)((\?|#).*)?$)/i);
+			}
+		}, {
+			key: '_isAudio',
+			value: function _isAudio(string) {
+				return string && string.match(/(^data:audio\/.*,)|(\.(mp3|ogg)((\?|#).*)?$)/i);
+			}
+		}, {
+			key: '_isVideo',
+			value: function _isVideo(string) {
+				return string && string.match(/(^data:audio\/.*,)|(\.(mp4|ogg)((\?|#).*)?$)/i);
 			}
 		}, {
 			key: '_containerToUse',
@@ -299,7 +310,7 @@ var Lightbox = (function ($) {
 				var currentRemote = this._$element.attr('data-remote') || this._$element.attr('href');
 				var currentType = this._detectRemoteType(currentRemote, this._$element.attr('data-type') || false);
 
-				if (['image', 'youtube', 'vimeo', 'instagram', 'video', 'url'].indexOf(currentType) < 0) return this._error(this._config.strings.type);
+				if (['image', 'youtube', 'vimeo', 'instagram', 'video', 'url', 'audio'].indexOf(currentType) < 0) return this._error(this._config.strings.type);
 
 				switch (currentType) {
 					case 'image':
@@ -317,6 +328,9 @@ var Lightbox = (function ($) {
 						break;
 					case 'video':
 						this._showHtml5Video(currentRemote, $toUse);
+						break;
+					case 'audio':
+						this._showHtml5Audio(currentRemote, $toUse);
 						break;
 					default:
 						// url
@@ -455,6 +469,19 @@ var Lightbox = (function ($) {
 				var width = this._$element.data('width') || 560;
 				var height = this._$element.data('height') || width / (560 / 315);
 				$containerForElement.html('<div class="embed-responsive embed-responsive-16by9"><video width="' + width + '" height="' + height + '" src="' + url + '" preload="auto" autoplay controls class="embed-responsive-item"></video></div>');
+				this._resize(width, height);
+				this._config.onContentLoaded.call(this);
+				if (this._$modalArrows) this._$modalArrows.css('display', 'none'); //hide the arrows when showing video
+				this._toggleLoading(false);
+				return this;
+			}
+		}, {
+			key: '_showHtml5Audio',
+			value: function _showHtml5Audio(url, $containerForElement) {
+				// should be used for videos only. for remote content use loadRemoteContent (data-type=url)
+				var width = this._$element.data('width') || 560;
+				var height = this._$element.data('height') || width / (560 / 315);
+				$containerForElement.html('<div class="embed-responsive embed-responsive-16by9"><audio width="' + width + '" height="' + height + '" src="' + url + '" preload="auto" autoplay controls class="embed-responsive-item"></audio></div>');
 				this._resize(width, height);
 				this._config.onContentLoaded.call(this);
 				if (this._$modalArrows) this._$modalArrows.css('display', 'none'); //hide the arrows when showing video

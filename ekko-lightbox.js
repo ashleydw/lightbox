@@ -261,15 +261,26 @@ const Lightbox = (($) => {
 				type = 'vimeo';
 			if(!type && this._getInstagramId(src))
 				type = 'instagram';
-
-			if(!type || ['image', 'youtube', 'vimeo', 'instagram', 'video', 'url'].indexOf(type) < 0)
+                        if(!type && this._isAudio(src))
+				type = 'audio';
+                        if(!type && this._isVideo(src))
+				type = 'video';
+			if(!type || ['image', 'youtube', 'vimeo', 'instagram', 'video', 'url', 'audio'].indexOf(type) < 0)
 				type = 'url';
-
+                        
 			return type;
 		}
 
 		_isImage(string) {
 			return string && string.match(/(^data:image\/.*,)|(\.(jp(e|g|eg)|gif|png|bmp|webp|svg)((\?|#).*)?$)/i)
+		}
+                
+                _isAudio(string) {
+			return string && string.match(/(^data:audio\/.*,)|(\.(mp3|ogg)((\?|#).*)?$)/i)
+		}
+                
+                _isVideo(string) {
+			return string && string.match(/(^data:audio\/.*,)|(\.(mp4|ogg)((\?|#).*)?$)/i)
 		}
 
 		_containerToUse() {
@@ -302,7 +313,7 @@ const Lightbox = (($) => {
 			let currentRemote = this._$element.attr('data-remote') || this._$element.attr('href')
 			let currentType = this._detectRemoteType(currentRemote, this._$element.attr('data-type') || false)
 
-			if(['image', 'youtube', 'vimeo', 'instagram', 'video', 'url'].indexOf(currentType) < 0)
+			if(['image', 'youtube', 'vimeo', 'instagram', 'video', 'url', 'audio'].indexOf(currentType) < 0)
 				return this._error(this._config.strings.type)
 
 			switch(currentType) {
@@ -321,6 +332,9 @@ const Lightbox = (($) => {
 					break;
 				case 'video':
 					this._showHtml5Video(currentRemote, $toUse);
+					break;
+                                case 'audio':
+					this._showHtml5Audio(currentRemote, $toUse);
 					break;
 				default: // url
 					this._loadRemoteContent(currentRemote, $toUse);
@@ -456,6 +470,18 @@ const Lightbox = (($) => {
 			let width = this._$element.data('width') || 560
 			let height = this._$element.data('height') ||  width / ( 560/315 )
 			$containerForElement.html(`<div class="embed-responsive embed-responsive-16by9"><video width="${width}" height="${height}" src="${url}" preload="auto" autoplay controls class="embed-responsive-item"></video></div>`);
+			this._resize(width, height);
+			this._config.onContentLoaded.call(this);
+			if (this._$modalArrows)
+				this._$modalArrows.css('display', 'none'); //hide the arrows when showing video
+			this._toggleLoading(false);
+			return this;
+		}
+                
+                _showHtml5Audio(url, $containerForElement) { // should be used for videos only. for remote content use loadRemoteContent (data-type=url)
+			let width = this._$element.data('width') || 560
+			let height = this._$element.data('height') ||  width / ( 560/315 )
+			$containerForElement.html(`<div class="embed-responsive embed-responsive-16by9"><audio width="${width}" height="${height}" src="${url}" preload="auto" autoplay controls class="embed-responsive-item"></audio></div>`);
 			this._resize(width, height);
 			this._config.onContentLoaded.call(this);
 			if (this._$modalArrows)
