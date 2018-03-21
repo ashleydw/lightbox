@@ -269,9 +269,7 @@ var Lightbox = (function ($) {
 					url: src,
 					async: false
 				});
-				console.log(response);
 				var contentType = response.getResponseHeader('Content-Type');
-				console.log(contentType);
 				return contentType;
 			}
 		}, {
@@ -471,7 +469,6 @@ var Lightbox = (function ($) {
 			value: function _showHtml5Media(url, $containerForElement) {
 				// should be used for videos only. for remote content use loadRemoteContent (data-type=url)
 				var contentType = this._getRemoteContentType(url);
-				console.log(contentType);
 				if (!contentType) {
 					return this._error(this._config.strings.type);
 				}
