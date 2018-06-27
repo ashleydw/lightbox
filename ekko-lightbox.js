@@ -475,7 +475,7 @@ const Lightbox = (($) => {
 			// local ajax can be loaded into the container itself
 			if (!disableExternalCheck && !this._isExternal(url)) {
 				$containerForElement.load(url, $.proxy(() => {
-					return this._$element.trigger('loaded.bs.modal');l
+					return this._$element.trigger('loaded.bs.modal');
 				}));
 
 			} else {
