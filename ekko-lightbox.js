@@ -12,6 +12,8 @@ const Lightbox = (($) => {
 		wrapping: true, //if true, gallery loops infinitely
 		type: null, //force the lightbox into image / youtube mode. if null, or not image|youtube|vimeo; detect it
 		alwaysShowClose: false, //always show the close button, even if there is no title
+		fade: true, // fade in or not
+		verticalAlignCenter: false, // vertically centered modal
 		loadingMessage: '<div class="ekko-lightbox-loader"><div><div></div><div></div></div></div>', // http://tobiasahlin.com/spinkit/
 		leftArrow: '<span>&#10094;</span>',
 		rightArrow: '<span>&#10095;</span>',
@@ -83,10 +85,13 @@ const Lightbox = (($) => {
 			let h4 = `<h4 class="modal-title">${this._config.title || "&nbsp;"}</h4>`;
 			let btn = `<button type="button" class="close" data-dismiss="modal" aria-label="${this._config.strings.close}"><span aria-hidden="true">&times;</span></button>`;
 
+			let fade = this._config.fade ? 'fade in' : '';
+			let vertical = this._config.verticalAlignCenter ? 'modal-dialog-centered' : '';
+
 			let header = `<div class="modal-header${this._config.title || this._config.alwaysShowClose ? '' : ' hide'}">`+(this._isBootstrap3 ? btn+h4 : h4+btn)+`</div>`;
 			let footer = `<div class="modal-footer${this._config.footer ? '' : ' hide'}">${this._config.footer || "&nbsp;"}</div>`;
-			let body = '<div class="modal-body"><div class="ekko-lightbox-container"><div class="ekko-lightbox-item fade in show"></div><div class="ekko-lightbox-item fade"></div></div></div>'
-			let dialog = `<div class="modal-dialog" role="document"><div class="modal-content">${header}${body}${footer}</div></div>`
+			let body = `<div class="modal-body"><div class="ekko-lightbox-container"><div class="ekko-lightbox-item ${fade} show"></div><div class="ekko-lightbox-item fade"></div></div></div>`;
+			let dialog = `<div class="modal-dialog ${vertical}" role="document"><div class="modal-content">${header}${body}${footer}</div></div>`;
 			$(this._config.doc.body).append(`<div id="${this._modalId}" class="ekko-lightbox modal fade" tabindex="-1" tabindex="-1" role="dialog" aria-hidden="true">${dialog}</div>`)
 
 			this._$modal = $(`#${this._modalId}`, this._config.doc)
@@ -369,7 +374,7 @@ const Lightbox = (($) => {
 				$('.modal-backdrop').append(this._config.loadingMessage)
 			}
 			else {
-				this._$modalDialog.css('display', 'block')
+				this._$modalDialog.css('display', this._config.verticalAlignCenter ? 'flex' : 'block')
 				this._$modal.addClass('in show')
 				$('.modal-backdrop').find('.ekko-lightbox-loader').remove()
 			}
