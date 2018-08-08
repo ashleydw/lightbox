@@ -650,7 +650,7 @@ const Lightbox = (($) => {
 			}
 
 			this._$lightboxContainer.css('height', maxHeight)
-			this._$modalDialog.css('flex', 1).css('maxWidth', width);
+			this._$modalDialog.css('flex', '1').css('maxWidth', width);
 
 			let modal = this._$modal.data('bs.modal');
 			if (modal) {
