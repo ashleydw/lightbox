@@ -327,7 +327,8 @@ const Lightbox = (($) => {
 
 			switch(currentType) {
 				case 'image':
-					this._preloadImage(currentRemote, $toUse)
+					let altTag = this._$element.attr('data-alt') || '';
+					this._preloadImage(currentRemote, altTag, $toUse)
 					this._preloadImageByIndex(this._galleryIndex, 3)
 					break;
 				case 'youtube':
@@ -552,35 +553,38 @@ const Lightbox = (($) => {
 
 			let src = next.attr('data-remote') || next.attr('href')
 			if (next.attr('data-type') === 'image' || this._isImage(src))
-				this._preloadImage(src, false)
+				this._preloadImage(src, '', false)
 
 			if(numberOfTimes > 0)
 				return this._preloadImageByIndex(startIndex + 1, numberOfTimes-1);
 		}
 
-		_preloadImage( src, $containerForImage) {
+		_preloadImage(src, altTag, $containerForImage) {
 
 			$containerForImage = $containerForImage || false
 
 			let img = new Image();
+			let loadingTimeout = null;
 			if ($containerForImage) {
-
 				// if loading takes > 200ms show a loader
-				let loadingTimeout = setTimeout(() => {
+				loadingTimeout = setTimeout(() => {
 					$containerForImage.append(this._config.loadingMessage)
-				}, 200)
+				}, 200);
+			}
 
-				img.onload = () => {
-					if(loadingTimeout)
-						clearTimeout(loadingTimeout)
-					loadingTimeout = null;
-					let image = $('<img />');
-					image.attr('src', img.src);
-					image.addClass('img-fluid');
+			img.onload = () => {
+				if(loadingTimeout)
+					clearTimeout(loadingTimeout)
+				loadingTimeout = null;
+				let image = $('<img />');
+				image.attr('src', img.src);
+				image.attr('alt', altTag);
+				image.addClass('img-fluid');
 
-					// backward compatibility for bootstrap v3
-					image.css('width', '100%');
+				// backward compatibility for bootstrap v3
+				image.css('width', '100%');
 
+				if ($containerForImage) {
 					$containerForImage.html(image);
 					if (this._$modalArrows)
 						this._$modalArrows.css('display', '') // remove display to default to css property
@@ -588,7 +592,10 @@ const Lightbox = (($) => {
 					this._resize(img.width, img.height);
 					this._toggleLoading(false);
 					return this._config.onContentLoaded.call(this);
-				};
+				}
+			};
+
+			if ($containerForImage) {
 				img.onerror = () => {
 					this._toggleLoading(false);
 					return this._error(this._config.strings.fail+`  ${src}`);

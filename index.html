@@ -336,6 +336,7 @@
                         <li><a href="#no-wrapping">Disable wrapping</a></li>
                         <li><a href="#disable-fade">Disable fade</a></li>
                         <li><a href="#center-vertically">Center vertically</a></li>
+                        <li><a href="#alt-attr">"alt" attribute</a></li>
                     </ul>
 
                     <h3 id="single-image">Single Image</h3>
@@ -356,13 +357,13 @@
                             <div class="col-md-8">
                                 <div class="row">
                                     <a href="https://unsplash.it/1200/768.jpg?image=251" data-toggle="lightbox" data-gallery="example-gallery" class="col-sm-4">
-                                        <img src="https://unsplash.it/600.jpg?image=251" class="img-fluid">
+                                        <img src="https://unsplash.it/600.jpg?image=251" alt="Image 1" class="img-fluid">
                                     </a>
                                     <a href="https://unsplash.it/1200/768.jpg?image=252" data-toggle="lightbox" data-gallery="example-gallery" class="col-sm-4">
-                                        <img src="https://unsplash.it/600.jpg?image=252" class="img-fluid">
+                                        <img src="https://unsplash.it/600.jpg?image=252" alt="Image 3" class="img-fluid">
                                     </a>
                                     <a href="https://unsplash.it/1200/768.jpg?image=253" data-toggle="lightbox" data-gallery="example-gallery" class="col-sm-4">
-                                        <img src="https://unsplash.it/600.jpg?image=253" class="img-fluid">
+                                        <img src="https://unsplash.it/600.jpg?image=253" alt="Image 3" class="img-fluid">
                                     </a>
                                 </div>
                                 <div class="row">
@@ -609,6 +610,27 @@ $(&#39;#open-youtube&#39;).click(function (e) {
                         </div>
                     </div>
                     <code class="html" data-code>$(this).ekkoLightbox({ verticalAlignCenter: true });</code>
+
+                    <h3 id="alt-attr">Image "alt" attribute</h3>
+                    <p>Add <code>data-alt</code> to provide the enlarged image an alt tag.</p>
+                    <div data-code="example-2">
+                        <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <a href="https://unsplash.it/1200/768.jpg?image=251" data-toggle="lightbox" data-alt="Image 1 Large Alt" data-gallery="example-gallery" class="col-sm-4">
+                                        <img src="https://unsplash.it/600.jpg?image=251" alt="Image 1 Thumbnail" class="img-fluid">
+                                    </a>
+                                    <a href="https://unsplash.it/1200/768.jpg?image=252" data-toggle="lightbox" data-alt="Image 2 Large Alt" data-gallery="example-gallery" class="col-sm-4">
+                                        <img src="https://unsplash.it/600.jpg?image=252" alt="Image 2 Thumbnail" class="img-fluid">
+                                    </a>
+                                    <a href="https://unsplash.it/1200/768.jpg?image=253" data-toggle="lightbox" data-alt="Image 3 Large Alt" data-gallery="example-gallery" class="col-sm-4">
+                                        <img src="https://unsplash.it/600.jpg?image=253" alt="Image 3 Thumbnail" class="img-fluid">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <code class="html" data-code="example-14"></code>
 
                     <p class="footer"><span>Built by me, <a href="https://ashleyd.ws">ashleydw</a></span></p>
                 </div>
